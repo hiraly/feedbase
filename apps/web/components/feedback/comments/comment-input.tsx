@@ -59,8 +59,8 @@ export default function CommentInput({
         commentEditor.current?.commands.clearContent();
         setCommentContent('');
       },
-      onError: () => {
-        toast.error('Failed to post comment');
+      onError: (error) => {
+        toast.error(error.message);
       },
     }
   );

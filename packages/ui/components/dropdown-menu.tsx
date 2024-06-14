@@ -99,18 +99,33 @@ const DropdownMenuDestructiveItem = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
     inset?: boolean;
+    confirmCheckText?: string;
   }
->(({ className, inset, ...props }, ref) => (
-  <DropdownMenuPrimitive.Item
-    ref={ref}
-    className={cn(
-      'text-destructive focus:text-destructive/90 focus:bg-destructive/20 relative flex h-8 cursor-pointer select-none items-center rounded-md px-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-      inset && 'pl-8',
-      className
-    )}
-    {...props}
-  />
-));
+>(({ children, className, inset, confirmCheckText, ...props }, ref) => {
+  const [initiated, setInitiated] = React.useState(false);
+
+  return (
+    <DropdownMenuPrimitive.Item
+      ref={ref}
+      className={cn(
+        'text-destructive focus:text-destructive/90 focus:bg-destructive/20 relative flex h-8 cursor-pointer select-none items-center gap-1 rounded-md px-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        inset && 'pl-8',
+        className
+      )}
+      {...props}
+      onSelect={(event) => {
+        if (confirmCheckText && !initiated) {
+          event.preventDefault();
+          setInitiated(true);
+          return;
+        }
+
+        props.onSelect?.(event);
+      }}>
+      {confirmCheckText && initiated ? confirmCheckText : children}
+    </DropdownMenuPrimitive.Item>
+  );
+});
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
 const DropdownMenuCheckboxItem = React.forwardRef<

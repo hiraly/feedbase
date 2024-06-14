@@ -2,7 +2,7 @@ import { sendEmail } from '@/emails';
 import WorkspaceInviteEmail from '@/emails/workspace-invite';
 import { withUserAuth, withWorkspaceAuth } from '../auth';
 import { ExtendedInviteProps, ProfileProps, TeamInviteProps } from '../types';
-import { formatRootUrl } from '../utils';
+import { formatRootUrl, isValidEmail } from '../utils';
 
 // Get all workspace invites
 export const getWorkspaceInvites = withWorkspaceAuth<ExtendedInviteProps[]>(
@@ -64,6 +64,11 @@ export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', e
     // If any errors, return error
     if (error) {
       return { data: null, error };
+    }
+
+    // Validate email
+    if (!isValidEmail(email)) {
+      return { data: null, error: { message: 'Please provide a valid email', status: 400 } };
     }
 
     // Check if user has an account already

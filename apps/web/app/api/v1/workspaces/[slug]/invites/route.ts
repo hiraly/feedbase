@@ -27,12 +27,6 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
 export async function POST(req: Request, context: { params: { slug: string } }) {
   const { email } = await req.json();
 
-  // Check if email is valid
-  const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-  if (!emailRegex.test(email)) {
-    return NextResponse.json({ error: 'Invalid email' }, { status: 400 });
-  }
-
   // Create invite
   const { data: invite, error } = await createWorkspaceInvite(context.params.slug, 'route', email);
 

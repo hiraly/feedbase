@@ -33,7 +33,7 @@ export default function FeedbackItem({
           mutate(`/api/v1/${workspaceSlug}/feedback`);
         },
         onError: (error) => {
-          toast.error(`Failed to upvote feedback - ${error}`);
+          toast.error(`Failed to upvote feedback - ${error.message}`);
         },
       }
     );

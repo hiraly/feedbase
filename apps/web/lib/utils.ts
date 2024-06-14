@@ -97,10 +97,21 @@ export async function actionFetcher<JSON = any>(
   input: RequestInfo,
   { arg }: { arg: Record<string, unknown>; method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE' }
 ): Promise<JSON> {
-  return fetch((arg.inputOverride as RequestInfo | URL) || input, {
+  const requestOptions: RequestInit = {
     method: (arg.method as string) || 'POST',
     body: JSON.stringify(arg),
-  }).then((res) => res.json());
+  };
+
+  const res = await fetch((arg.inputOverride as RequestInfo | URL) || input, requestOptions);
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    const err = new Error(errorData.error) as SWRError;
+    err.status = res.status;
+    throw err;
+  }
+
+  return res.json();
 }
 
 // Is valid email
@@ -253,9 +264,11 @@ export async function uploadToSupabaseStorage(
     .list(fileName.split('/').slice(0, -1).join('/'));
 
   // Check if file with same name, but without the timestamp already exists
-  const fileAlreadyExists = dirFiles?.filter((file) =>
-    file.name.includes(fileName.split('/').pop()?.split('.')[0]!)
-  );
+  const fileAlreadyExists =
+    dirFiles?.filter((file) => {
+      const fileNameWithoutTimestamp = fileName.split('/').pop()?.split('.')[0];
+      return fileNameWithoutTimestamp ? file.name.includes(fileNameWithoutTimestamp) : false;
+    }) ?? [];
 
   // Add timestamp to the file name
   const fileNameWithStamp = `${fileName.split('.').slice(0, -1)[0]}-${Date.now()}.${fileName
@@ -331,6 +344,7 @@ export async function signInAnonymously() {
 }
 
 // Function to check if two objects are equal
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function areObjectsEqual(obj1: any, obj2: any): boolean {
   // Check if the objects are the same reference
   if (obj1 === obj2) return true;

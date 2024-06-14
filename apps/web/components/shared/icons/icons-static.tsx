@@ -48,7 +48,7 @@ export const Icons = {
     <svg
       data-testid='geist-icon'
       height='16'
-      stroke-linejoin='round'
+      strokeLinejoin='round'
       viewBox='0 0 16 16'
       width='16'
       {...props}>
@@ -70,21 +70,21 @@ export const Icons = {
     <svg
       data-testid='geist-icon'
       height='16'
-      stroke-linejoin='round'
+      strokeLinejoin='round'
       viewBox='0 0 16 16'
       width='16'
       {...props}>
       <g clip-path='url(#clip0_2393_1490)'>
-        <path d='M8 0V4' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.5' d='M8 16V12' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.9' d='M3.29773 1.52783L5.64887 4.7639' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.1' d='M12.7023 1.52783L10.3511 4.7639' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.4' d='M12.7023 14.472L10.3511 11.236' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.6' d='M3.29773 14.472L5.64887 11.236' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.2' d='M15.6085 5.52783L11.8043 6.7639' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.7' d='M0.391602 10.472L4.19583 9.23598' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.3' d='M15.6085 10.4722L11.8043 9.2361' stroke='currentColor' stroke-width='1.5' />
-        <path opacity='0.8' d='M0.391602 5.52783L4.19583 6.7639' stroke='currentColor' stroke-width='1.5' />
+        <path d='M8 0V4' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.5' d='M8 16V12' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.9' d='M3.29773 1.52783L5.64887 4.7639' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.1' d='M12.7023 1.52783L10.3511 4.7639' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.4' d='M12.7023 14.472L10.3511 11.236' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.6' d='M3.29773 14.472L5.64887 11.236' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.2' d='M15.6085 5.52783L11.8043 6.7639' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.7' d='M0.391602 10.472L4.19583 9.23598' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.3' d='M15.6085 10.4722L11.8043 9.2361' stroke='currentColor' strokeWidth='1.5' />
+        <path opacity='0.8' d='M0.391602 5.52783L4.19583 6.7639' stroke='currentColor' strokeWidth='1.5' />
       </g>
       <defs>
         <clipPath id='clip0_2393_1490'>
@@ -204,21 +204,21 @@ export const Icons = {
       {...props}>
       <path
         d='M10.13 99.0312H19.31C22.69 99.0312 25.43 96.2891 25.43 92.9062V59.2188C25.43 55.8359 22.69 53.0938 19.31 53.0938H10.13C6.75006 53.0938 4.01001 55.8359 4.01001 59.2188V92.9062C4.01001 96.2891 6.75006 99.0312 10.13 99.0312Z'
-        stroke-width='8'
+        strokeWidth='8'
         strokeLinecap='round'
-        stroke-linejoin='round'
+        strokeLinejoin='round'
       />
       <path
         d='M89.6901 99.0312H98.8701C102.25 99.0312 104.99 96.2891 104.99 92.9062V34.7188C104.99 31.336 102.25 28.5938 98.8701 28.5938H89.6901C86.31 28.5938 83.5701 31.336 83.5701 34.7188V92.9062C83.5701 96.2891 86.31 99.0312 89.6901 99.0312Z'
-        stroke-width='8'
+        strokeWidth='8'
         strokeLinecap='round'
-        stroke-linejoin='round'
+        strokeLinejoin='round'
       />
       <path
         d='M49.91 99.0312H59.09C62.4701 99.0312 65.21 96.2891 65.21 92.9062V10.2188C65.21 6.83597 62.4701 4.09375 59.09 4.09375H49.91C46.53 4.09375 43.79 6.83597 43.79 10.2188V92.9062C43.79 96.2891 46.53 99.0312 49.91 99.0312Z'
-        stroke-width='8'
+        strokeWidth='8'
         strokeLinecap='round'
-        stroke-linejoin='round'
+        strokeLinejoin='round'
       />
     </svg>
   ),

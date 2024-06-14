@@ -39,7 +39,7 @@ export default function CreatePostModal({ children }: { children: React.ReactNod
         setOpen(false);
       },
       onError: (err) => {
-        toast.error(err);
+        toast.error(err.message);
       },
     }
   );

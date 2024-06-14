@@ -94,7 +94,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
         mutate(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`);
       },
       onError: (error) => {
-        toast.error(`Failed to upvote comment - ${error}`);
+        toast.error(`Failed to upvote comment - ${error.message}`);
         setComment((prev) => {
           return {
             ...prev,
