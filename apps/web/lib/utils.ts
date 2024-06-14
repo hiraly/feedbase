@@ -248,45 +248,58 @@ export async function uploadToSupabaseStorage(
   unique = false
 ): Promise<ApiResponse<string>> {
   // Check if file already exists
-  const { data: existingFileData } = await supabaseClient.storage.from(bucketName).getPublicUrl(fileName);
+  const { data: dirFiles } = await supabaseClient.storage
+    .from(bucketName)
+    .list(fileName.split('/').slice(0, -1).join('/'));
+
+  // Check if file with same name, but without the timestamp already exists
+  const fileAlreadyExists = dirFiles?.filter((file) =>
+    file.name.includes(fileName.split('/').pop()?.split('.')[0]!)
+  );
+
+  // Add timestamp to the file name
+  const fileNameWithStamp = `${fileName.split('.').slice(0, -1)[0]}-${Date.now()}.${fileName
+    .split('.')
+    .pop()}`;
 
   // If file already exists and unique is true, replace the file instead of uploading a new one
-  if (existingFileData && unique) {
-    const { error: updateError } = await supabaseClient.storage.from(bucketName).update(fileName, fileData, {
-      contentType,
-    });
-
-    if (updateError) {
-      return {
-        data: null,
-        error: {
-          message: updateError.message,
-          status: 500,
-        },
-      };
-    }
-  } else {
-    const { error: uploadError } = await supabaseClient.storage
+  if (fileAlreadyExists && fileAlreadyExists.length > 0 && unique) {
+    // Delete the existing file
+    const { error: deleteError } = await supabaseClient.storage
       .from(bucketName)
-      .upload(unique ? `${fileName}-${Date.now()}` : fileName, fileData, {
-        contentType,
-      });
+      .remove([`${fileName.split('/').slice(0, -1).join('/')}/${fileAlreadyExists[0].name}`]);
 
-    if (uploadError) {
+    if (deleteError) {
       return {
         data: null,
         error: {
-          message: uploadError.message,
+          message: deleteError.message,
           status: 500,
         },
       };
     }
   }
 
+  const { error: uploadError } = await supabaseClient.storage
+    .from(bucketName)
+    .upload(fileNameWithStamp, fileData, {
+      contentType,
+    });
+
+  if (uploadError) {
+    return {
+      data: null,
+      error: {
+        message: uploadError.message,
+        status: 500,
+      },
+    };
+  }
+
   // Get the public URL of the uploaded file
   const { data: publicUrlData } = await supabaseClient.storage
     .from(bucketName)
-    .getPublicUrl(unique ? `${fileName}-${Date.now()}` : fileName);
+    .getPublicUrl(fileNameWithStamp);
 
   return {
     data: publicUrlData?.publicUrl,
@@ -315,4 +328,35 @@ export async function signInAnonymously() {
   const { data, error } = await supabase.auth.signInAnonymously();
 
   return { data, error };
+}
+
+// Function to check if two objects are equal
+export function areObjectsEqual(obj1: any, obj2: any): boolean {
+  // Check if the objects are the same reference
+  if (obj1 === obj2) return true;
+
+  // Check if both arguments are objects
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) return false;
+
+  // Get the keys of both objects
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  // Check if the number of keys is different
+  if (keys1.length !== keys2.length) return false;
+
+  // Iterate over the keys and compare the values
+  for (const key of keys1) {
+    const val1 = obj1[key];
+    const val2 = obj2[key];
+
+    // Recursively compare nested objects
+    const areEqual = areObjectsEqual(val1, val2);
+
+    // Return false if the values are not equal
+    if (!areEqual) return false;
+  }
+
+  // If all properties are equal, return true
+  return true;
 }

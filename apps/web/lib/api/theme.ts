@@ -43,6 +43,7 @@ export const updateWorkspaceTheme = (
       .from('workspace_theme')
       .update(data)
       .eq('workspace_id', workspace!.id)
+      .select()
       .single();
 
     // Check for errors

@@ -1,3 +1,5 @@
+'use client';
+
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 
@@ -7,12 +9,16 @@ export default function SettingsCard({
   children,
   className,
   showSave,
+  onSave,
+  onCancel,
 }: {
   title: string;
   description: React.ReactNode;
   children: React.ReactNode;
   className?: string;
   showSave?: boolean;
+  onSave?: () => void;
+  onCancel?: () => void;
 }) {
   return (
     <div className='flex h-fit w-full flex-col justify-between gap-6 p-7'>
@@ -25,8 +31,12 @@ export default function SettingsCard({
 
         {showSave ? (
           <div className='col-span-2 flex w-full gap-2'>
-            <Button variant='default'>Save</Button>
-            <Button variant='outline'>Cancel</Button>
+            <Button variant='default' onClick={onSave}>
+              Save
+            </Button>
+            <Button variant='outline' onClick={onCancel}>
+              Cancel
+            </Button>
           </div>
         ) : null}
       </div>

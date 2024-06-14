@@ -13,10 +13,13 @@ import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import { ChevronsUpDownIcon } from 'lucide-react';
+import { Check, ChevronsUpDownIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import useSWRMutation from 'swr/mutation';
 import useWorkspace from '@/lib/swr/use-workspace';
 import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
 import { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
+import { actionFetcher, areObjectsEqual } from '@/lib/utils';
 import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import FileDrop from '@/components/shared/file-drop';
@@ -38,6 +41,31 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
 
   const [workspace, setWorkspace] = useState<WorkspaceProps['Row']>();
   const [workspaceTheme, setWorkspaceTheme] = useState<WorkspaceThemeProps['Row']>();
+
+  const { trigger: updateWorkspace } = useSWRMutation(`/api/v1/workspaces/${params.slug}`, actionFetcher, {
+    onSuccess: () => {
+      // Check if slug has changed
+      if (workspace?.slug !== workspaceData?.slug) {
+        // Redirect to new slug
+        window.location.href = `/${workspace?.slug}/settings/general`;
+      }
+
+      workspaceMutate();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const { trigger: updateWorkspaceTheme } = useSWRMutation(
+    `/api/v1/workspaces/${params.slug}/theme`,
+    actionFetcher,
+    {
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    }
+  );
 
   useEffect(() => {
     setWorkspace(workspaceData);
@@ -76,7 +104,16 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
   if (workspace && workspaceTheme) {
     return (
       <>
-        <SettingsCard title='Branding' description='Customize your workspace branding.'>
+        <SettingsCard
+          title='Branding'
+          description='Customize your workspace branding.'
+          showSave={!areObjectsEqual(workspace, workspaceData)}
+          onSave={async () => {
+            await updateWorkspace({ method: 'PATCH', ...workspace });
+          }}
+          onCancel={() => {
+            setWorkspace(workspaceData);
+          }}>
           <div className='-mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm'>Name</Label>
             <Input
@@ -116,7 +153,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
 
             {/* File Upload */}
             <div className='flex items-center gap-2.5'>
-              <Avatar className={cn('h-12 w-12 hover:cursor-pointer', workspace.icon_radius)}>
+              <Avatar className={cn('h-12 w-12', workspace.icon_radius)}>
                 <AvatarImage src={workspace.icon || ''} alt={workspace.name} />
                 <AvatarFallback className={cn('bg-muted select-none text-sm', workspace.icon_radius)}>
                   {workspace.name[0]}
@@ -124,11 +161,42 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               </Avatar>
               <div className='flex flex-col gap-1'>
                 <div className='flex gap-1'>
-                  <Button variant='secondary' size='sm' className='w-fit'>
+                  <Label
+                    className='bg-secondary text-secondary-foreground hover:bg-secondary/80 flex h-7 w-fit items-center justify-center rounded-md px-2 hover:cursor-pointer'
+                    htmlFor='icon-upload'>
                     Upload
-                  </Button>
+                  </Label>
+                  <input
+                    type='file'
+                    id='icon-upload'
+                    className='hidden'
+                    onChange={(event) => {
+                      // Set the icon to the uploaded file
+                      if (event.target.files?.[0]) {
+                        // Check if the file is an image, image/png, image/jpeg, etc.
+                        if (!['image/png', 'image/jpeg', 'image/jpg'].includes(event.target.files[0].type)) {
+                          toast.error('Please upload a valid image.');
+                          return;
+                        }
+
+                        // Read the file as a data URL
+                        const reader = new FileReader();
+                        reader.onload = (e) => {
+                          setWorkspace({
+                            ...workspace,
+                            icon: e.target?.result as string,
+                          });
+                        };
+                        reader.readAsDataURL(event.target.files[0]);
+                      }
+                    }}
+                  />
                   {workspace.icon ? (
-                    <Button variant='destructive' size='sm' className='w-fit'>
+                    <Button
+                      variant='destructive'
+                      size='sm'
+                      className='w-fit'
+                      onClick={() => setWorkspace({ ...workspace, icon: '' })}>
                       Remove
                     </Button>
                   ) : null}
@@ -207,7 +275,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <div className='col-span-2 space-y-1'>
             <FileDrop
               labelComponent={<Label className='text-foreground/70 text-sm'>OG Image</Label>}
-              image={null}
+              image={workspace.opengraph_image}
               setImage={(e: string | null) => {
                 setWorkspace({
                   ...workspace,
@@ -228,12 +296,17 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
+              toast.promise(updateWorkspaceTheme({ method: 'PATCH', theme: 'light' }), {
+                loading: 'Updating theme...',
+                success: 'Theme updated successfully.',
+                error: 'Failed to update theme.',
+              });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'light' });
             }}
             type='button'>
             <div
               className={cn(
-                'border-border/50 h-full w-full items-center rounded-md border-2 p-1',
+                'border-border/50 relative h-full w-full items-center rounded-md border-2 p-1',
                 workspaceTheme.theme === 'light' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
@@ -251,19 +324,33 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   <div className='h-2 w-[100px] rounded-lg bg-[#F4F4F5]' />
                 </div>
               </div>
+
+              <div
+                className={cn(
+                  'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-[#0D0D0E]',
+                  workspaceTheme.theme === 'light' ? 'flex' : 'hidden'
+                )}>
+                <Check className='h-3.5 w-3.5 text-white' />
+              </div>
             </div>
+
             <span className='text-muted-foreground text-sm '>Light</span>
           </button>
 
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
+              toast.promise(updateWorkspaceTheme({ method: 'PATCH', theme: 'dark' }), {
+                loading: 'Updating theme...',
+                success: 'Theme updated successfully.',
+                error: 'Failed to update theme.',
+              });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'dark' });
             }}
             type='button'>
             <div
               className={cn(
-                'border-border/50 bg-root h-full w-full items-center rounded-md border-2 p-1',
+                'border-border/50 bg-root relative h-full w-full items-center rounded-md border-2 p-1',
                 workspaceTheme.theme === 'dark' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
@@ -281,6 +368,14 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   <div className='h-2 w-[100px] rounded-lg bg-[#121416]' />
                 </div>
               </div>
+
+              <div
+                className={cn(
+                  'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-white',
+                  workspaceTheme.theme === 'dark' ? 'flex' : 'hidden'
+                )}>
+                <Check className='h-3.5 w-3.5 text-black' />
+              </div>
             </div>
             <span className='text-muted-foreground text-sm'>Dark</span>
           </button>
@@ -289,12 +384,17 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             type='button'
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
+              toast.promise(updateWorkspaceTheme({ method: 'PATCH', theme: 'custom' }), {
+                loading: 'Updating theme...',
+                success: 'Theme updated successfully.',
+                error: 'Failed to update theme.',
+              });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'custom' });
             }}>
             <div className='relative h-full w-full'>
               <div
                 className={cn(
-                  'border-border/50 bg-root items-center rounded-md border-2 p-1',
+                  'border-border/50 bg-root relative items-center rounded-md border-2 p-1',
                   workspaceTheme.theme === 'custom' &&
                     'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
                 )}>
@@ -332,6 +432,14 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div
+                className={cn(
+                  'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-white',
+                  workspaceTheme.theme === 'custom' ? 'flex' : 'hidden'
+                )}>
+                <Check className='h-3.5 w-3.5 text-black' />
               </div>
             </div>
             <span className='text-muted-foreground text-sm '>System</span>

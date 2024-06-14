@@ -24,16 +24,16 @@ export default function DomainSettings() {
 
   return (
     <SettingsCard title='Custom Domain' description='Host your public hub at your own custom domain.'>
-      <div className='col-span-1 -mt-1 w-full space-y-1 '>
+      <div className='col-span-1 -mt-1 w-full space-y-1'>
         <Label className='text-foreground/70 text-sm '>Domain</Label>
-        <div className='flex w-full gap-2'>
+        <div className='flex w-full gap-1.5'>
           <InputGroup prefix='https://' value='feedbase.com' />
-          <Button variant='default' size='icon'>
+          <Button variant='default' size='icon' className='shrink-0'>
             <Trash2Icon className='h-4 w-4' />
           </Button>
         </div>
         <Label className='text-muted-foreground text-xs'>
-          Want to host on a subpath? Check out our{' '}
+          Want to host on a sub-path? Check out our{' '}
           <Link href={formatRootUrl('docs')} className='hover:text-foreground underline transition-colors'>
             documentation
           </Link>
@@ -117,7 +117,8 @@ export default function DomainSettings() {
         </DropdownMenu>
 
         <Label className='text-muted-foreground text-xs'>
-          Wether to redirect the default feedbase subdomain to your custom domain.
+          Wether to redirect the default {process.env.NEXT_PUBLIC_ROOT_DOMAIN} subdomain to your custom
+          domain.
         </Label>
       </div>
     </SettingsCard>

@@ -35,11 +35,19 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     icon,
     icon_radius: iconRadius,
     opengraph_image: OGImage,
+    icon_redirect_url: iconRedirectURL,
   } = (await req.json()) as WorkspaceProps['Update'];
 
   const { data: updatedWorkspace, error } = await updateWorkspaceBySlug(
     context.params.slug,
-    { name, slug, icon, icon_radius: iconRadius, opengraph_image: OGImage },
+    {
+      name,
+      slug,
+      icon,
+      icon_radius: iconRadius,
+      opengraph_image: OGImage,
+      icon_redirect_url: iconRedirectURL,
+    },
     'route'
   );
 

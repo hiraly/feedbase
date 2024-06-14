@@ -1,6 +1,7 @@
+import { decode } from 'base64-arraybuffer';
 import { withUserAuth, withWorkspaceAuth } from '@/lib/auth';
 import { AnalyticsProps, TeamMemberProps, WorkspaceProps } from '@/lib/types';
-import { isSlugValid } from '@/lib/utils';
+import { isSlugValid, isValidUrl, uploadToSupabaseStorage } from '@/lib/utils';
 
 // Get Workspace
 export const getWorkspaceBySlug = withWorkspaceAuth<WorkspaceProps['Row']>(
@@ -68,12 +69,61 @@ export const updateWorkspaceBySlug = (
       return { data: null, error: { message: 'slug is invalid.', status: 400 } };
     }
 
+    // Check if icon redirect url is valid
+    if (data.icon_redirect_url && !isValidUrl(data.icon_redirect_url)) {
+      return { data: null, error: { message: 'icon redirect url is invalid.', status: 400 } };
+    }
+
+    // If base64 icon is provided, upload to storage
+    if (data.icon && data.icon.startsWith('data:image')) {
+      const { data: iconUploadUrl, error } = await uploadToSupabaseStorage(
+        supabase,
+        'workspaces',
+        `${workspace!.slug}/icon.png`,
+        decode(data.icon.split(',')[1]),
+        'image/png',
+        true
+      );
+
+      // Check for errors
+      if (error) {
+        return { data: null, error: { message: error.message, status: 500 } };
+      }
+
+      // Update data with uploaded url
+      data.icon = iconUploadUrl;
+    }
+
+    // If base64 opengraph image is provided, upload to storage
+    if (data.opengraph_image && data.opengraph_image.startsWith('data:image')) {
+      const { data: opengraphUpload, error: opengraphError } = await uploadToSupabaseStorage(
+        supabase,
+        'workspaces',
+        `${workspace!.slug}/opengraph.png`,
+        decode(data.opengraph_image.split(',')[1]),
+        'image/png',
+        true
+      );
+
+      // Check for errors
+      if (opengraphError) {
+        return { data: null, error: { message: opengraphError.message, status: 500 } };
+      }
+
+      // Update data with uploaded url
+      data.opengraph_image = opengraphUpload;
+    }
+
     // Update workspace
     const { data: updatedWorkspace, error: updateError } = await supabase
       .from('workspace')
       .update({
         name: data.name,
         slug: data.slug,
+        icon: data.icon,
+        icon_radius: data.icon_radius,
+        opengraph_image: data.opengraph_image,
+        icon_redirect_url: data.icon_redirect_url,
       })
       .eq('id', workspace!.id)
       .select()
