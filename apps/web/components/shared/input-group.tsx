@@ -5,7 +5,7 @@ type InputGroupProps = {
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
   placeholder?: string;
-  value: string;
+  value: string | number | readonly string[] | undefined;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   groupClassName?: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;

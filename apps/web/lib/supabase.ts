@@ -253,6 +253,13 @@ export type Database = {
             referencedRelation: 'workspace_view';
             referencedColumns: ['id'];
           },
+          {
+            foreignKeyName: 'public_feedback_board_id_fkey';
+            columns: ['board_id'];
+            isOneToOne: false;
+            referencedRelation: 'feedback_board';
+            referencedColumns: ['id'];
+          },
         ];
       };
       feedback_board: {
@@ -466,6 +473,7 @@ export type Database = {
         Row: {
           created_at: string;
           custom_domain: string | null;
+          custom_domain_redirect: Database['public']['Enums']['domain_redirect_type'];
           custom_domain_verified: boolean;
           icon: string | null;
           icon_radius: Database['public']['Enums']['icon_radius_type'];
@@ -480,6 +488,7 @@ export type Database = {
         Insert: {
           created_at?: string;
           custom_domain?: string | null;
+          custom_domain_redirect?: Database['public']['Enums']['domain_redirect_type'];
           custom_domain_verified?: boolean;
           icon?: string | null;
           icon_radius?: Database['public']['Enums']['icon_radius_type'];
@@ -494,6 +503,7 @@ export type Database = {
         Update: {
           created_at?: string;
           custom_domain?: string | null;
+          custom_domain_redirect?: Database['public']['Enums']['domain_redirect_type'];
           custom_domain_verified?: boolean;
           icon?: string | null;
           icon_radius?: Database['public']['Enums']['icon_radius_type'];
@@ -885,6 +895,7 @@ export type Database = {
     Enums: {
       api_token_type: 'full_access' | 'public_access';
       changelog_style_type: 'summary' | 'content';
+      domain_redirect_type: 'no_redirect' | 'direct_redirect' | 'root_redirect';
       icon_radius_type: 'rounded-full' | 'rounded-none' | 'rounded-md';
       notification_type: 'comment' | 'post';
       status_type: 'in review' | 'planned' | 'in progress' | 'completed' | 'rejected';

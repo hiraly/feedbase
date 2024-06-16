@@ -105,7 +105,9 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
             <Label className='text-foreground/70 text-sm '>Email</Label>
             <div className='flex w-full gap-2'>
               <Input className='w-full' placeholder='member@feedbase.app' />
-              <Button className='shrink-0'>Send Invite</Button>
+              <Button className='shrink-0' disabled>
+                Send Invite
+              </Button>
             </div>
             <Label className='text-muted-foreground text-xs'>
               The user will receive an email with an invite link.
@@ -201,7 +203,9 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
               className='w-full'
               placeholder='member@feedbase.app'
               value={inviteEmail}
-              onChange={(e) => { setInviteEmail(e.target.value); }}
+              onChange={(e) => {
+                setInviteEmail(e.target.value);
+              }}
             />
             <Button type='submit' className='shrink-0 gap-2' disabled={isSendingInvite || !inviteEmail}>
               {isSendingInvite ? <Icons.Spinner className='h-3.5 w-3.5 animate-spin' /> : null}
@@ -359,7 +363,9 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                           <DropdownMenuItem>Resend</DropdownMenuItem>
                           <DropdownMenuDestructiveItem
                             confirmCheckText='Confirm revoke?'
-                            onSelect={() => { revokeInvite(invite.id); }}>
+                            onSelect={() => {
+                              revokeInvite(invite.id);
+                            }}>
                             Revoke
                           </DropdownMenuDestructiveItem>
                         </DropdownMenuContent>

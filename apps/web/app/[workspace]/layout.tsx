@@ -105,7 +105,15 @@ export default async function HubLayout({ children, params, searchParams }: Prop
 
   // Check if custom domain is set and redirect to it
   if (workspace.custom_domain && workspace.custom_domain_verified && hostname !== workspace.custom_domain) {
-    redirect(`https://${workspace.custom_domain}`);
+    // Validate redirect rules
+    switch (workspace.custom_domain_redirect) {
+      case 'root_redirect':
+        return redirect(`https://${workspace.custom_domain}`);
+      case 'direct_redirect':
+        return redirect(`https://${workspace.custom_domain}${pathname}`);
+      case 'no_redirect':
+        break;
+    }
   }
 
   // Get current tab

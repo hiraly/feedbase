@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
 
 /*
-  GET /api/v1/workspaces/:slug/config/domain
+  GET /api/v1/workspaces/:slug/domain
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
   // Get workspace
@@ -128,7 +128,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
 }
 
 /*
-  POST /api/v1/workspaces/:slug/config/domain
+  POST /api/v1/workspaces/:slug/domain
   {
     "name": "example.com"
   }
@@ -202,7 +202,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 }
 
 /*
-  DELETE /api/v1/workspaces/:slug/config/domain
+  DELETE /api/v1/workspaces/:slug/domain
 */
 export async function DELETE(req: Request, context: { params: { slug: string } }) {
   // Get workspace

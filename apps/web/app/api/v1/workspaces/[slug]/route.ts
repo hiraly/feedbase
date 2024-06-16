@@ -26,6 +26,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
       icon: string,
       icon_radius: string,
       og_image: string
+      icon_redirect_url: string
+      custom_domain_redirect: string
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
@@ -36,6 +38,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     icon_radius: iconRadius,
     opengraph_image: OGImage,
     icon_redirect_url: iconRedirectURL,
+    custom_domain_redirect: customDomainRedirect,
   } = (await req.json()) as WorkspaceProps['Update'];
 
   const { data: updatedWorkspace, error } = await updateWorkspaceBySlug(
@@ -47,6 +50,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
       icon_radius: iconRadius,
       opengraph_image: OGImage,
       icon_redirect_url: iconRedirectURL,
+      custom_domain_redirect: customDomainRedirect,
     },
     'route'
   );

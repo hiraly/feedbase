@@ -124,6 +124,9 @@ export const updateWorkspaceBySlug = (
         icon_radius: data.icon_radius,
         opengraph_image: data.opengraph_image,
         icon_redirect_url: data.icon_redirect_url,
+        custom_domain: data.custom_domain,
+        custom_domain_verified: data.custom_domain_verified,
+        custom_domain_redirect: data.custom_domain_redirect,
       })
       .eq('id', workspace!.id)
       .select()
