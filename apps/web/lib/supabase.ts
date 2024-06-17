@@ -483,6 +483,7 @@ export type Database = {
           opengraph_image: string | null;
           slug: string;
           sso_auth_enabled: boolean;
+          sso_auth_secret_id: string | null;
           sso_auth_url: string | null;
         };
         Insert: {
@@ -498,6 +499,7 @@ export type Database = {
           opengraph_image?: string | null;
           slug: string;
           sso_auth_enabled?: boolean;
+          sso_auth_secret_id?: string | null;
           sso_auth_url?: string | null;
         };
         Update: {
@@ -513,9 +515,25 @@ export type Database = {
           opengraph_image?: string | null;
           slug?: string;
           sso_auth_enabled?: boolean;
+          sso_auth_secret_id?: string | null;
           sso_auth_url?: string | null;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: 'public_workspace_sso_auth_secret_id_fkey';
+            columns: ['sso_auth_secret_id'];
+            isOneToOne: false;
+            referencedRelation: 'decrypted_secrets';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'public_workspace_sso_auth_secret_id_fkey';
+            columns: ['sso_auth_secret_id'];
+            isOneToOne: false;
+            referencedRelation: 'secrets';
+            referencedColumns: ['id'];
+          },
+        ];
       };
       workspace_api_key: {
         Row: {
@@ -855,6 +873,19 @@ export type Database = {
       };
     };
     Functions: {
+      get_secret_by_id: {
+        Args: {
+          secret_id: string;
+        };
+        Returns: {
+          id: string;
+          name: string;
+          decrypted_secret: string;
+          description: string;
+          created_at: string;
+          updated_at: string;
+        }[];
+      };
       get_workspace_api_key: {
         Args: {
           api_key_secret: string;
@@ -873,6 +904,14 @@ export type Database = {
       get_workspace_api_key_secret: {
         Args: {
           api_key_id: string;
+        };
+        Returns: string;
+      };
+      insert_secret: {
+        Args: {
+          secret_value: string;
+          secret_name?: string;
+          description?: string;
         };
         Returns: string;
       };

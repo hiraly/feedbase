@@ -54,7 +54,7 @@ function createCookiesConfig(
 // Create Supabase Client for needed client type
 // Also returns the current user
 // cType: 'server' | 'route'
-async function createClient(
+export async function createClient(
   cType: 'server' | 'route',
   isPublic = false
 ): Promise<{

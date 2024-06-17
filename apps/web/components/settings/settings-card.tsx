@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button } from '@feedbase/ui/components/button';
+import { Switch } from '@feedbase/ui/components/switch';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 
@@ -13,11 +14,15 @@ export default function SettingsCard({
   showSave,
   onSave,
   onCancel,
+  checked,
+  onCheckedChange,
 }: {
   title: string;
   description: React.ReactNode;
   children: React.ReactNode;
   className?: string;
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
   showSave?: boolean;
   onSave?: () => Promise<void>;
   onCancel?: () => void;
@@ -31,9 +36,22 @@ export default function SettingsCard({
 
   return (
     <div className='flex h-fit w-full flex-col justify-between gap-6 p-7'>
-      <div className='flex w-full flex-col items-start gap-2 border-b pb-5'>
-        <h2 className='text-lg font-normal leading-none tracking-tight'>{title}</h2>
-        <p className='text-foreground/50 text-sm '>{description}</p>
+      <div className='flex w-full items-center justify-between border-b pb-5'>
+        <div className='flex w-full flex-col items-start gap-2'>
+          <h2 className='text-lg font-normal leading-none tracking-tight'>{title}</h2>
+          <p className='text-foreground/50 text-sm '>{description}</p>
+        </div>
+
+        {onCheckedChange || checked !== undefined ? (
+          <Switch
+            className='mr-5'
+            checked={checked}
+            onCheckedChange={(c) => {
+              if (!onCheckedChange) return;
+              onCheckedChange(c);
+            }}
+          />
+        ) : null}
       </div>
       <div className={cn('grid w-full grid-cols-2 flex-col items-end justify-center gap-5', className)}>
         {children}

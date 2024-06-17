@@ -127,6 +127,8 @@ export const updateWorkspaceBySlug = (
         custom_domain: data.custom_domain,
         custom_domain_verified: data.custom_domain_verified,
         custom_domain_redirect: data.custom_domain_redirect,
+        sso_auth_enabled: data.sso_auth_enabled,
+        sso_auth_url: data.sso_auth_url,
       })
       .eq('id', workspace!.id)
       .select()
@@ -337,4 +339,56 @@ export const getWorkspaceAnalytics = (
       },
       error: null,
     };
+  })(slug, cType);
+
+// Create workspace sso secret
+export const createWorkspaceSSOSecret = (slug: string, cType: 'server' | 'route') =>
+  withWorkspaceAuth(async (user, supabase, workspace, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Generate random jwt secret
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const jwtSecret = Array(32)
+      .fill(null)
+      .map(() => characters.charAt(Math.floor(Math.random() * characters.length)))
+      .join('');
+
+    // Insert jwt secret into vault
+    const { data: secretId, error: secretIdError } = await supabase.rpc('insert_secret', {
+      secret_value: jwtSecret,
+    });
+
+    // Check for errors
+    if (secretIdError) {
+      return { data: null, error: { message: secretIdError.message, status: 500 } };
+    }
+
+    // Update workspace with secret id
+    const { error: updateError } = await supabase
+      .from('workspace')
+      .update({ sso_auth_secret_id: secretId })
+      .eq('id', workspace!.id)
+      .select()
+      .single();
+
+    // Check for errors
+    if (updateError) {
+      return { data: null, error: { message: updateError.message, status: 500 } };
+    }
+
+    // Get secret value
+    const { data: secret, error: secretError } = await supabase.rpc('get_secret_by_id', {
+      secret_id: secretId,
+    });
+
+    // Check for errors
+    if (secretError) {
+      return { data: null, error: { message: secretError.message, status: 500 } };
+    }
+
+    // Return jwt secret
+    return { data: { secret: secret[0].decrypted_secret }, error: null };
   })(slug, cType);

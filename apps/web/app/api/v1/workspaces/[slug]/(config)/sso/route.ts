@@ -6,26 +6,18 @@ import { updateWorkspaceBySlug } from '@/lib/api/workspace';
   PATCH /api/v1/workspaces/:slug/config/integrations/sso
   {
     enabled: boolean,
-    url: string,
-    secret: string,
+    url: string
   }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
-  const { enabled, url, secret } = await req.json();
-
-  if (enabled && (!url || !secret)) {
-    return NextResponse.json(
-      { error: 'url and secret are required when enabling SSO integration.' },
-      { status: 400 }
-    );
-  }
+  const { enabled, url } = await req.json();
 
   // Update workspace config
   const { data: updatedWorkspaceConfig, error } = await updateWorkspaceBySlug(
     context.params.slug,
     {
       sso_auth_enabled: enabled,
-      sso_auth_url: enabled ? url : null,
+      sso_auth_url: url,
     },
     'route'
   );

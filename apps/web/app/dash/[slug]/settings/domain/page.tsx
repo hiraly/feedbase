@@ -133,7 +133,9 @@ export default function DomainSettings({ params }: { params: { slug: string } })
   if (error) {
     return (
       <SettingsCard title='Custom Domain' description='Host your public hub at your own custom domain.'>
-        <FetchError error={error} mutate={mutate} name='workspace' isValidating={isValidating} />
+        <div className='col-span-2 h-full w-full'>
+          <FetchError error={error} mutate={mutate} name='workspace' isValidating={isValidating} />
+        </div>
       </SettingsCard>
     );
   }
@@ -149,7 +151,9 @@ export default function DomainSettings({ params }: { params: { slug: string } })
             placeholder='feedbase.app'
             disabled={domainStatus !== 'unset'}
             value={domain}
-            onChange={(event) => { setDomain(event.target.value); }}
+            onChange={(event) => {
+              setDomain(event.target.value);
+            }}
           />
           {domainStatus === 'unset' ? (
             <Button
@@ -288,7 +292,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               </div>
             )}
 
-            {domainData ? <div className='flex h-full w-full flex-col'>
+            {domainData ? (
+              <div className='flex h-full w-full flex-col'>
                 {/* Tabs, if domain is not assigned to a vercel workspace yet */}
                 {domainData.verification === undefined ? (
                   <Tabs defaultValue='a' className='w-fit'>
@@ -584,7 +589,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                     </Label>
                   </div>
                 ) : null}
-              </div> : null}
+              </div>
+            ) : null}
           </>
         ) : null}
       </div>

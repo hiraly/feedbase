@@ -15,7 +15,7 @@ export default function FetchError({
   isValidating?: boolean;
 }) {
   return (
-    <div className='flex flex-col items-center gap-4 p-10'>
+    <div className='flex flex-col items-center gap-3 p-10'>
       <AlertCircle className='text-secondary-foreground h-7 w-7 stroke-[1.5px]' />
       <div className='space-y-1.5 text-center'>
         <div className='text-secondary-foreground text-center'>Failed to load {name}. Please try again.</div>
