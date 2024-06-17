@@ -91,7 +91,6 @@ export default async function Feedback({ params }: Props) {
           {/* Feedback List */}
           <FeedbackList workspaceSlug={params.workspace} feedbackBoards={boards} />
         </div>
-
         {/* Boards */}
         <FeedbackBoardList boards={boards} initialBoard={initialBoard} />
       </div>

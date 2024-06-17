@@ -30,10 +30,17 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
         content: string;
         status: string;
         tags: string[];
+        board_id: string;
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { title, content, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
+  const {
+    title,
+    content,
+    status,
+    tags,
+    board_id: boardId,
+  } = (await req.json()) as FeedbackWithUserInputProps;
 
   const { data: feedback, error } = await updateFeedbackByID(
     context.params.feedbackId,
@@ -42,9 +49,10 @@ export async function PATCH(req: Request, context: { params: { slug: string; fee
       title: title || '',
       content: content || '',
       status: status?.toLowerCase() as FeedbackWithUserInputProps['status'],
-      board_id: 'dummy-id',
+      board_id: boardId || '',
       user_id: 'dummy-id',
       tags: tags || undefined,
+      workspace_id: 'dummy-id',
     },
     'route'
   );

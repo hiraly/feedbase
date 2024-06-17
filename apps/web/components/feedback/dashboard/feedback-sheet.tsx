@@ -48,6 +48,7 @@ import { StatusCombobox } from '@/components/feedback/common/status-combobox';
 import { TagCombobox } from '@/components/feedback/common/tag-combobox';
 import { Icons } from '@/components/shared/icons/icons-static';
 import DefaultTooltip from '@/components/shared/tooltip';
+import { BoardCombobox } from '../common/board-combobox';
 
 export function FeedbackSheet({
   feedback,
@@ -142,7 +143,7 @@ export function FeedbackSheet({
     if (open) {
       setCurrentFeedback(initialFeedback);
     }
-  }, [open, initialFeedback]);
+  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Format date in a readable format, e.g. 2 days ago or if too old, show the date
   const formatDate = (date: string) => {
@@ -436,17 +437,16 @@ export function FeedbackSheet({
 
             <div className='flex items-center justify-between'>
               <Label>Board</Label>
-              <Button
-                variant='ghost'
-                size='sm'
-                className='text-secondary-foreground w-1/2 justify-between'
-                disabled>
-                <div className='flex items-center gap-1.5'>
-                  <LayoutGrid className='text-foreground/60 h-4 w-4' />
-                  Board
-                </div>
-                <ChevronsUpDownIcon className='text-muted-foreground h-4 w-4' />
-              </Button>
+              <BoardCombobox
+                initialBoard={currentFeedback.board_id}
+                onBoardChange={(board) => {
+                  setCurrentFeedback((prev) => ({
+                    ...prev,
+                    board_id: board,
+                  }));
+                  updateFeedback({ board_id: board, method: 'PATCH' });
+                }}
+              />
             </div>
 
             <div className='flex items-center justify-between'>

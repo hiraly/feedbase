@@ -355,6 +355,7 @@ export const updateFeedbackByID = (
         content: data.content ? data.content : feedback!.content,
         status: data.status !== undefined ? data.status : feedback!.status,
         raw_tags: data.raw_tags ? data.raw_tags : feedback!.raw_tags,
+        board_id: data.board_id ? data.board_id : feedback!.board_id,
       })
       .eq('id', feedback!.id)
       .select()
@@ -547,7 +548,7 @@ export const getAllBoardFeedback = withFeedbackBoardAuth<FeedbackWithUserProps[]
     // Get feedback and also include complete user object
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
-      .select('*, user:user_id (*)')
+      .select('*, user:user_id (*), board:board_id (*)')
       .eq('board_id', board!.id);
 
     // Check for errors
@@ -600,7 +601,7 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
     // Get all feedback for workspace
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
-      .select('*, user:user_id (*)')
+      .select('*, user:user_id (*), board:board_id (*)')
       .eq('workspace_id', workspace!.id);
 
     // Check for errors
@@ -615,6 +616,27 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
     feedbackData.forEach((feedback) => {
       feedback.tags = feedback.raw_tags as unknown as FeedbackTagProps['Row'][];
     });
+
+    // Get upvoters
+    const { data: userUpvotes, error: userUpvotesError } = await supabase
+      .from('feedback_upvoter')
+      .select()
+      .eq('profile_id', user!.id);
+
+    // Check for errors
+    if (userUpvotesError) {
+      return { data: null, error: { message: userUpvotesError.message, status: 500 } };
+    }
+
+    // Get array of upvoted feedback ids
+    const upvotedFeedbackIds = userUpvotes.map((upvoter) => upvoter.feedback_id);
+
+    // Add has upvoted
+    if (upvotedFeedbackIds.length > 0) {
+      feedbackData.forEach((feedback) => {
+        feedback.has_upvoted = upvotedFeedbackIds.includes(feedback.id);
+      });
+    }
 
     // Return feedback
     return { data: feedbackData, error: null };

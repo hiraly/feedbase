@@ -49,6 +49,10 @@ export default function AuthModal({ children, disabled }: { children: React.Reac
           </div>
           <GitHub />
         </Auth>
+
+        <span className='text-foreground/60 text-center text-xs'>
+          We&apos;re using Feedbase to collect feedback and improve our product.
+        </span>
         <ResponsiveDialogClose className='absolute' />
       </ResponsiveDialogContent>
     </ResponsiveDialog>

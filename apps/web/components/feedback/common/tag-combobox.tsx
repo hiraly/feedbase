@@ -120,7 +120,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
             ref={inputRef}
           />
           <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs'>
-            {tagsLoading ? 'Loading tags...' : 'No tags found, start typing to create a new tag'}
+            {tagsLoading ? 'Loading tags...' : null}
           </CommandEmpty>
           <CommandGroup>
             {workspaceTags?.map((tag) => (

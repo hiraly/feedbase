@@ -21,7 +21,7 @@ const colors = [
   },
   {
     name: 'Red',
-    hex: '#FF6F61',
+    hex: '#E57373',
   },
   {
     name: 'Lavender',
@@ -29,7 +29,7 @@ const colors = [
   },
   {
     name: 'Green',
-    hex: '#85AC82',
+    hex: '#C8E6C9',
   },
   {
     name: 'Pink',
@@ -37,7 +37,7 @@ const colors = [
   },
   {
     name: 'Yellow',
-    hex: '#F4C430',
+    hex: '#FFECB3',
   },
   {
     name: 'Sky Blue',

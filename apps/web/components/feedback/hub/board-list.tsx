@@ -63,6 +63,17 @@ export default function FeedbackBoardList({
           </Link>
         ))}
       </div>
+
+      {/* Powered by Feedbase */}
+      <div className='flex w-full flex-row items-center justify-center pt-2'>
+        <Link
+          className='text-muted-foreground hover:text-secondary-foreground text-xs transition-colors duration-150 hover:cursor-pointer hover:underline'
+          href="https://feedbase.app"
+          target='_blank'
+          rel='noreferrer'>
+          Powered by Feedbase
+        </Link>
+      </div>
     </div>
   );
 }

@@ -549,7 +549,10 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
 AS $function$begin
   -- Check if the user is anonymous
   if new.is_anonymous then
-    -- If the user is anonymous, do not insert and return the new row
+    -- If the user is anonymous, insert dummy data
+    insert into public.profile (id, full_name, email, is_anonymous)
+    values (new.id, 'Anonymous User', 'anonymous@fb.app', true);
+
     return new;
   end if;
 
@@ -591,6 +594,13 @@ BEGIN
     -- Insert into workspace_theme table
     INSERT INTO public.workspace_theme (workspace_id)
     VALUES (NEW.id);
+
+    -- Insert default tags for the new workspace
+    INSERT INTO public.feedback_tag (name, color, workspace_id)
+    VALUES
+        ('High Priority', '#E57373', NEW.id),
+        ('Medium Priority', '#FFECB3', NEW.id),
+        ('Low Priority', '#C8E6C9', NEW.id);    
 
     RETURN NEW;
 END;$function$
@@ -1968,3 +1978,109 @@ create or replace view "public"."workspace_view" as  SELECT workspace.id,
     workspace.icon_radius,
     workspace.opengraph_image
    FROM workspace;
+
+create policy "All access for authenticated users 8ykxq_0"
+on "storage"."objects"
+as permissive
+for update
+to authenticated
+using ((bucket_id = 'workspaces'::text));
+
+
+create policy "All access for authenticated users 8ykxq_1"
+on "storage"."objects"
+as permissive
+for delete
+to authenticated
+using ((bucket_id = 'workspaces'::text));
+
+
+create policy "All access for authenticated users 8ykxq_2"
+on "storage"."objects"
+as permissive
+for insert
+to authenticated
+with check ((bucket_id = 'workspaces'::text));
+
+
+create policy "All access for authenticated users 8ykxq_3"
+on "storage"."objects"
+as permissive
+for select
+to authenticated
+using ((bucket_id = 'workspaces'::text));
+
+create type "public"."domain_redirect_type" as enum ('no_redirect', 'direct_redirect', 'root_redirect');
+
+drop policy "Enable update for workspace members" on "public"."workspace";
+
+alter table "public"."profile" add column "is_anonymous" boolean not null default false;
+
+alter table "public"."workspace" add column "custom_domain_redirect" domain_redirect_type not null default 'root_redirect'::domain_redirect_type;
+
+alter table "public"."workspace" add column "sso_auth_secret_id" uuid;
+
+alter table "public"."workspace_module" add column "feedback_anon_posting" boolean not null default false;
+
+alter table "public"."feedback" add constraint "public_feedback_board_id_fkey" FOREIGN KEY (board_id) REFERENCES feedback_board(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+
+alter table "public"."feedback" validate constraint "public_feedback_board_id_fkey";
+
+CREATE OR REPLACE FUNCTION public.get_secret_by_id(secret_id uuid)
+ RETURNS TABLE(id uuid, name text, decrypted_secret text, description text, created_at timestamp with time zone, updated_at timestamp with time zone)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+BEGIN
+    RETURN QUERY
+    SELECT
+        s.id,
+        s.name,
+        ds.decrypted_secret,
+        s.description,
+        s.created_at,
+        s.updated_at
+    FROM vault.secrets s
+    JOIN vault.decrypted_secrets ds ON s.id = ds.id
+    WHERE s.id = get_secret_by_id.secret_id;
+END;
+$function$
+;
+
+CREATE OR REPLACE FUNCTION public.insert_secret(secret_value text, secret_name text DEFAULT NULL::text, description text DEFAULT ''::text)
+ RETURNS uuid
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+AS $function$
+DECLARE
+    secret_id UUID;
+BEGIN
+    -- Insert the secret into the vault.secrets table
+    SELECT vault.create_secret(secret_value, secret_name, COALESCE(description, '')) INTO secret_id;
+    RETURN secret_id;
+END;
+$function$
+;
+
+create policy "Enable delete for own comment upvotes only"
+on "public"."comment_upvoter"
+as permissive
+for all
+to authenticated
+using ((auth.uid() = profile_id));
+
+
+create policy "Enable updpate for workspace member"
+on "public"."workspace_theme"
+as permissive
+for update
+to authenticated
+using (is_workspace_member(workspace_id));
+
+
+create policy "Enable update for workspace members"
+on "public"."workspace"
+as permissive
+for update
+to authenticated
+using (is_workspace_member(id));

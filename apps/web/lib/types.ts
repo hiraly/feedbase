@@ -61,6 +61,7 @@ export type FeedbackTagProps = Database['public']['Tables']['feedback_tag'];
 export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
   user: ProfileProps['Row'] & { isTeamMember: boolean };
   tags: { name: string; color: string }[];
+  board: FeedbackBoardProps['Row'];
   has_upvoted: boolean;
 };
 

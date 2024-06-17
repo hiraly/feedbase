@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -175,6 +175,23 @@ export function FilterFeedback(feedbackList: FeedbackWithUserProps[], tab?: stri
         if (new Date(feedback.created_at) < new Date(feedbackFilters.created_date.a)) {
           return false;
         }
+      }
+    }
+
+    // Filter by board
+    if (feedbackFilters.board.i.length > 0 || feedbackFilters.board.e.length > 0) {
+      if (
+        feedbackFilters.board.i.length > 0 &&
+        !feedbackFilters.board.i.some((board) => feedback.board_id === board.id)
+      ) {
+        return false;
+      }
+
+      if (
+        feedbackFilters.board.e.length > 0 &&
+        feedbackFilters.board.e.some((board) => feedback.board_id === board.id)
+      ) {
+        return false;
       }
     }
 

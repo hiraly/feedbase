@@ -138,14 +138,18 @@ export default function Header({
           {/* Login */}
           {!workspace.sso_auth_enabled && (!user || user?.is_anonymous) ? (
             <AuthModal>
-              <Button variant='default'>Login</Button>
+              <Button variant='default' size='sm'>
+                Login
+              </Button>
             </AuthModal>
           ) : null}
 
           {/* SSO */}
           {workspace.sso_auth_enabled && (!user || user?.is_anonymous) ? (
             <Link href={workspace.sso_auth_url || ''}>
-              <Button variant='default'>Login with {workspace?.name}</Button>
+              <Button variant='default' size='sm'>
+                Login with {workspace?.name}
+              </Button>
             </Link>
           ) : null}
         </div>
