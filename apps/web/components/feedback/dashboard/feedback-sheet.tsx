@@ -17,6 +17,7 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@feedbase/ui/components/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
 import { cn } from '@feedbase/ui/lib/utils';
+import { DialogTriggerProps } from '@radix-ui/react-dialog';
 import {
   BadgeCheck,
   CalendarClockIcon,
@@ -27,7 +28,6 @@ import {
   EyeOffIcon,
   Hash,
   Info,
-  LayoutGrid,
   LinkIcon,
   MailIcon,
   MessageCircleOff,
@@ -54,13 +54,12 @@ export function FeedbackSheet({
   feedback,
   initialFeedback,
   children,
-  asChild,
+  ...props
 }: {
   feedback: FeedbackWithUserProps[];
   initialFeedback: FeedbackWithUserProps;
   children: React.ReactNode;
-  asChild?: boolean;
-}) {
+} & DialogTriggerProps) {
   const { mutate } = useSWRConfig();
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
@@ -162,7 +161,7 @@ export function FeedbackSheet({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild={asChild}>{children}</SheetTrigger>
+      <SheetTrigger {...props}>{children}</SheetTrigger>
       <SheetContent className='flex max-w-full flex-row items-start justify-between gap-0 p-0 sm:w-[calc(100vw-20px)] sm:max-w-full md:max-w-5xl'>
         <div className='flex h-full w-full flex-col'>
           {/* Header */}
@@ -234,7 +233,7 @@ export function FeedbackSheet({
             </div>
 
             {/* Feedback Navigation */}
-            {feedback.length > 0 && (
+            {feedback && feedback.length > 0 ? (
               <div className='flex items-center gap-2'>
                 <span className='text-muted-foreground select-none text-sm'>
                   {feedback.findIndex((f) => f.id === currentFeedback.id) + 1}{' '}
@@ -275,7 +274,7 @@ export function FeedbackSheet({
                   </Button>
                 </DefaultTooltip>
               </div>
-            )}
+            ) : null}
           </div>
 
           {/* Post Content */}

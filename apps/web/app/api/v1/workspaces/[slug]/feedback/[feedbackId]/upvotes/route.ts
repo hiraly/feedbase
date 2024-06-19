@@ -3,7 +3,7 @@ import { getFeedbackById, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/
 
 /*
   Get feedback upvotes
-  GET /api/v1/workspaces/[slug]/feedback/[id]/upvote
+  GET /api/v1/workspaces/[slug]/feedback/[id]/upvotes
 */
 export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
   const { data: feedback, error } = await getFeedbackById(
@@ -41,7 +41,7 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
 
 /*
     Upvote a feedback
-    POST /api/v1/workspaces/[slug]/feedback/[id]/upvote
+    POST /api/v1/workspaces/[slug]/feedback/[id]/upvotes
 */
 export async function POST(req: NextRequest, context: { params: { slug: string; feedbackId: string } }) {
   // Upvote feedback

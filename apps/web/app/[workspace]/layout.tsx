@@ -52,7 +52,7 @@ const tabs: { name: string; link: string; items?: { name: string; link: string }
   },
   {
     name: 'Roadmap',
-    link: '/feedback',
+    link: '/roadmap',
   },
   {
     name: 'Changelog',

@@ -11,7 +11,7 @@ import useFeedback from '@/lib/swr/use-feedback';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher } from '@/lib/utils';
 import AnimatedTabs from '@/components/shared/animated-tabs';
-import FeedbackKanban from './kanban';
+import FeedbackKanban from '../kanban';
 
 type sortingOptions = 'upvotes' | 'created' | 'trending';
 
@@ -24,22 +24,26 @@ export default function RoadmapBoard() {
 
   // Sort the feedback into groups based on status { 'STATUS': [feedback], ... }
   function groupFeedbackByStatus(): Record<string, FeedbackWithUserProps[]> {
-    return (
-      feedback?.reduce(
-        (acc, curr) => {
-          const status = curr.status;
-          if (status) {
-            if (acc[status]) {
-              acc[status].push(curr);
-            } else {
-              acc[status] = [curr];
-            }
-          }
-          return acc;
-        },
-        {} as Record<string, FeedbackWithUserProps[]>
-      ) || {}
-    );
+    const groupedFeedback: Record<string, FeedbackWithUserProps[]> = {};
+    const statusOptions = new Set(['in review', 'planned', 'in progress', 'completed', 'rejected']);
+
+    feedback?.forEach((f) => {
+      const { status } = f;
+      const normalizedStatus = status ? status.toLowerCase().replace(/\s/g, ' ') : '';
+
+      if (normalizedStatus && statusOptions.has(normalizedStatus)) {
+        const label =
+          STATUS_OPTIONS.find(({ label }) => label.toLowerCase().replace(/\s/g, ' ') === normalizedStatus)
+            ?.label || '';
+
+        if (!groupedFeedback[label]) {
+          groupedFeedback[label] = [];
+        }
+        groupedFeedback[label].push(f);
+      }
+    });
+
+    return groupedFeedback;
   }
 
   Object.values(kanbanData).forEach((feedbackList) => {
@@ -105,23 +109,15 @@ export default function RoadmapBoard() {
         <FeedbackKanban
           data={kanbanData}
           columns={STATUS_OPTIONS}
-          onDataChange={(data) => {
-            // Compare new data with old data to get the changed feedback
-            const changedFeedback = feedback?.filter((feedback) => {
-              const newFeedback = data[feedback.status];
-              return !newFeedback || !newFeedback.find((f) => f.id === feedback.id);
-            });
-
-            // Get the category the feedback was moved to
-            const newStatus = Object.keys(data).find((status) =>
-              data[status].find((f) => f.id === changedFeedback?.[0]?.id)
-            );
-
+          onDataChange={(data, changedFeedback) => {
             // Update feedback
             changedFeedback?.forEach((feedback) => {
+              // Get the new status of the feedback
+              const newStatus = Object.keys(data).find((status) => data[status].includes(feedback));
+
               updateFeedback({
-                status: newStatus,
                 method: 'PATCH',
+                status: newStatus,
                 inputOverride: `/api/v1/workspaces/${slug}/feedback/${feedback.id}`,
               });
             });

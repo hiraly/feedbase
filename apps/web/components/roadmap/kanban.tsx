@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -9,6 +9,8 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { Button } from '@feedbase/ui/components/button';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, LayoutGrid, LucideIcon, Plus } from 'lucide-react';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
@@ -81,11 +83,20 @@ export default function FeedbackKanban({
   data,
   onDataChange,
   sortedBy,
+  publicBoard = false,
+  hideEmptyColumns = false,
+  isValidating,
 }: {
   columns: { label: string; icon: LucideIcon }[];
   data: Record<string, FeedbackWithUserProps[]>;
-  onDataChange: (data: Record<string, FeedbackWithUserProps[]>) => void;
+  onDataChange?: (
+    data: Record<string, FeedbackWithUserProps[]>,
+    changedFeedback?: FeedbackWithUserProps[]
+  ) => void;
   sortedBy: string;
+  publicBoard?: boolean;
+  hideEmptyColumns?: boolean;
+  isValidating?: boolean;
 }) {
   const [activeItem, setActiveItem] = useState<FeedbackWithUserProps | null>(null);
 
@@ -106,55 +117,73 @@ export default function FeedbackKanban({
     return null;
   }
 
-  return (
-    <div className='flex h-full w-full overflow-y-auto'>
-      <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} sensors={sensors}>
-        <div className='flex h-full w-full gap-3 overflow-x-auto p-5'>
-          {columns.map(({ label, icon: Icon }) => (
-            <div
-              className='bg-secondary/50 dark:bg-root flex h-full w-full min-w-[350px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
-              key={label}>
-              {/* Header Row */}
-              <div className='flex items-center justify-between dark:brightness-90'>
-                <div className='flex items-center gap-2'>
-                  <Icon className='text-muted-foreground h-4 w-4' />
-                  <span className='text-sm'>{label}</span>
-                  <span className='text-muted-foreground text-sm'>
-                    {data[label.toLowerCase()]?.length || 0}
-                  </span>
-                </div>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='text-muted-foreground hover:text-foreground h-6 w-6'>
-                  <Plus className='h-3.5 w-3.5' />
-                </Button>
-              </div>
+  const randomCounts = useMemo(() => columns.map(() => Math.floor(Math.random() * 8) + 1), [columns]);
 
-              {/* Feedback Items */}
-              <Droppable
-                key={label}
-                id={label.toLowerCase()}
-                className='no-scrollbar flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md dark:brightness-90'
-                isOverOverlay={
-                  <div className='bg-root absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
-                    <span>Drop here</span>
-                    <span className='text-muted-foreground text-sm'>Items are sorted by {sortedBy}</span>
+  return (
+    <div className={cn('flex h-full w-full gap-9', publicBoard ? 'h-[70dvh]' : '')}>
+      <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} sensors={sensors}>
+        <div
+          className={cn(
+            'flex h-full w-full gap-3 overflow-x-auto p-5',
+            publicBoard ? 'custom-scrollbar min-h-full p-0' : ''
+          )}>
+          {columns.map(({ label, icon: Icon }, index) => {
+            if (hideEmptyColumns && !data[label]?.length) return null;
+            const randomCount = randomCounts[index];
+
+            return (
+              <div
+                className='bg-secondary/50 dark:bg-root relative flex h-full w-full min-w-[350px] flex-col gap-3 overflow-y-auto rounded-md p-3 dark:brightness-110'
+                key={label}>
+                {/* Header Row */}
+                <div className='flex items-center justify-between dark:brightness-90'>
+                  <div className='flex items-center gap-2'>
+                    <Icon className='text-muted-foreground h-4 w-4' />
+                    <span className='text-sm'>{label}</span>
+                    <span className='text-muted-foreground text-sm'>{data[label]?.length || 0}</span>
                   </div>
-                }>
-                {data[label.toLowerCase()]?.map((item) => (
-                  <FeedbackSheet key={item.id} initialFeedback={item} feedback={data[label.toLowerCase()]}>
-                    <Draggable
-                      key={item.id}
-                      id={item.id}
-                      className='bg-root z-50 flex h-fit w-full flex-col gap-3 rounded-md border p-3'>
-                      <FeedbackCard feedback={item} />
-                    </Draggable>
-                  </FeedbackSheet>
-                ))}
-              </Droppable>
-            </div>
-          ))}
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                    <Plus className='h-3.5 w-3.5' />
+                  </Button>
+                </div>
+
+                {/* Feedback Items */}
+                <Droppable
+                  key={label}
+                  id={label}
+                  className='no-scrollbar relative flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md dark:brightness-90'
+                  isOverOverlay={
+                    <div className='bg-root absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
+                      <span>Drop here</span>
+                      <span className='text-muted-foreground text-sm'>Items are sorted by {sortedBy}</span>
+                    </div>
+                  }>
+                  {isValidating
+                    ? [...Array(randomCount)].map((_, i) => (
+                        <Skeleton key={`skeleton-${i}`} className='h-20 w-full brightness-[0.98]' />
+                      ))
+                    : data[label]?.map((item) => (
+                        <FeedbackSheet
+                          key={item.id}
+                          initialFeedback={item}
+                          feedback={data[label]}
+                          disabled={publicBoard}>
+                          <Draggable
+                            key={item.id}
+                            id={item.id}
+                            disabled={publicBoard}
+                            className='bg-root z-50 flex h-fit w-full flex-col gap-3 rounded-md border p-3'>
+                            <FeedbackCard feedback={item} />
+                          </Draggable>
+                        </FeedbackSheet>
+                      ))}
+                </Droppable>
+              </div>
+            );
+          })}
         </div>
 
         <DragOverlay
@@ -199,7 +228,7 @@ export default function FeedbackKanban({
     };
 
     // Call onDataChange callback
-    onDataChange(newData);
+    if (onDataChange) onDataChange(newData, [getItemById(active.id as string)!]);
     setActiveItem(null);
   }
 }

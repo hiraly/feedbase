@@ -45,15 +45,15 @@ export default function FeedbackItem({
 
   return (
     <div
-      className='hover:bg-accent/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
+      className='hover:bg-muted/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
       key={feedback.id}>
       <AuthModal disabled={!forceAuth}>
-        <div className='flex items-center border-r'>
+        <div className='hover:bg-muted/50 flex items-center border-r transition-colors duration-150'>
           {/* Upvotes */}
           <Button
             variant='ghost'
             size='sm'
-            className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
+            className='group/upvote flex h-full flex-col items-center rounded-none px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
             onClick={async () => {
               await signInAnonymously();
 

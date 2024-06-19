@@ -1,5 +1,5 @@
-import RoadmapBoard from '@/components/roadmap/roadmap-board';
-import RoadmapHeader from '@/components/roadmap/roadmap-header';
+import RoadmapBoard from '@/components/roadmap/dashboard/roadmap-board';
+import RoadmapHeader from '@/components/roadmap/dashboard/roadmap-header';
 
 export default async function Roadmap() {
   return (

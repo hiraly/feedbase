@@ -1,5 +1,5 @@
-import { FilterCombobox } from '../feedback/common/filter-combobox';
-import SortFeedbackDropdown from './sort-dropdown';
+import { FilterCombobox } from '../../feedback/common/filter-combobox';
+import SortFeedbackDropdown from '../sort-dropdown';
 
 export default function RoadmapHeader() {
   return (
