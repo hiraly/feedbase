@@ -7,6 +7,7 @@ import { Input } from '@feedbase/ui/components/input';
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Plus, X } from 'lucide-react';
+import useDebounce from '@/lib/hooks/use-debounce';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { SearchIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';
@@ -16,25 +17,12 @@ export default function FeedbackHeader() {
   const [searchActive, setSearchActive] = useState(false);
   const [animate, setAnimate] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
   const searchParams = useSearchParams();
   const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
 
-  function handleSearchDebounce(value: string) {
-    // Clear previous timeout
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    // Debounce search
-    const newTimeoutId = setTimeout(() => {
-      // Search logic
-      createQueryParams('search', value);
-    }, 500);
-
-    // Update timeoutId state
-    setTimeoutId(newTimeoutId);
-  }
+  const handleSearchDebounce = useDebounce((value: string) => {
+    createQueryParams('search', value);
+  }, 500);
 
   useEffect(() => {
     // Preset / update search value

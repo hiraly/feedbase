@@ -1,9 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { PlusIcon, Search } from 'lucide-react';
+import useDebounce from '@/lib/hooks/use-debounce';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
 import { ProfileProps, WorkspaceModuleProps } from '@/lib/types';
 import SortFeedbackDropdown from '@/components/roadmap/sort-dropdown';
@@ -18,7 +20,18 @@ export default function FeedbackHeader({
   user: ProfileProps['Row'] | null;
   moduleConfig: WorkspaceModuleProps['Row'];
 }) {
-  const createQueryString = useCreateQueryString(useRouter(), usePathname(), useSearchParams());
+  const [search, setSearch] = useState('');
+  const searchParams = useSearchParams();
+  const createQueryParams = useCreateQueryString(useRouter(), usePathname(), searchParams);
+
+  const handleSearchDebounce = useDebounce((value: string) => {
+    createQueryParams('search', value);
+  }, 500);
+
+  useEffect(() => {
+    // Preset / update search value
+    setSearch(searchParams.get('search') || '');
+  }, [searchParams]);
 
   return (
     <>
@@ -39,8 +52,10 @@ export default function FeedbackHeader({
             <Input
               placeholder='Search posts'
               className='px-8'
+              value={search}
               onChange={(e) => {
-                createQueryString('search', e.target.value);
+                setSearch(e.target.value);
+                handleSearchDebounce(e.target.value);
               }}
             />
 
