@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -9,74 +10,77 @@ import {
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { CalendarClock, Flame, ThumbsUp } from 'lucide-react';
+import { Clock3, Flame, ThumbsUp } from 'lucide-react';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 
 export default function SortFeedbackDropdown() {
   const searchParams = useSearchParams();
-  const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
+  const createQueryString = useQueryParamRouter(useRouter(), usePathname(), searchParams);
 
-  function renderActiveSort() {
-    switch (searchParams.get('sort') || 'upvotes') {
-      case 'upvotes':
-        return (
-          <div className='flex items-center gap-1.5'>
-            <ThumbsUp className='h-3.5 w-3.5' />
-            Upvotes
-          </div>
-        );
-      case 'recent':
-        return (
-          <div className='flex items-center gap-1.5'>
-            <CalendarClock className='h-3.5 w-3.5' />
-            Recent
-          </div>
-        );
-      case 'trending':
-        return (
-          <div className='flex items-center gap-1.5'>
-            <Flame className='h-3.5 w-3.5' />
-            Trending
-          </div>
-        );
-    }
-  }
+  // Query params
+  const sort = searchParams.get('sort') || '';
+
+  const [currentSort, setCurrentSort] = useState<string>(sort);
+
+  useEffect(() => {
+    setCurrentSort(sort);
+  }, [sort]);
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          variant='outline'
-          className='text-secondary-foreground hover:text-foreground flex items-center gap-2'>
-          {renderActiveSort()}
-
+        <Button variant='outline' className='gap-1.5 pr-2'>
+          {currentSort === '' && (
+            <>
+              <Clock3 className='h-3.5 w-3.5' />
+              Recent
+            </>
+          )}
+          {currentSort === 'trending' && (
+            <>
+              <Flame className='h-3.5 w-3.5' />
+              Trending
+            </>
+          )}
+          {currentSort === 'upvotes' && (
+            <>
+              <ThumbsUp className='h-3.5 w-3.5' />
+              Upvotes
+            </>
+          )}
           <ChevronUpDownIcon className='h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-36' align='end'>
+      <DropdownMenuContent align='start'>
         <DropdownMenuItem
-          className='flex items-center gap-1.5'
+          className='gap-1.5'
+          key='upvotes'
           onSelect={() => {
-            createQueryParams('sort', 'upvotes');
+            setCurrentSort('upvotes');
+            createQueryString('sort', 'upvotes');
           }}>
           <ThumbsUp className='h-4 w-4' />
-          Upvotes
+          <span>Upvotes</span>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className='flex items-center gap-1.5'
+          className='gap-1.5'
+          key='recent'
           onSelect={() => {
-            createQueryParams('sort', 'recent');
+            setCurrentSort('');
+            createQueryString('sort', '');
           }}>
-          <CalendarClock className='h-4 w-4' />
-          Recent
+          <Clock3 className='h-4 w-4' />
+          <span>Recent</span>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className='flex items-center gap-1.5'
+          className='gap-1.5'
+          key='trending'
           onSelect={() => {
-            createQueryParams('sort', 'trending');
+            setCurrentSort('trending');
+            createQueryString('sort', 'trending');
           }}>
           <Flame className='h-4 w-4' />
-          Trending
+          <span>Trending</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

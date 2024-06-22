@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -102,101 +102,151 @@ function FeedbackFilter({
 }
 
 // Filter Feedback Helper Function
-export function FilterFeedback(feedbackList: FeedbackWithUserProps[], tab?: string): FeedbackWithUserProps[] {
+export function FilterFeedback(
+  feedbackList: FeedbackWithUserProps[],
+  tab?: string
+): { feedback: FeedbackWithUserProps[]; sortType: 'trending' | 'upvotes' | null } {
   const { tags } = useTags();
   const { feedbackBoards } = useFeedbackBoards();
-  const feedbackFilters = useActiveFilters(useSearchParams(), tags, feedbackBoards);
+  const searchParams = useSearchParams();
+  const feedbackFilters = useActiveFilters(searchParams, tags, feedbackBoards);
 
-  return feedbackList.filter((feedback) => {
-    // Filter by tab
-    if (tab && tab !== 'All' && feedback.status?.toLowerCase() !== tab.toLowerCase()) return false;
+  // Filter the feedback
+  const filteredFeedback = useMemo(() => {
+    return feedbackList
+      .filter((feedback) => {
+        // Filter by tab
+        if (tab && tab !== 'All' && feedback.status?.toLowerCase() !== tab.toLowerCase()) return false;
 
-    // Filter by search
-    if (feedbackFilters.search) {
-      // Include feedback if it doesn't have '!' in front of the search
-      if (!feedbackFilters.search.startsWith('!')) {
-        if (!feedback.title.toLowerCase().includes(feedbackFilters.search.toLowerCase())) {
-          return false;
+        // Filter by search
+        if (feedbackFilters.search) {
+          if (!feedbackFilters.search.startsWith('!')) {
+            if (!feedback.title.toLowerCase().includes(feedbackFilters.search.toLowerCase())) {
+              return false;
+            }
+          } else if (feedback.title.toLowerCase().includes(feedbackFilters.search.slice(1).toLowerCase())) {
+            return false;
+          }
         }
-      } else if (feedback.title.toLowerCase().includes(feedbackFilters.search.slice(1).toLowerCase())) {
-        return false;
-      }
-    }
 
-    // Filter by tag/tags
-    if (feedbackFilters.tags.i.length > 0 || feedbackFilters.tags.e.length > 0) {
-      if (
-        feedbackFilters.tags.i.length > 0 &&
-        !feedbackFilters.tags.i.some(
-          (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
-        )
-      ) {
-        return false;
-      }
+        // Filter by tag/tags
+        if (feedbackFilters.tags.i.length > 0 || feedbackFilters.tags.e.length > 0) {
+          if (
+            feedbackFilters.tags.i.length > 0 &&
+            !feedbackFilters.tags.i.some(
+              (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+            )
+          ) {
+            return false;
+          }
 
-      if (
-        feedbackFilters.tags.e.length > 0 &&
-        feedbackFilters.tags.e.some(
-          (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
-        )
-      ) {
-        return false;
-      }
-    }
-
-    // Filter by status
-    if (feedbackFilters.status.i.length > 0 || feedbackFilters.status.e.length > 0) {
-      // Include feedback if it doesn't have '!' in front of the status
-      if (
-        feedbackFilters.status.i.length > 0 &&
-        !feedbackFilters.status.i.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
-      ) {
-        return false;
-      }
-
-      // Exclude feedback if it has '!' in front of the status
-      if (
-        feedbackFilters.status.e.length > 0 &&
-        feedbackFilters.status.e.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
-      ) {
-        return false;
-      }
-    }
-
-    // Filter by created before/after
-    if (feedbackFilters.created_date.b || feedbackFilters.created_date.a) {
-      if (feedbackFilters.created_date.b) {
-        if (new Date(feedback.created_at) > new Date(feedbackFilters.created_date.b)) {
-          return false;
+          if (
+            feedbackFilters.tags.e.length > 0 &&
+            feedbackFilters.tags.e.some(
+              (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+            )
+          ) {
+            return false;
+          }
         }
-      }
 
-      if (feedbackFilters.created_date.a) {
-        if (new Date(feedback.created_at) < new Date(feedbackFilters.created_date.a)) {
-          return false;
+        // Filter by status
+        if (feedbackFilters.status.i.length > 0 || feedbackFilters.status.e.length > 0) {
+          if (
+            feedbackFilters.status.i.length > 0 &&
+            !feedbackFilters.status.i.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
+          ) {
+            return false;
+          }
+
+          if (
+            feedbackFilters.status.e.length > 0 &&
+            feedbackFilters.status.e.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
+          ) {
+            return false;
+          }
         }
-      }
-    }
 
-    // Filter by board
-    if (feedbackFilters.board.i.length > 0 || feedbackFilters.board.e.length > 0) {
-      if (
-        feedbackFilters.board.i.length > 0 &&
-        !feedbackFilters.board.i.some((board) => feedback.board_id === board.id)
-      ) {
-        return false;
-      }
+        // Filter by created before/after
+        if (feedbackFilters.created_date.b || feedbackFilters.created_date.a) {
+          if (feedbackFilters.created_date.b) {
+            if (new Date(feedback.created_at) > new Date(feedbackFilters.created_date.b)) {
+              return false;
+            }
+          }
 
-      if (
-        feedbackFilters.board.e.length > 0 &&
-        feedbackFilters.board.e.some((board) => feedback.board_id === board.id)
-      ) {
-        return false;
-      }
-    }
+          if (feedbackFilters.created_date.a) {
+            if (new Date(feedback.created_at) < new Date(feedbackFilters.created_date.a)) {
+              return false;
+            }
+          }
+        }
 
-    return true;
-  });
+        // Filter by board
+        if (feedbackFilters.board.i.length > 0 || feedbackFilters.board.e.length > 0) {
+          if (
+            feedbackFilters.board.i.length > 0 &&
+            !feedbackFilters.board.i.some((board) => feedback.board_id === board.id)
+          ) {
+            return false;
+          }
+
+          if (
+            feedbackFilters.board.e.length > 0 &&
+            feedbackFilters.board.e.some((board) => feedback.board_id === board.id)
+          ) {
+            return false;
+          }
+        }
+
+        return true;
+      })
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+  }, [feedbackList, tab, feedbackFilters]);
+
+  // Sort the filtered feedback only when searchParams changes
+  const sortedFeedback = useMemo(() => {
+    // Sort the feedback
+    return [...filteredFeedback].sort((a, b) => {
+      let upvoteScoreA: number,
+        upvoteScoreB: number,
+        commentScoreA: number,
+        commentScoreB: number,
+        trendingScoreA: number,
+        trendingScoreB: number;
+
+      switch (searchParams.get('sort')) {
+        case 'trending':
+          upvoteScoreA =
+            a.upvotes / ((new Date().getTime() - new Date(a.created_at).getTime()) / (1000 * 60 * 60 * 24));
+          upvoteScoreB =
+            b.upvotes / ((new Date().getTime() - new Date(b.created_at).getTime()) / (1000 * 60 * 60 * 24));
+
+          commentScoreA =
+            a.comment_count /
+            ((new Date().getTime() - new Date(a.created_at).getTime()) / (1000 * 60 * 60 * 24));
+          commentScoreB =
+            b.comment_count /
+            ((new Date().getTime() - new Date(b.created_at).getTime()) / (1000 * 60 * 60 * 24));
+
+          trendingScoreA = upvoteScoreA + commentScoreA;
+          trendingScoreB = upvoteScoreB + commentScoreB;
+
+          return trendingScoreB - trendingScoreA;
+        case 'upvotes':
+          return b.upvotes - a.upvotes;
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams.get('sort')]);
+
+  return {
+    feedback: sortedFeedback.length === 0 ? filteredFeedback : sortedFeedback,
+    sortType:
+      sortedFeedback.length === 0 ? null : (searchParams.get('sort') as 'trending' | 'upvotes' | null),
+  };
 }
 
 export default function FeedbackFilterHeader({

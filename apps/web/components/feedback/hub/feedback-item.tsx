@@ -5,44 +5,21 @@ import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/ava
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, MessagesSquare } from 'lucide-react';
-import { toast } from 'sonner';
-import { useSWRConfig } from 'swr';
-import useSWRMutation from 'swr/mutation';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
-import { actionFetcher, formatTimeAgo, signInAnonymously } from '@/lib/utils';
+import { formatTimeAgo, signInAnonymously } from '@/lib/utils';
+import NumberAnimation from '@/components/shared/animated-number';
 import AuthModal from '../../modals/login-signup-modal';
 
 export default function FeedbackItem({
   feedback,
   forceAuth,
-  workspaceSlug,
+  onUpvote,
 }: {
   feedback: FeedbackWithUserProps;
   forceAuth?: boolean;
-  workspaceSlug: string;
+  onUpvote: (feedbackId: string) => void;
 }) {
-  const { mutate } = useSWRConfig();
-
-  const useUpvoteMutation = (feedbackId: string) => {
-    const { trigger: onUpvote } = useSWRMutation(
-      `/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/upvotes`,
-      actionFetcher,
-      {
-        onSuccess: () => {
-          mutate(`/api/v1/${workspaceSlug}/feedback`);
-        },
-        onError: (error) => {
-          toast.error(`Failed to upvote feedback - ${error.message}`);
-        },
-      }
-    );
-
-    return { onUpvote };
-  };
-
-  const { onUpvote } = useUpvoteMutation(feedback.id);
-
   return (
     <div
       className='hover:bg-muted/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
@@ -53,11 +30,12 @@ export default function FeedbackItem({
           <Button
             variant='ghost'
             size='sm'
-            className='group/upvote flex h-full flex-col items-center rounded-none px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
+            className='group/upvote flex h-full flex-col items-center rounded-none px-4 transition-all duration-150 hover:bg-transparent active:scale-[0.85]'
             onClick={async () => {
               await signInAnonymously();
 
-              await onUpvote({});
+              // Upvote
+              onUpvote(feedback.id);
             }}>
             {/* Arrow */}
             <ChevronUp
@@ -68,13 +46,10 @@ export default function FeedbackItem({
             />
 
             {/* Upvotes */}
-            <div
-              className={cn(
-                'text-sm  transition-colors',
-                feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
-              )}>
-              {feedback.upvotes}
-            </div>
+            <NumberAnimation
+              baseNumber={feedback.has_upvoted ? feedback.upvotes - 1 : feedback.upvotes}
+              isIncremented={feedback.has_upvoted}
+            />
           </Button>
         </div>
       </AuthModal>

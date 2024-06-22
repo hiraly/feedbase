@@ -9,7 +9,7 @@ import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import FeedbackBoardList from '@/components/feedback/hub/board-list';
 import FeedbackHeader from '@/components/feedback/hub/button-header';
-import FeedbackList from '@/components/feedback/hub/feedback-list-hub';
+import FeedbackList from '@/components/feedback/hub/feedback-list';
 
 type Props = {
   params: { workspace: string };

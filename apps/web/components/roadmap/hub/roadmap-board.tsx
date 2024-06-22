@@ -1,13 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
-import useSWRMutation from 'swr/mutation';
 import { STATUS_OPTIONS } from '@/lib/constants';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useFeedback from '@/lib/swr/use-feedback';
 import { FeedbackWithUserProps } from '@/lib/types';
-import { actionFetcher } from '@/lib/utils';
 import { FilterFeedback } from '@/components/feedback/common/feedback-filters';
 import FeedbackKanban from '@/components/roadmap/kanban';
 import RoadmapList from './roadmap-list';
@@ -15,14 +14,17 @@ import RoadmapList from './roadmap-list';
 type sortingOptions = 'upvotes' | 'created' | 'trending';
 
 export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | 'list' }) {
-  const { feedback, mutate, isValidating } = useFeedback(true);
-  const filteredFeedback = FilterFeedback(feedback || []);
+  const { feedback: feedbackData, isValidating } = useFeedback(true);
+  const [feedback, setFeedback] = useState<FeedbackWithUserProps[]>(feedbackData || []);
   const { workspace: slug } = useParams<{ workspace: string }>();
   const searchParams = useSearchParams();
-  const [groupedFeedbackData, setGroupedFeedbackData] = useState(groupFeedbackByStatus());
+  const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
 
-  // Sort the feedback into groups based on status { 'STATUS': [feedback], ... }
-  function groupFeedbackByStatus(): Record<string, FeedbackWithUserProps[]> {
+  // Filter / Sort feedback
+  const { feedback: filteredFeedback, sortType } = FilterFeedback(feedback || []);
+
+  // Group feedback by status
+  const groupedFeedbackData = useCallback(() => {
     let groupedFeedback: Record<string, FeedbackWithUserProps[]> = {};
 
     // Initialize the groupedFeedback object with empty arrays for each status in STATUS_OPTIONS
@@ -53,59 +55,26 @@ export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | '
     }
 
     return groupedFeedback;
+  }, [filteredFeedback, style])();
+
+  // Handle non-applied sort query params
+  if (sortType !== searchParams.get('sort')) {
+    createQueryParams('sort', sortType ? sortType : '');
   }
 
-  Object.values(groupedFeedbackData).forEach((feedbackList) => {
-    switch ((searchParams.get('sort') as sortingOptions) || 'upvotes') {
-      case 'upvotes':
-        feedbackList.sort((a, b) => b.upvotes - a.upvotes);
-        break;
-      case 'created':
-        feedbackList.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-        break;
-      case 'trending':
-        // Most upvotes & comments in the last 7 days
-        feedbackList.sort((a, b) => {
-          const aScore = a.upvotes + a.comment_count;
-          const bScore = b.upvotes + b.comment_count;
-          return bScore - aScore;
-        });
-    }
-  });
-
-  // Keep the kanban data in sync with the feedback data
-  useEffect(() => {
-    setGroupedFeedbackData(groupFeedbackByStatus());
-  }, [feedback]);
-
+  // On upvote feedback
   const upvoteFeedback = (id: string) => {
-    // Find the feedback index
-    const feedbackIndex = filteredFeedback.findIndex((f) => f.id === id);
+    // Optimistically update the feedback
+    const feedbackIndex = filteredFeedback.findIndex((feedback) => feedback.id === id);
 
-    // Get correct status option
-    const statusOption = STATUS_OPTIONS.find(
-      (option) => option.label.toLowerCase() === filteredFeedback[feedbackIndex].status.toLowerCase()
-    );
-
-    if (!statusOption) {
-      return;
+    if (feedbackIndex !== -1) {
+      const feedbackCopy = [...filteredFeedback];
+      feedbackCopy[feedbackIndex].upvotes = feedbackCopy[feedbackIndex].has_upvoted
+        ? feedbackCopy[feedbackIndex].upvotes - 1
+        : feedbackCopy[feedbackIndex].upvotes + 1;
+      feedbackCopy[feedbackIndex].has_upvoted = !feedbackCopy[feedbackIndex].has_upvoted;
+      setFeedback(feedbackCopy);
     }
-
-    // Set the upvoted state
-    setGroupedFeedbackData((prev) => {
-      const updatedData = { ...prev };
-      updatedData[statusOption.label] = updatedData[statusOption.label].map((f) => {
-        if (f.id === filteredFeedback[feedbackIndex].id) {
-          return {
-            ...f,
-            has_upvoted: !f.has_upvoted,
-            upvotes: f.has_upvoted ? f.upvotes - 1 : f.upvotes + 1,
-          };
-        }
-        return f;
-      });
-      return updatedData;
-    });
 
     // Upvote feedback
     fetch(`/api/v1/workspaces/${slug}/feedback/${id}/upvotes`, {
@@ -113,11 +82,15 @@ export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | '
     }).then((res) => {
       if (!res.ok) {
         // Revert the feedback
-        setGroupedFeedbackData(groupFeedbackByStatus());
+        setFeedback(filteredFeedback);
         toast.error('Failed to upvote feedback');
       }
     });
   };
+
+  useEffect(() => {
+    setFeedback(feedbackData || []);
+  }, [feedbackData]);
 
   return (
     <div className='min-h-[100%] w-full'>
@@ -134,7 +107,14 @@ export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | '
       )}
 
       {/* List */}
-      {style === 'list' && <RoadmapList groupedFeedback={groupedFeedbackData} onUpvote={upvoteFeedback} />}
+      {style === 'list' && (
+        <RoadmapList
+          groupedFeedback={groupedFeedbackData}
+          onUpvote={upvoteFeedback}
+          isValidating={isValidating}
+          sections={STATUS_OPTIONS}
+        />
+      )}
     </div>
   );
 }

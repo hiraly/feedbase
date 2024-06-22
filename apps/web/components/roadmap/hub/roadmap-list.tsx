@@ -1,8 +1,10 @@
+import { useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, LucideIcon } from 'lucide-react';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { formatTimeAgo } from '@/lib/utils';
@@ -140,35 +142,47 @@ function FeedbackItem({
 export default function RoadmapList({
   groupedFeedback,
   onUpvote,
+  sections,
+  isValidating,
 }: {
+  sections: { label: string; icon: LucideIcon }[];
   groupedFeedback: Record<string, FeedbackWithUserProps[]>;
   onUpvote: (feedbackId: string) => void;
+  isValidating: boolean;
 }) {
+  const randomCounts = useMemo(() => sections.map(() => Math.floor(Math.random() * 6) + 1), [sections]);
+
   return (
     <div className='flex h-full w-full flex-col gap-3'>
-      {Object.entries(groupedFeedback).map(([label, feedbackItems]) => {
+      {sections.map((section) => {
         // If empty, skip
-        if (feedbackItems.length === 0) return null;
+        if (!groupedFeedback[section.label]?.length) return null;
 
-        const statusOption = STATUS_OPTIONS.find(
-          (option) => option.label.toLowerCase() === label.toLowerCase()
-        );
-
-        const Icon = statusOption?.icon;
-        const labelText = statusOption?.label || label;
+        const randomCount = randomCounts[sections.indexOf(section)];
 
         return (
-          <div key={label} className='flex w-full flex-col gap-1.5'>
+          <div key={section.label} className='flex w-full flex-col gap-1.5'>
             <div className='bg-secondary/50 inline-flex items-center gap-1.5 rounded-sm px-2.5 py-1.5 text-sm'>
-              {Icon ? <Icon className='text-muted-foreground h-4 w-4' /> : null}
+              {section.icon ? <section.icon className='text-muted-foreground h-4 w-4' /> : null}
 
-              <span className='text-foreground'>{labelText}</span>
-              <span className='text-muted-foreground text-xs'>{feedbackItems.length}</span>
+              <span className='text-foreground'>{section.label}</span>
+              <span className='text-muted-foreground text-xs'>{groupedFeedback[section.label]?.length}</span>
             </div>
             <div>
-              {feedbackItems.map((feedback) => (
-                <FeedbackItem key={feedback.id} feedback={feedback} onUpvote={onUpvote} />
-              ))}
+              {isValidating ? (
+                <div className='flex h-full w-full flex-col '>
+                  {[...Array(randomCount)].map((_, i) => (
+                    <Skeleton
+                      key={`skeleton-${crypto.randomUUID()}`}
+                      className='h-12 w-full rounded-none py-0.5 first:rounded-t last:rounded-b'
+                    />
+                  ))}
+                </div>
+              ) : (
+                groupedFeedback[section.label].map((feedback) => (
+                  <FeedbackItem key={feedback.id} feedback={feedback} onUpvote={onUpvote} />
+                ))
+              )}
             </div>
           </div>
         );
