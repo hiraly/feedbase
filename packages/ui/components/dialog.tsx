@@ -38,7 +38,7 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        'bg-root data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 flex grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] flex-col gap-6 border p-6 shadow-lg duration-200 sm:rounded-xl md:w-full',
+        'bg-root data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] fixed left-[50%] top-[50%] z-50 flex grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] flex-col gap-6 border p-5 shadow-lg duration-200 sm:rounded-xl',
         className
       )}
       {...props}>
@@ -55,7 +55,7 @@ const DialogClose = React.forwardRef<
   <DialogPrimitive.Close
     ref={ref}
     className={cn(
-      'text-muted-foreground hover:text-foreground absolute right-[22px] top-[22px] rounded-sm transition-colors focus:outline-none disabled:pointer-events-none',
+      'text-muted-foreground hover:text-foreground absolute right-[20px] top-[20px] rounded-sm transition-colors focus:outline-none disabled:pointer-events-none',
       className
     )}
     {...props}>
@@ -87,7 +87,7 @@ DialogHeader.displayName = 'DialogHeader';
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('-mx-6 -mb-6 flex flex-col-reverse gap-2 px-6 pb-5 sm:flex-row sm:justify-end', className)}
+    className={cn('-mx-5 -mb-5 flex flex-col-reverse gap-2 p-5 sm:flex-row sm:justify-end', className)}
     {...props}
   />
 );

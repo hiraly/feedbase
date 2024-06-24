@@ -56,7 +56,7 @@ function FeedbackItem({
 
           {/* Description */}
           <div
-            className={cn('text-muted-foreground -mt-1 line-clamp-2 max-w-full text-sm', 'transition-all')}
+            className={cn('text-muted-foreground -mt-1 line-clamp-1 max-w-full text-sm', 'transition-all')}
             dangerouslySetInnerHTML={{ __html: feedback.content }}
           />
         </div>

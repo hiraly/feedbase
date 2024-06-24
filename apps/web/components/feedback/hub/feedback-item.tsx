@@ -60,11 +60,11 @@ export default function FeedbackItem({
         className='flex flex-grow flex-col items-start justify-between gap-3 p-4'>
         <div className='flex flex-col'>
           {/* Title */}
-          <span className='text-foreground/90 line-clamp-2 pr-10 text-sm font-medium'>{feedback.title}</span>
+          <span className='text-foreground/90 line-clamp-1 pr-10 text-sm font-medium'>{feedback.title}</span>
 
           {/* Description */}
           <div
-            className={cn('line-clamp-2 max-w-full text-sm', PROSE_CN)}
+            className={cn('line-clamp-1 max-w-full text-sm', PROSE_CN)}
             dangerouslySetInnerHTML={{ __html: feedback.content }}
           />
         </div>
@@ -83,7 +83,6 @@ export default function FeedbackItem({
             {formatTimeAgo(new Date(feedback.created_at))}
           </span>
         </div>
-        {/* </div> */}
       </Link>
 
       {/* Comments Count */}

@@ -86,8 +86,7 @@ export default async function Feedback({ params }: Props) {
         {/* Filter Header, Feedback List */}
         <div className='flex h-full w-full flex-col items-center justify-center'>
           {/* Filter Header */}
-          <FeedbackHeader user={user} moduleConfig={moduleConfig} />
-
+          <FeedbackHeader user={user} moduleConfig={moduleConfig} feedbackBoards={boards} />
           {/* Feedback List */}
           <FeedbackList workspaceSlug={params.workspace} feedbackBoards={boards} />
         </div>

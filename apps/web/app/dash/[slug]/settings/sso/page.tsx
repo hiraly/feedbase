@@ -251,7 +251,7 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
               />
             </div>
 
-            <ResponsiveDialogFooter className='items-center border-t px-6 py-4 sm:justify-between'>
+            <ResponsiveDialogFooter className='items-center border-t p-4 px-5 sm:justify-between'>
               <div className='inline-flex flex-row items-center gap-2'>
                 <Checkbox
                   checked={hasCopied}

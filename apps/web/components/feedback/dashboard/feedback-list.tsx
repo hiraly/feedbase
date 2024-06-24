@@ -29,10 +29,10 @@ export default function FeedbackList() {
   const { feedback: feedbackList, error, loading: isLoading, mutate } = useFeedback();
 
   // Filter feedback by query params if they exist
+  const { feedback: initialFeedback } = FilterFeedback(feedbackList || [], tab);
+
   const filteredFeedback =
-    FilterFeedback(feedbackList || [], tab).sort(
-      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-    ) || [];
+    initialFeedback.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || [];
 
   // Categorize feedback by date - Today, Yesterday, Last 7 days, Last 30 days, Older
   const dateSortedFeedback: DateSortedFeedbackProps = filteredFeedback.reduce<DateSortedFeedbackProps>(
@@ -77,26 +77,7 @@ export default function FeedbackList() {
           {
             label: 'All',
           },
-          {
-            label: 'In Review',
-            icon: CircleDotDashed,
-          },
-          {
-            label: 'Planned',
-            icon: CircleDot,
-          },
-          {
-            label: 'In Progress',
-            icon: CheckCircle2,
-          },
-          {
-            label: 'Completed',
-            icon: XCircle,
-          },
-          {
-            label: 'Rejected',
-            icon: XCircle,
-          },
+          ...STATUS_OPTIONS,
         ]}
         selectedTab={tab}
         setSelectedTab={setTab}

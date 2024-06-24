@@ -7,7 +7,7 @@ import { Input } from '@feedbase/ui/components/input';
 import { PlusIcon, Search } from 'lucide-react';
 import useDebounce from '@/lib/hooks/use-debounce';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
-import { ProfileProps, WorkspaceModuleProps } from '@/lib/types';
+import { FeedbackBoardProps, ProfileProps, WorkspaceModuleProps } from '@/lib/types';
 import SortFeedbackDropdown from '@/components/roadmap/sort-dropdown';
 import CreatePostModal from '../../modals/create-post-modal';
 import AuthModal from '../../modals/login-signup-modal';
@@ -16,9 +16,11 @@ import { FilterCombobox } from '../common/filter-combobox';
 export default function FeedbackHeader({
   user,
   moduleConfig,
+  feedbackBoards,
 }: {
   user: ProfileProps['Row'] | null;
   moduleConfig: WorkspaceModuleProps['Row'];
+  feedbackBoards: FeedbackBoardProps['Row'][];
 }) {
   const [search, setSearch] = useState('');
   const searchParams = useSearchParams();
@@ -64,7 +66,9 @@ export default function FeedbackHeader({
           </div>
 
           {(user && !user.is_anonymous) || moduleConfig?.feedback_anon_posting ? (
-            <CreatePostModal>
+            <CreatePostModal
+              defaultBoard={moduleConfig.feedback_default_board_id}
+              feedbackBoards={feedbackBoards}>
               <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>
