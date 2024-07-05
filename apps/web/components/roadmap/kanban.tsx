@@ -120,12 +120,12 @@ export default function FeedbackKanban({
   const randomCounts = useMemo(() => columns.map(() => Math.floor(Math.random() * 8) + 1), [columns]);
 
   return (
-    <div className={cn('flex h-full w-full gap-9', publicBoard ? 'h-[70dvh]' : '')}>
+    <div className={cn('flex h-full w-full gap-9', publicBoard ? 'h-[70dvh]' : 'max-h-[calc(100%-108px)]')}>
       <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} sensors={sensors}>
         <div
           className={cn(
             'flex h-full w-full gap-3 overflow-x-auto p-5',
-            publicBoard ? 'custom-scrollbar min-h-full p-0' : ''
+            publicBoard ? 'custom-scrollbar min-h-full p-0' : 'pt-5'
           )}>
           {columns.map(({ label, icon: Icon }, index) => {
             if (hideEmptyColumns && !data[label]?.length) return null;
@@ -142,12 +142,14 @@ export default function FeedbackKanban({
                     <span className='text-sm'>{label}</span>
                     <span className='text-muted-foreground text-sm'>{data[label]?.length || 0}</span>
                   </div>
-                  <Button
-                    variant='ghost'
-                    size='icon'
-                    className='text-muted-foreground hover:text-foreground h-6 w-6'>
-                    <Plus className='h-3.5 w-3.5' />
-                  </Button>
+                  {!publicBoard ? (
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                      <Plus className='h-3.5 w-3.5' />
+                    </Button>
+                  ) : null}
                 </div>
 
                 {/* Feedback Items */}

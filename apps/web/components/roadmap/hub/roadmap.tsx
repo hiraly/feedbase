@@ -32,7 +32,7 @@ export default function Roadmap() {
         </div>
 
         {/* Tabs */}
-        <div className='bg-background flex h-[33px] w-fit space-x-1 rounded-lg border p-0.5'>
+        <div className='bg-background flex h-[33px] w-fit select-none space-x-1 rounded-lg border p-0.5'>
           {tabs.map((tab) => (
             <button
               type='button'
