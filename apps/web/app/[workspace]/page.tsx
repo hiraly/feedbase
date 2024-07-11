@@ -6,10 +6,10 @@ import { getWorkspaceBoards } from '@/lib/api/boards';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getCurrentUser } from '@/lib/api/user';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import FeedbackBoardList from '@/components/feedback/hub/board-list';
 import FeedbackHeader from '@/components/feedback/hub/button-header';
 import FeedbackList from '@/components/feedback/hub/feedback-list';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
 
 type Props = {
   params: { workspace: string };

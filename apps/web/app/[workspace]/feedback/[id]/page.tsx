@@ -5,12 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/ava
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck } from 'lucide-react';
-import { getCommentsForFeedbackById } from '@/lib/api/comment';
 import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { PROSE_CN, STATUS_OPTIONS } from '@/lib/constants';
-import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import CommentsList from '@/components/feedback/hub/comments-list';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
 
 type Props = {
   params: { workspace: string; id: string };

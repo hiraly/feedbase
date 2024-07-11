@@ -7,8 +7,8 @@ import { fontMono } from '@feedbase/ui/styles/fonts';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import SubscribeToEmailUpdates from '@/components/modals/subscribe-email-modal';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
 
 type Props = {
   params: { workspace: string };
