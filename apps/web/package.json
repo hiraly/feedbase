@@ -48,8 +48,6 @@
     "@tiptap/starter-kit": "^2.3.0",
     "@trigger.dev/nextjs": "^2.3.18",
     "@trigger.dev/react": "^2.3.18",
-    "@types/jsonwebtoken": "^9.0.6",
-    "@types/react-syntax-highlighter": "^15.5.11",
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^0.0.4",
     "autoprefixer": "10.4.14",
@@ -78,21 +76,23 @@
     "sonner": "^0.7.4",
     "swr": "^2.2.5",
     "tailwind-merge": "^1.14.0",
-    "tailwindcss": "3.3.2",
+    "tailwindcss": "^3.3.3",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@feedbase/eslint-config": "workspace:*",
     "@feedbase/tailwind-config": "workspace:*",
     "@feedbase/tsconfig": "workspace:*",
-    "@types/node": "20.3.1",
+    "@types/jsonwebtoken": "^9.0.6",
+    "@types/node": "^20.8.0",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.8",
+    "@types/react-syntax-highlighter": "^15.5.11",
     "encoding": "^0.1.13",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
     "react-email": "^2.1.1",
-    "typescript": "5.1.3"
+    "typescript": "^5.2.2"
   },
   "trigger.dev": {
     "endpointId": "feedbase-o9J_"
