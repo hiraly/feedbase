@@ -4,30 +4,25 @@
   "scripts": {
     "build": "dotenv -- turbo run build",
     "dev": "dotenv -- turbo run dev",
-    "lint": "turbo run lint --",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
+    "lint": "biome lint .",
+    "format": "biome format .",
+    "format-and-lint": "biome check .",
+    "format-and-lint:fix": "biome check . --write",
     "ts": "turbo run ts",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@feedbase/eslint-config": "workspace:*",
+    "@biomejs/biome": "1.8.3",
     "@feedbase/tailwind-config": "workspace:*",
     "@feedbase/tsconfig": "workspace:*",
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
     "dotenv-cli": "^7.3.0",
-    "eslint": "^8.50.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.3.0",
-    "prettier": "3.0.3",
-    "prettier-plugin-tailwindcss": "^0.4.1",
     "sherif": "^1.0.0",
     "turbo": "^2.0.12"
   },
   "packageManager": "pnpm@8.6.2",
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write",
-      "eslint --fix"
-    ]
+    "*.{js,jsx,ts,tsx}": ["pnpm format-and-lint:fix"]
   }
 }

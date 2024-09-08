@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
+import type React from 'react';
+import { useRef, useState } from 'react';
 
 export default function BentoCardWrapper({
   className,
@@ -50,7 +51,8 @@ export default function BentoCardWrapper({
       className={cn(
         'relative max-w-md select-none overflow-hidden rounded-md border bg-[#0F1116]',
         className
-      )}>
+      )}
+    >
       <div
         className='pointer-events-none absolute -inset-px hidden opacity-0 transition duration-300 sm:block'
         style={{

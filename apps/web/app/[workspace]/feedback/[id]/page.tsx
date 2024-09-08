@@ -1,15 +1,15 @@
-import { Metadata } from 'next';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import CommentsList from '@/components/feedback/hub/comments-list';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import { getPublicWorkspaceFeedback } from '@/lib/api/public';
+import { getCurrentUser } from '@/lib/api/user';
+import { PROSE_CN, STATUS_OPTIONS } from '@/lib/constants';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck } from 'lucide-react';
-import { getPublicWorkspaceFeedback } from '@/lib/api/public';
-import { getCurrentUser } from '@/lib/api/user';
-import { PROSE_CN, STATUS_OPTIONS } from '@/lib/constants';
-import CommentsList from '@/components/feedback/hub/comments-list';
-import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { workspace: string; id: string };
@@ -138,7 +138,8 @@ export default async function FeedbackDetails({ params }: Props) {
                       ? feedback.tags.map((tag) => (
                           <div
                             className='group/tag hover:border-foreground/20 hover:bg-accent/50 flex w-fit flex-shrink-0 select-none flex-wrap items-center gap-2 rounded-full border px-3 py-1 transition-colors'
-                            key={tag.name.toLowerCase()}>
+                            key={tag.name.toLowerCase()}
+                          >
                             {/* Tag color */}
                             <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                             {/* Tag name */}
@@ -249,7 +250,8 @@ export default async function FeedbackDetails({ params }: Props) {
                   ? feedback.tags.map((tag) => (
                       <div
                         className='group/tag hover:border-foreground/20 hover:bg-accent/50 hidden w-fit flex-shrink-0 select-none flex-wrap items-center gap-2 rounded-full border px-3 py-1 transition-colors md:flex'
-                        key={tag.name.toLowerCase()}>
+                        key={tag.name.toLowerCase()}
+                      >
                         {/* Tag color */}
                         <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                         {/* Tag name */}

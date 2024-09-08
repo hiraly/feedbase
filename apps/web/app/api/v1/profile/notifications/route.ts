@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getUserNotifications } from '@/lib/api/user';
+import { NextResponse } from 'next/server';
 
 /*
   Get user's notifications

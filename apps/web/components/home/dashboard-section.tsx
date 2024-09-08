@@ -1,7 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import Image from 'next/image';
+import BentoCardWrapper from '@/components/home/spotlight-card';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -15,8 +14,9 @@ import { Label } from '@feedbase/ui/components/label';
 import { RadioGroup, RadioGroupItem } from '@feedbase/ui/components/radio-group';
 import { cn } from '@feedbase/ui/lib/utils';
 import { MoreVertical } from 'lucide-react';
+import Image from 'next/image';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
-import BentoCardWrapper from '@/components/home/spotlight-card';
 import { Icons } from '../shared/icons/icons-static';
 
 export default function DashboardSection() {
@@ -39,13 +39,13 @@ export default function DashboardSection() {
   });
 
   const onChangePicture = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: explicit any
     (e: any) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          setLogo((prev) => ({ ...prev, url: e.target!.result as string }));
+          setLogo((prev) => ({ ...prev, url: e.target?.result as string }));
         };
         reader.readAsDataURL(file);
       }
@@ -92,7 +92,8 @@ export default function DashboardSection() {
                       className={cn(
                         'bg-background hover:bg-background/90 group-hover:bg-background/90 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-md border',
                         logo.radius
-                      )}>
+                      )}
+                    >
                       <p className='absolute hidden text-xs text-gray-500 group-hover:block group-hover:transition-all group-hover:duration-300 dark:text-gray-400'>
                         Upload
                       </p>
@@ -127,7 +128,8 @@ export default function DashboardSection() {
                     className='flex flex-col gap-1'
                     onValueChange={(value) => {
                       setLogo((prev) => ({ ...prev, radius: value }));
-                    }}>
+                    }}
+                  >
                     <div className='flex items-center space-x-2'>
                       <RadioGroupItem value='rounded-none' id='square' className='h-[14px] w-[14px]' />
                       <Label htmlFor='square'>Square</Label>
@@ -153,7 +155,8 @@ export default function DashboardSection() {
                       className={cn(
                         'text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r',
                         colorScheme.primary === '' ? 'px-3' : 'px-2'
-                      )}>
+                      )}
+                    >
                       {colorScheme.primary === '' ? (
                         '#'
                       ) : (
@@ -186,7 +189,8 @@ export default function DashboardSection() {
                       className={cn(
                         'text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r',
                         colorScheme.accent === '' ? 'px-3' : 'px-2'
-                      )}>
+                      )}
+                    >
                       {colorScheme.accent === '' ? (
                         '#'
                       ) : (
@@ -242,7 +246,8 @@ export default function DashboardSection() {
                       error: 'Failed to save.',
                     }
                   );
-                }}>
+                }}
+              >
                 Save Changes
               </Button>
             </div>
@@ -300,7 +305,8 @@ export default function DashboardSection() {
                         error: 'Failed to send invitation.',
                       }
                     );
-                  }}>
+                  }}
+                >
                   Send Invitation
                 </Button>
               </div>
@@ -345,7 +351,8 @@ export default function DashboardSection() {
                     setConnected(true);
                   }, 2000);
                 }}
-                disabled={isLoading || connected}>
+                disabled={isLoading || connected}
+              >
                 {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                 Connect
               </Button>
@@ -355,7 +362,8 @@ export default function DashboardSection() {
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='text-foreground/50 hover:text-foreground h-8 w-5'>
+                    className='text-foreground/50 hover:text-foreground h-8 w-5'
+                  >
                     <MoreVertical className='h-5 w-5' />
                   </Button>
                 </DropdownMenuTrigger>
@@ -372,7 +380,8 @@ export default function DashboardSection() {
                         setMenuOpen(false);
                       }, 1000);
                     }}
-                    disabled={isLoading || !connected}>
+                    disabled={isLoading || !connected}
+                  >
                     {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                     Disconnect
                   </DropdownMenuItem>
@@ -402,7 +411,8 @@ export default function DashboardSection() {
                 onClick={() => {
                   setRequested(true);
                 }}
-                disabled={requested}>
+                disabled={requested}
+              >
                 {requested ? 'Requested' : 'Request'}
               </Button>
             </div>

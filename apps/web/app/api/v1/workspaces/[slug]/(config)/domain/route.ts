@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /*
   GET /api/v1/workspaces/:slug/domain
@@ -81,10 +81,10 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
             verifyData.error.code === 'forbidden'
               ? 403
               : verifyData.error.code === 'domain_taken'
-              ? 409
-              : verifyData.error.code === 'verification_failed'
-              ? 400
-              : 400,
+                ? 409
+                : verifyData.error.code === 'verification_failed'
+                  ? 400
+                  : 400,
         }
       );
     }
@@ -179,8 +179,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
           responseData.error.code === 'forbidden'
             ? 403
             : responseData.error.code === 'domain_taken'
-            ? 409
-            : 400,
+              ? 409
+              : 400,
       }
     );
   }

@@ -1,5 +1,5 @@
 import { withWorkspaceAuth } from '../auth';
-import { FeedbackBoardProps } from '../types';
+import type { FeedbackBoardProps } from '../types';
 
 // Create workspace board
 export const createWorkspaceBoard = (
@@ -16,7 +16,7 @@ export const createWorkspaceBoard = (
     // Create board
     const { data: board, error: boardError } = await supabase
       .from('feedback_board')
-      .insert({ ...data, workspace_id: workspace!.id })
+      .insert({ ...data, workspace_id: workspace?.id! })
       .single();
 
     // Check for errors
@@ -40,7 +40,7 @@ export const getWorkspaceBoards = withWorkspaceAuth<FeedbackBoardProps['Row'][]>
     const { data: boards, error: boardsError } = await supabase
       .from('feedback_board')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (boardsError) {

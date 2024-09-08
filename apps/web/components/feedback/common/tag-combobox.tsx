@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import useTags from '@/lib/swr/use-tags';
 import { Button } from '@feedbase/ui/components/button';
 import { Checkbox } from '@feedbase/ui/components/checkbox';
 import {
@@ -13,7 +13,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon, Tags } from 'lucide-react';
-import useTags from '@/lib/swr/use-tags';
+import * as React from 'react';
 import { CreateTagModal } from '../../modals/add-tag-modal';
 
 interface TagComboboxProps {
@@ -44,7 +44,8 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
           onSelect={() => {
             // Close the dropdown
             setOpenColorDialog(true);
-          }}>
+          }}
+        >
           Create tag: <span className='text-secondary-foreground'>&quot;{search}&quot;</span>
         </CommandItem>
       </>
@@ -73,7 +74,8 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
           aria-expanded={open}
           variant='ghost'
           size='sm'
-          className='text-secondary-foreground w-1/2 justify-between'>
+          className='text-secondary-foreground w-1/2 justify-between'
+        >
           {/* Tags */}
           {selectedTags.length > 0 ? (
             <div className='flex flex-row items-center justify-center gap-1.5'>
@@ -154,7 +156,8 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
                   });
 
                   onTagsChange(newTagsIds);
-                }}>
+                }}
+              >
                 {/* Checkbox, show on hover except if it's already selected */}
                 <Checkbox
                   className={cn(

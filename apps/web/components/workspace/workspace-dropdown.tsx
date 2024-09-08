@@ -1,8 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import AddWorkspaceDialog from '@/components/modals/add-workspace-modal';
+import type { WorkspaceProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -13,8 +12,9 @@ import {
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
-import { WorkspaceProps } from '@/lib/types';
-import AddWorkspaceDialog from '@/components/modals/add-workspace-modal';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function WorkspaceDropdown({
   workspaces,
@@ -37,7 +37,8 @@ export default function WorkspaceDropdown({
           className={cn(
             'group w-fit min-w-[100px] shrink-0 justify-between rounded-lg pl-1 pr-1.5',
             className
-          )}>
+          )}
+        >
           <div className='flex flex-row items-center justify-start gap-1.5'>
             {activeWorkspace?.icon ? (
               <div className='ml-[2px] flex items-center justify-center'>
@@ -69,7 +70,8 @@ export default function WorkspaceDropdown({
               onSelect={() => {
                 setSelectedWorkspace(workspace);
               }}
-              className='flex flex-row items-center gap-2'>
+              className='flex flex-row items-center gap-2'
+            >
               {workspace.icon ? (
                 <Image
                   src={workspace.icon}
@@ -92,7 +94,8 @@ export default function WorkspaceDropdown({
             <DropdownMenuItem
               onSelect={(event) => {
                 event.preventDefault();
-              }}>
+              }}
+            >
               <div className='flex flex-row items-center gap-3 pl-[3.5px]'>
                 <Plus className='text-foreground/70 h-4 w-4' />
                 New Workspace

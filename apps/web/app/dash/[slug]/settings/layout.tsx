@@ -1,3 +1,5 @@
+import Sidebar from '@/components/layout/sidebar';
+import type { SidebarTabsProps } from '@/lib/types';
 import {
   Blocks,
   Earth,
@@ -11,8 +13,6 @@ import {
   Wallet2,
   Webhook,
 } from 'lucide-react';
-import { SidebarTabsProps } from '@/lib/types';
-import Sidebar from '@/components/layout/sidebar';
 
 const tabs: SidebarTabsProps = {
   Workspace: [

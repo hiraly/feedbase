@@ -1,8 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
 import * as SwitchPrimitives from '@radix-ui/react-switch';
+import * as React from 'react';
 
 interface SwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> {
   thumbClassName?: string;
@@ -16,7 +16,8 @@ const Switch = React.forwardRef<React.ElementRef<typeof SwitchPrimitives.Root>, 
         className
       )}
       {...props}
-      ref={ref}>
+      ref={ref}
+    >
       <SwitchPrimitives.Thumb
         className={cn(
           'bg-background pointer-events-none block h-[18px] w-[18px] rounded-full shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0',

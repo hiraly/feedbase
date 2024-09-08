@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+// import { sendDiscordConfirmation } from '@/lib/api/integration';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -14,9 +15,8 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import { useState } from 'react';
 import { toast } from 'sonner';
-// import { sendDiscordConfirmation } from '@/lib/api/integration';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function DiscordIntegrationModal({
   workspaceSlug,
@@ -51,7 +51,7 @@ export default function DiscordIntegrationModal({
 
     // Validate role
     if (role !== '') {
-      if (isNaN(parseInt(role))) {
+      if (Number.isNaN(Number.parseInt(role))) {
         toast.error('Invalid role id.');
         return;
       }
@@ -164,7 +164,8 @@ export default function DiscordIntegrationModal({
               onClick={() => {
                 setWebhook('');
                 setRole('');
-              }}>
+              }}
+            >
               Cancel
             </Button>
           </ResponsiveDialogClose>
@@ -174,9 +175,10 @@ export default function DiscordIntegrationModal({
             disabled={
               webhook === '' ||
               !webhook.startsWith('https://discord.com/api/webhooks/') ||
-              (role !== '' && isNaN(parseInt(role))) ||
+              (role !== '' && Number.isNaN(Number.parseInt(role))) ||
               isLoading
-            }>
+            }
+          >
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Connect
           </Button>

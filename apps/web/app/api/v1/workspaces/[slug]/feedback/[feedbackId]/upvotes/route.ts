@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getFeedbackById, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/lib/api/feedback';
+import { type NextRequest, NextResponse } from 'next/server';
 
 /*
   Get feedback upvotes

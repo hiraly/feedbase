@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import type { ProfileProps } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import {
   DropdownMenu,
@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
 import { createBrowserClient } from '@supabase/ssr';
-import { ProfileProps } from '@/lib/types';
+import { useState } from 'react';
 import UpdateProfileModal from '../modals/edit-profile-modal';
 import FeedbackModal from '../modals/send-feedback-modal';
 import { ChatIcon, LogoutIcon, ProfileIcon } from './icons/icons-animated';
@@ -58,7 +58,8 @@ export default function UserDropdown({
             }}
             onSelect={(e) => {
               e.preventDefault();
-            }}>
+            }}
+          >
             <LottiePlayer
               lottieSrc={ProfileIcon}
               animate={isHover === 'Profile'}
@@ -83,7 +84,8 @@ export default function UserDropdown({
             }}
             onSelect={(e) => {
               e.preventDefault();
-            }}>
+            }}
+          >
             <LottiePlayer
               lottieSrc={ChatIcon}
               animate={isHover === 'Feedback'}
@@ -105,7 +107,8 @@ export default function UserDropdown({
           onMouseLeave={() => {
             setIsHover('');
           }}
-          onClick={handleLogout}>
+          onClick={handleLogout}
+        >
           <LottiePlayer
             lottieSrc={LogoutIcon}
             animate={isHover === 'Logout'}

@@ -1,12 +1,12 @@
-import Link from 'next/link';
-import { Background } from '@feedbase/ui/components/background/background';
-import { Button } from '@feedbase/ui/components/button';
-import { ArrowRight, ChevronRight } from 'lucide-react';
-import { formatRootUrl } from '@/lib/utils';
 import ChangelogSection from '@/components/home/changelog-section';
 import DashboardSection from '@/components/home/dashboard-section';
 import FeedbackSection from '@/components/home/feedback-section';
 import HomeFooter from '@/components/home/footer';
+import { formatRootUrl } from '@/lib/utils';
+import { Background } from '@feedbase/ui/components/background/background';
+import { Button } from '@feedbase/ui/components/button';
+import { ArrowRight, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Landing() {
   return (
@@ -40,7 +40,8 @@ export default function Landing() {
           <Link href='/github'>
             <button
               className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#06060A,90%,#1e2631,95%,#06060A)] bg-[length:225%_100%] px-4 py-1 text-sm  transition-colors'
-              type='button'>
+              type='button'
+            >
               Star on GitHub
             </button>
           </Link>
@@ -48,7 +49,8 @@ export default function Landing() {
 
         <Link
           href={formatRootUrl('hub')}
-          className='text-foreground/60 hover:text-foreground/90 group relative mt-4 flex w-fit flex-row items-center justify-center p-1 text-center text-sm '>
+          className='text-foreground/60 hover:text-foreground/90 group relative mt-4 flex w-fit flex-row items-center justify-center p-1 text-center text-sm '
+        >
           <p className='mr-1 '>See it in action</p>
           <ArrowRight className='relative mb-[1px] inline h-4 w-0 transition-all group-hover:w-4' />
           <ChevronRight className='relative mb-[1px] inline h-4 w-4 transition-all group-hover:w-0' />
@@ -85,7 +87,8 @@ export default function Landing() {
 
           <Link
             href={formatRootUrl('hub')}
-            className='group relative grid h-9 items-center overflow-hidden rounded-md px-4 py-1 shadow-[0_1000px_0_0_hsl(0_0%_20%)_inset] transition-colors duration-200'>
+            className='group relative grid h-9 items-center overflow-hidden rounded-md px-4 py-1 shadow-[0_1000px_0_0_hsl(0_0%_20%)_inset] transition-colors duration-200'
+          >
             <span className='backdrop bg-root group-hover:bg-accent absolute inset-[1px] rounded-md transition-colors duration-200' />
             <span className='z-10 py-0.5 text-sm text-neutral-100'>View Demo</span>
           </Link>

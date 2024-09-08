@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@feedbase/ui/components/card';
-import { cn } from '@feedbase/ui/lib/utils';
-import { AnalyticsProps } from '@/lib/types';
 import BarList from '@/components/analytics/bar-list';
 import LineChart from '@/components/analytics/line-chart';
+import type { AnalyticsProps } from '@/lib/types';
+import { Card, CardContent, CardHeader, CardTitle } from '@feedbase/ui/components/card';
+import { cn } from '@feedbase/ui/lib/utils';
+import { useState } from 'react';
 
 export default function AnalyticsCards({
   analyticsData,
@@ -75,7 +75,8 @@ export default function AnalyticsCards({
               onClick={() => {
                 setChangelogsView(changelogsView === 'clicks' ? 'visitors' : 'clicks');
               }}
-              type='button'>
+              type='button'
+            >
               {changelogsView === 'clicks' ? 'Views' : 'Visitors'}
             </button>
           </CardHeader>
@@ -83,7 +84,8 @@ export default function AnalyticsCards({
             className={cn(
               'min-h-[250px] p-3',
               !topChangelogData.length && 'flex items-center justify-center'
-            )}>
+            )}
+          >
             {!topChangelogData.length ? (
               <p className='text-foreground/60 h-full text-sm '>Not enough data</p>
             ) : (
@@ -107,15 +109,14 @@ export default function AnalyticsCards({
               onClick={() => {
                 setFeedbackView(feedbackView === 'clicks' ? 'visitors' : 'clicks');
               }}
-              type='button'>
+              type='button'
+            >
               {feedbackView === 'clicks' ? 'Views' : 'Visitors'}
             </button>
           </CardHeader>
           <CardContent
-            className={cn(
-              'min-h-[250px] p-3',
-              !topFeedbackData.length && 'flex items-center justify-center'
-            )}>
+            className={cn('min-h-[250px] p-3', !topFeedbackData.length && 'flex items-center justify-center')}
+          >
             {!topFeedbackData.length ? (
               <p className='text-foreground/60 h-full text-sm '>Not enough data</p>
             ) : (

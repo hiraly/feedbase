@@ -1,6 +1,6 @@
+import type { CommentWithUserProps } from '@/lib/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { CommentWithUserProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
 export default function useFeedbackComments(feedbackId: string) {

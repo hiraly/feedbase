@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
+import * as React from 'react';
 import * as RechartsPrimitive from 'recharts';
 
 // Format: { THEME_NAME: CSS_SELECTOR }
@@ -49,7 +49,8 @@ const ChartContainer = React.forwardRef<
           "[&_.recharts-cartesian-axis-tick_text]:fill-muted-foreground [&_.recharts-cartesian-grid_line]:stroke-border/50 [&_.recharts-curve.recharts-tooltip-cursor]:stroke-border [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-border [&_.recharts-radial-bar-background-sector]:fill-muted [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-muted [&_.recharts-reference-line-line]:stroke-border flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-none [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-sector]:outline-none [&_.recharts-surface]:outline-none",
           className
         )}
-        {...props}>
+        {...props}
+      >
         <ChartStyle id={chartId} config={config} />
         <RechartsPrimitive.ResponsiveContainer>{children}</RechartsPrimitive.ResponsiveContainer>
       </div>
@@ -154,7 +155,8 @@ const ChartTooltipContent = React.forwardRef<
         className={cn(
           'border-border/50 bg-background grid min-w-[8rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl',
           className
-        )}>
+        )}
+      >
         {!nestLabel ? tooltipLabel : null}
         <div className='grid gap-1.5'>
           {payload.map((item, index) => {
@@ -168,7 +170,8 @@ const ChartTooltipContent = React.forwardRef<
                 className={cn(
                   '[&>svg]:text-muted-foreground flex w-full items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5',
                   indicator === 'dot' && 'items-center'
-                )}>
+                )}
+              >
                 {formatter && item.value && item.name ? (
                   formatter(item.value, item.name, item, index, item.payload)
                 ) : (
@@ -197,7 +200,8 @@ const ChartTooltipContent = React.forwardRef<
                       className={cn(
                         'flex flex-1 justify-between leading-none',
                         nestLabel ? 'items-end' : 'items-center'
-                      )}>
+                      )}
+                    >
                       <div className='grid gap-1.5'>
                         {nestLabel ? tooltipLabel : null}
                         <span className='text-muted-foreground'>{itemConfig?.label || item.name}</span>
@@ -243,7 +247,8 @@ const ChartLegendContent = React.forwardRef<
         'flex items-center justify-center gap-4',
         verticalAlign === 'top' ? 'pb-3' : 'pt-3',
         className
-      )}>
+      )}
+    >
       {payload.map((item) => {
         const key = `${nameKey || item.dataKey || 'value'}`;
         const itemConfig = getPayloadConfigFromPayload(config, item, key);
@@ -251,7 +256,8 @@ const ChartLegendContent = React.forwardRef<
         return (
           <div
             key={item.value}
-            className={cn('[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3')}>
+            className={cn('[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3')}
+          >
             {itemConfig?.icon && !hideIcon ? (
               <itemConfig.icon />
             ) : (

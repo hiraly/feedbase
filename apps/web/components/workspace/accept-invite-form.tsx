@@ -1,13 +1,13 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import type { ExtendedInviteProps, ProfileProps } from '@/lib/types';
+import { formatRootUrl } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@feedbase/ui/components/card';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { ExtendedInviteProps, ProfileProps } from '@/lib/types';
-import { formatRootUrl } from '@/lib/utils';
 
 export default function WorkspaceInviteForm({
   invite,
@@ -44,7 +44,7 @@ export default function WorkspaceInviteForm({
       loading: 'Accepting invitation...',
       success: () => {
         router.push(`/${invite.workspace.slug}`);
-        return `Invitation accepted! Redirecting...`;
+        return 'Invitation accepted! Redirecting...';
       },
       error: (err) => {
         return err;

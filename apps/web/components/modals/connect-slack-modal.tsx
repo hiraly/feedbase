@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+// import { sendSlackConfirmation } from '@/lib/api/integration';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -14,9 +15,8 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import { useState } from 'react';
 import { toast } from 'sonner';
-// import { sendSlackConfirmation } from '@/lib/api/integration';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function SlackIntegrationModal({
   workspaceSlug,
@@ -129,7 +129,8 @@ export default function SlackIntegrationModal({
               variant='outline'
               onClick={() => {
                 setWebhook('');
-              }}>
+              }}
+            >
               Cancel
             </Button>
           </ResponsiveDialogClose>
@@ -139,9 +140,8 @@ export default function SlackIntegrationModal({
               event.preventDefault();
               onConnectSlack();
             }}
-            disabled={
-              webhook === '' || !webhook.startsWith('https://hooks.slack.com/services/') || isLoading
-            }>
+            disabled={webhook === '' || !webhook.startsWith('https://hooks.slack.com/services/') || isLoading}
+          >
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Connect
           </Button>

@@ -24,7 +24,8 @@ export default function ChangelogLoading() {
         {[1, 2, 3].map((index) => (
           <div
             key={index}
-            className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'>
+            className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
+          >
             <div className='relative flex'>
               <div className='flex w-full pb-4 pr-5 md:w-[200px] md:pb-0'>
                 <Skeleton className='h-5 w-full' />

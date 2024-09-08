@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { CodeIcon } from '@/components/shared/icons/icons-animated';
+import LottiePlayer from '@/components/shared/lottie-player';
+import { formatRootUrl } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@feedbase/ui/components/alert';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
@@ -17,11 +18,10 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
 import { Check, Copy, Info } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
+import { useState } from 'react';
 import { LightAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco, nightOwl } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { formatRootUrl } from '@/lib/utils';
-import { CodeIcon } from '@/components/shared/icons/icons-animated';
-import LottiePlayer from '@/components/shared/lottie-player';
 
 export function ApiSheet({ workspaceSlug }: { workspaceSlug: string }) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -66,7 +66,8 @@ print(response.json())`,
           onMouseLeave={() => {
             setIsHover(false);
           }}
-          className='flex items-center gap-2'>
+          className='flex items-center gap-2'
+        >
           <LottiePlayer lottieSrc={CodeIcon} animate={isHover} className='-ml-[2px] h-5 w-5' />
           API
         </Button>
@@ -105,7 +106,8 @@ print(response.json())`,
                       currentTarget.setAttribute('data-copied', 'false');
                     }
                   }, 1000);
-                }}>
+                }}
+              >
                 <Copy className='text-muted-foreground group-hover:text-foreground h-4 w-4 transition-colors group-data-[copied=true]:hidden' />
                 <Check className='h-4 w-4 text-green-500 group-data-[copied=false]:hidden' />
               </Button>
@@ -124,7 +126,8 @@ print(response.json())`,
                         variant='ghost'
                         size='sm'
                         className='text-foreground data-[state=active]:bg-accent hover:bg-accent'
-                        id={tab.id}>
+                        id={tab.id}
+                      >
                         {tab.name}
                       </Button>
                     </TabsTrigger>
@@ -156,7 +159,8 @@ print(response.json())`,
                         currentTarget.setAttribute('data-copied', 'false');
                       }
                     }, 1000);
-                  }}>
+                  }}
+                >
                   <Copy className='text-muted-foreground h-4 w-4 group-data-[copied=true]:hidden' />
                   <Check className='h-4 w-4 text-green-500 group-data-[copied=false]:hidden' />
                 </Button>
@@ -166,7 +170,8 @@ print(response.json())`,
                   <SyntaxHighlighter
                     language={tab.id}
                     className='w-full overflow-auto !bg-transparent !px-4 !py-2 text-sm'
-                    style={currentTheme.theme === 'dark' ? nightOwl : docco}>
+                    style={currentTheme.theme === 'dark' ? nightOwl : docco}
+                  >
                     {tab.content}
                   </SyntaxHighlighter>
                 </TabsContent>
@@ -186,7 +191,8 @@ print(response.json())`,
               <Link
                 href={formatRootUrl('docs', '/api-reference/endpoint/changelog')}
                 target='_blank'
-                rel='noopener noreferrer'>
+                rel='noopener noreferrer'
+              >
                 <Button variant='link' className='mt-2 h-fit px-0'>
                   Learn more
                 </Button>

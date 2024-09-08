@@ -1,5 +1,5 @@
 import { withWorkspaceAuth } from '@/lib/auth';
-import { ApiKeyPermissions, WorkspaceApiKeyProps, WorkspaceApiKeyWithTokenProps } from '@/lib/types';
+import type { ApiKeyPermissions, WorkspaceApiKeyProps, WorkspaceApiKeyWithTokenProps } from '@/lib/types';
 
 // Create new API key
 export const createWorkspaceApiKey = (
@@ -25,7 +25,7 @@ export const createWorkspaceApiKey = (
     const { data: apiKeys, error: apiKeysError } = await supabase
       .from('workspace_api_key')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (apiKeysError) {
@@ -46,10 +46,10 @@ export const createWorkspaceApiKey = (
     const { data: apiKey, error: apiKeyError } = await supabase
       .from('workspace_api_key')
       .insert({
-        workspace_id: workspace!.id,
+        workspace_id: workspace?.id!,
         name: data.name,
         permission: data.permission,
-        creator_id: user!.id,
+        creator_id: user?.id,
       })
       .select()
       .single();
@@ -84,7 +84,7 @@ export const getWorkspaceApiKeys = withWorkspaceAuth<WorkspaceApiKeyProps['Row']
     const { data: apiKeys, error: apiKeysError } = await supabase
       .from('workspace_api_key')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (apiKeysError) {
@@ -108,7 +108,7 @@ export const deleteWorkspaceApiKey = (slug: string, keyId: string, cType: 'serve
     const { data: apiKey, error: apiKeyError } = await supabase
       .from('workspace_api_key')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('id', keyId)
       .single();
 

@@ -1,4 +1,6 @@
-import React from 'react';
+import { BarChart } from '@/components/analytics/bar-chart';
+import { LineChart } from '@/components/analytics/line-chart';
+import { getWorkspaceAnalytics } from '@/lib/api/workspace';
 import {
   Select,
   SelectContent,
@@ -6,9 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@feedbase/ui/components/select';
-import { getWorkspaceAnalytics } from '@/lib/api/workspace';
-import { BarChart } from '@/components/analytics/bar-chart';
-import { LineChart } from '@/components/analytics/line-chart';
+import React from 'react';
 
 export default async function AnalyticsPage({ params }: { params: { slug: string } }) {
   const { data, error } = await getWorkspaceAnalytics(params.slug, 'server');

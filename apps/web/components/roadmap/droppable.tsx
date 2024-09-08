@@ -1,6 +1,6 @@
-import React from 'react';
 import { useDroppable } from '@dnd-kit/core';
 import { cn } from '@feedbase/ui/lib/utils';
+import type React from 'react';
 
 export function Droppable({
   id,

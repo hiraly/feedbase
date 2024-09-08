@@ -1,8 +1,8 @@
-import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
-import { JwtPayload, verify } from 'jsonwebtoken';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
+import { createClient } from '@supabase/supabase-js';
+import { type JwtPayload, verify } from 'jsonwebtoken';
+import { cookies } from 'next/headers';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest, context: { params: { slug: string } }) {
   const redirectTo = req.nextUrl.searchParams.get('redirect_to');
@@ -91,7 +91,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   cookies().set(
     `sb-${
       process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_SUPABASE_URL!.split('.')[0].replace('https://', '')
+        ? process.env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0].replace('https://', '')
         : 'localhost'
     }-auth-token`,
     sessionEncoded,

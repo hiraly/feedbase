@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { recordClick } from '@/lib/tinybird';
+import { type NextRequest, NextResponse } from 'next/server';
 
 /*
   Record page view

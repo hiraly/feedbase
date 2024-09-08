@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { Button } from '@feedbase/ui/components/button';
 import HomeFooter from '@/components/home/footer';
+import { Button } from '@feedbase/ui/components/button';
+import Link from 'next/link';
 
 export default function Deploy() {
   return (
@@ -59,7 +59,8 @@ export default function Deploy() {
               <Link
                 href='https://supafork.com/new?repository_url=https://github.com/chroxify/feedbase'
                 target='_blank'
-                rel='noopener noreferrer'>
+                rel='noopener noreferrer'
+              >
                 <Button size='sm' className='border-background mt-3 border'>
                   Fork Supabase database
                 </Button>
@@ -87,7 +88,8 @@ export default function Deploy() {
               <Link
                 href='https://github.com/chroxify/feedbase/blob/main/.env.example'
                 target='_blank'
-                rel='noopener noreferrer'>
+                rel='noopener noreferrer'
+              >
                 <Button size='sm' className='border-background mt-3 border'>
                   View example configuration
                 </Button>

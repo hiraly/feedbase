@@ -1,12 +1,12 @@
-import { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
-import { Separator } from '@feedbase/ui/components/separator';
+import Roadmap from '@/components/roadmap/hub/roadmap';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getCurrentUser } from '@/lib/api/user';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import Roadmap from '@/components/roadmap/hub/roadmap';
-import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import { Separator } from '@feedbase/ui/components/separator';
+import type { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { workspace: string };

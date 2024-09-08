@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
+import { AddChangelogModal } from '@/components/modals/add-edit-changelog-modal';
+import AnimatedTabs from '@/components/shared/animated-tabs';
+import type { ChangelogProps } from '@/lib/types';
+import { fetcher } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,12 +28,10 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
-import { ChangelogProps } from '@/lib/types';
-import { fetcher } from '@/lib/utils';
-import { AddChangelogModal } from '@/components/modals/add-edit-changelog-modal';
-import AnimatedTabs from '@/components/shared/animated-tabs';
 
 export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string }) {
   const [tab, setTab] = useState('Drafts');
@@ -67,7 +67,7 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
 
     toast.promise(promise, {
       loading: 'Deleting changelog...',
-      success: `Changelog deleted successfully!`,
+      success: 'Changelog deleted successfully!',
       error: (err) => {
         return err;
       },
@@ -109,7 +109,7 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
 
     toast.promise(promise, {
       loading: 'Duplicating changelog...',
-      success: `Changelog duplicated successfully!`,
+      success: 'Changelog duplicated successfully!',
       error: (err) => {
         return err;
       },
@@ -126,13 +126,15 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
         const filteredChangelogs = changelogsData.filter((changelog) => {
           if (tab === 'Drafts') {
             return !changelog.published;
-          } else if (tab === 'Scheduled') {
+          }
+          if (tab === 'Scheduled') {
             return (
               changelog.published &&
               changelog.publish_date &&
               changelog.publish_date > new Date().toISOString()
             );
-          } else if (tab === 'Published') {
+          }
+          if (tab === 'Published') {
             return (
               changelog.published &&
               changelog.publish_date &&
@@ -178,7 +180,7 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {isLoading
           ? [...Array(5)].map((_, index) => (
-              // eslint-disable-next-line react/no-array-index-key
+              // biome-ignore lint/suspicious/noArrayIndexKey: expected
               <Skeleton key={`skeleton-${index}`} className='h-32 w-full' />
             ))
           : null}
@@ -207,7 +209,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
               variant='secondary'
               onClick={() => {
                 mutate();
-              }}>
+              }}
+            >
               Try Again
             </Button>
           </div>
@@ -230,7 +233,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
         {changelogs?.map((changelog) => (
           <div
             className='bg-card text-card-foreground flex min-h-[8rem] w-full gap-5 rounded-lg border p-2.5 shadow-sm'
-            key={changelog.id}>
+            key={changelog.id}
+          >
             {/* Image */}
             <div className='flex h-full min-w-[190px] flex-col items-center justify-center'>
               {changelog.thumbnail ? (
@@ -292,7 +296,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
                 <Button
                   variant='ghost'
                   size='icon'
-                  className='text-foreground/50 hover:text-foreground h-7 w-4'>
+                  className='text-foreground/50 hover:text-foreground h-7 w-4'
+                >
                   <MoreVertical className='h-4 w-4' />
                 </Button>
               </DropdownMenuTrigger>
@@ -302,7 +307,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
                     onSelect={(event) => {
                       event.preventDefault();
                       event.stopPropagation();
-                    }}>
+                    }}
+                  >
                     <Edit className='mr-2 h-4 w-4' />
                     Edit
                   </DropdownMenuItem>
@@ -313,7 +319,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
                     if (changelog.published) {
                       setTab('Drafts');
                     }
-                  }}>
+                  }}
+                >
                   <Copy className='mr-2 h-4 w-4' />
                   {changelog.published ? 'Duplicate in Drafts' : 'Duplicate'}
                 </DropdownMenuItem>
@@ -323,7 +330,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
                       onSelect={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
-                      }}>
+                      }}
+                    >
                       <Trash className='mr-2 h-4 w-4' />
                       Delete
                     </DropdownMenuDestructiveItem>
@@ -339,7 +347,8 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
-                        onClick={() => onDeleteChangelog(changelog)}>
+                        onClick={() => onDeleteChangelog(changelog)}
+                      >
                         Yes, delete
                       </AlertDialogAction>
                     </AlertDialogFooter>

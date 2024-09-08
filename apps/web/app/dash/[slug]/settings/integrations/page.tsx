@@ -1,6 +1,6 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import FeedbackModal from '@/components/modals/send-feedback-modal';
 import SettingsCard from '@/components/settings/settings-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 
 function IntegrationCard({
   title,
@@ -19,7 +19,8 @@ function IntegrationCard({
     <button
       className='bg-secondary col-span-1 -mt-1 flex w-full flex-row items-center gap-3 rounded-lg p-3'
       type='button'
-      onClick={onClick}>
+      onClick={onClick}
+    >
       {/* Avatar */}
       <Avatar className='rounded-md'>
         <AvatarImage src={image} alt={alt} />

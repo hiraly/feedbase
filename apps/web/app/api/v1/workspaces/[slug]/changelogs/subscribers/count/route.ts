@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getChangelogSubscribers } from '@/lib/api/changelog';
+import { NextResponse } from 'next/server';
 
 /*
   Get the subscribers count for a workspace changelog

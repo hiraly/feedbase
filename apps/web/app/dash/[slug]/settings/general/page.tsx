@@ -1,6 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import SettingsCard from '@/components/settings/settings-card';
+import FetchError from '@/components/shared/fetch-error';
+import FileDrop from '@/components/shared/file-drop';
+import InputGroup from '@/components/shared/input-group';
+import useWorkspace from '@/lib/swr/use-workspace';
+import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
+import type { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
+import { actionFetcher, areObjectsEqual } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -14,16 +21,9 @@ import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Check, ChevronsUpDownIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import useWorkspace from '@/lib/swr/use-workspace';
-import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
-import { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
-import { actionFetcher, areObjectsEqual } from '@/lib/utils';
-import SettingsCard from '@/components/settings/settings-card';
-import FetchError from '@/components/shared/fetch-error';
-import FileDrop from '@/components/shared/file-drop';
-import InputGroup from '@/components/shared/input-group';
 
 export default function GeneralSettings({ params }: { params: { slug: string } }) {
   const {
@@ -113,7 +113,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           }}
           onCancel={() => {
             setWorkspace(workspaceData);
-          }}>
+          }}
+        >
           <div className='-mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm'>Name</Label>
             <Input
@@ -163,7 +164,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                 <div className='flex gap-1'>
                   <Label
                     className='bg-secondary text-secondary-foreground hover:bg-secondary/80 flex h-7 w-fit items-center justify-center rounded-md px-2 hover:cursor-pointer'
-                    htmlFor='icon-upload'>
+                    htmlFor='icon-upload'
+                  >
                     Upload
                   </Label>
                   <input
@@ -196,7 +198,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                       variant='destructive'
                       size='sm'
                       className='w-fit'
-                      onClick={() => setWorkspace({ ...workspace, icon: '' })}>
+                      onClick={() => setWorkspace({ ...workspace, icon: '' })}
+                    >
                       Remove
                     </Button>
                   ) : null}
@@ -214,8 +217,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   {workspace.icon_radius === 'rounded-md'
                     ? 'Rounded'
                     : workspace.icon_radius === 'rounded-full'
-                    ? 'Circle'
-                    : 'Square'}
+                      ? 'Circle'
+                      : 'Square'}
                   <ChevronsUpDownIcon className='text-secondary-foreground ml-2 h-3.5 w-3.5' />
                 </Button>
               </DropdownMenuTrigger>
@@ -226,7 +229,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                       ...workspace,
                       icon_radius: 'rounded-md',
                     });
-                  }}>
+                  }}
+                >
                   Rounded
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -235,7 +239,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                       ...workspace,
                       icon_radius: 'rounded-full',
                     });
-                  }}>
+                  }}
+                >
                   Circle
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -244,7 +249,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                       ...workspace,
                       icon_radius: 'rounded-none',
                     });
-                  }}>
+                  }}
+                >
                   Square
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -303,13 +309,15 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'light' });
             }}
-            type='button'>
+            type='button'
+          >
             <div
               className={cn(
                 'border-border/50 relative h-full w-full items-center rounded-md border-2 p-1',
                 workspaceTheme.theme === 'light' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
-              )}>
+              )}
+            >
               <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>
                 <div className='space-y-2  rounded-md border border-[#E5E7EB] bg-white p-2 shadow-sm'>
                   <div className='h-2 w-[80px] rounded-lg bg-[#F4F4F5]' />
@@ -329,7 +337,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                 className={cn(
                   'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-[#0D0D0E]',
                   workspaceTheme.theme === 'light' ? 'flex' : 'hidden'
-                )}>
+                )}
+              >
                 <Check className='h-3.5 w-3.5 text-white' />
               </div>
             </div>
@@ -347,13 +356,15 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'dark' });
             }}
-            type='button'>
+            type='button'
+          >
             <div
               className={cn(
                 'border-border/50 bg-root relative h-full w-full items-center rounded-md border-2 p-1',
                 workspaceTheme.theme === 'dark' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
-              )}>
+              )}
+            >
               <div className='space-y-2 rounded-sm bg-[#0D0D0E] p-2'>
                 <div className='space-y-2 rounded-md border border-[#2D2E34] bg-[#26272C] p-2 shadow-sm'>
                   <div className='h-2 w-[80px] rounded-lg bg-[#121416]' />
@@ -373,7 +384,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                 className={cn(
                   'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-white',
                   workspaceTheme.theme === 'dark' ? 'flex' : 'hidden'
-                )}>
+                )}
+              >
                 <Check className='h-3.5 w-3.5 text-black' />
               </div>
             </div>
@@ -390,14 +402,16 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                 error: 'Failed to update theme.',
               });
               setWorkspaceTheme({ ...workspaceTheme, theme: 'custom' });
-            }}>
+            }}
+          >
             <div className='relative h-full w-full'>
               <div
                 className={cn(
                   'border-border/50 bg-root relative items-center rounded-md border-2 p-1',
                   workspaceTheme.theme === 'custom' &&
                     'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
-                )}>
+                )}
+              >
                 <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>
                   <div className='space-y-2  rounded-md border border-[#E5E7EB] bg-white p-2 shadow-sm'>
                     <div className='h-2 w-[80px] rounded-lg bg-[#F4F4F5]' />
@@ -415,7 +429,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               </div>
               <div
                 className='absolute bottom-0 left-0 right-0 top-0'
-                style={{ clipPath: 'polygon(100% 0px, 0px 0px, 100% 100%)' }}>
+                style={{ clipPath: 'polygon(100% 0px, 0px 0px, 100% 100%)' }}
+              >
                 <div className='border-muted bg-root items-center rounded-md border-2 p-1'>
                   <div className='space-y-2 rounded-sm bg-[#0D0D0E] p-2'>
                     <div className='space-y-2 rounded-md border border-[#2D2E34] bg-[#26272C] p-2 shadow-sm'>
@@ -438,7 +453,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                 className={cn(
                   'absolute bottom-3 right-3 h-5 w-5 items-center justify-center rounded-full bg-white',
                   workspaceTheme.theme === 'custom' ? 'flex' : 'hidden'
-                )}>
+                )}
+              >
                 <Check className='h-3.5 w-3.5 text-black' />
               </div>
             </div>

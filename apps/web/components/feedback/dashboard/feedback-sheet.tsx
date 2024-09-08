@@ -1,7 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import Comment from '@/components/feedback/comments/comment';
+import CommentInput from '@/components/feedback/comments/comment-input';
+import { StatusCombobox } from '@/components/feedback/common/status-combobox';
+import { TagCombobox } from '@/components/feedback/common/tag-combobox';
+import { Icons } from '@/components/shared/icons/icons-static';
+import DefaultTooltip from '@/components/shared/tooltip';
+import { PROSE_CN } from '@/lib/constants';
+import type { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
+import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
 import { Alert, AlertDescription, AlertTitle } from '@feedbase/ui/components/alert';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
@@ -17,13 +24,13 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@feedbase/ui/components/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
 import { cn } from '@feedbase/ui/lib/utils';
-import { DialogTriggerProps } from '@radix-ui/react-dialog';
+import type { DialogTriggerProps } from '@radix-ui/react-dialog';
 import {
   BadgeCheck,
   CalendarClockIcon,
   ChevronDown,
-  ChevronsUpDownIcon,
   ChevronUp,
+  ChevronsUpDownIcon,
   EditIcon,
   EyeOffIcon,
   Hash,
@@ -36,18 +43,11 @@ import {
   Trash2Icon,
   Users,
 } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { PROSE_CN } from '@/lib/constants';
-import { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
-import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
-import Comment from '@/components/feedback/comments/comment';
-import CommentInput from '@/components/feedback/comments/comment-input';
-import { StatusCombobox } from '@/components/feedback/common/status-combobox';
-import { TagCombobox } from '@/components/feedback/common/tag-combobox';
-import { Icons } from '@/components/shared/icons/icons-static';
-import DefaultTooltip from '@/components/shared/tooltip';
 import { BoardCombobox } from '../common/board-combobox';
 
 export function FeedbackSheet({
@@ -142,7 +142,7 @@ export function FeedbackSheet({
     if (open) {
       setCurrentFeedback(initialFeedback);
     }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Format date in a readable format, e.g. 2 days ago or if too old, show the date
   const formatDate = (date: string) => {
@@ -151,9 +151,11 @@ export function FeedbackSheet({
 
     if (days < 1) {
       return 'Today';
-    } else if (days < 2) {
+    }
+    if (days < 2) {
       return 'Yesterday';
-    } else if (days < 7) {
+    }
+    if (days < 7) {
       return `${days} days ago`;
     }
     return new Date(date).toDateString();
@@ -173,7 +175,8 @@ export function FeedbackSheet({
                   <Button
                     size='icon'
                     variant='ghost'
-                    className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                    className='text-muted-foreground hover:text-foreground h-6 w-6'
+                  >
                     <MoreHorizontal className='h-4 w-4' />
                   </Button>
                 </DropdownMenuTrigger>
@@ -182,7 +185,8 @@ export function FeedbackSheet({
                     className='text-secondary-foreground hover:text-foreground flex flex-row items-center gap-2'
                     onClick={() => {
                       copyToClipboard('ID', currentFeedback.id);
-                    }}>
+                    }}
+                  >
                     <Hash className='h-4 w-4' />
                     Copy ID
                   </DropdownMenuItem>
@@ -192,7 +196,8 @@ export function FeedbackSheet({
                     className='text-secondary-foreground hover:text-foreground flex flex-row items-center gap-2'
                     onClick={() => {
                       // TODO: Edit feedback
-                    }}>
+                    }}
+                  >
                     <EditIcon className='h-4 w-4' />
                     Edit Title / Content
                   </DropdownMenuItem>
@@ -204,7 +209,8 @@ export function FeedbackSheet({
                       router.push(
                         `mailto:${currentFeedback.user.email}?subject=Your Feedback Submission (${currentFeedback.id})&body=Hi ${currentFeedback.user.full_name},%0D%0A%0D%0AWe have received your recent feedback and had some follow up questions about it.%0D%0A%0D%0A%0D%0A%0D%0AIf you could get back to us as soon as possible, that would be great!%0D%0A%0D%0AThanks!`
                       );
-                    }}>
+                    }}
+                  >
                     <MailIcon className='h-4 w-4' />
                     Email submitter
                   </DropdownMenuItem>
@@ -214,7 +220,8 @@ export function FeedbackSheet({
                     className='flex flex-row items-center gap-2'
                     onClick={() => {
                       // TODO: Disable commenting
-                    }}>
+                    }}
+                  >
                     <MessageCircleOff className='h-4 w-4' />
                     Disable Commenting
                   </DropdownMenuItem>
@@ -224,7 +231,8 @@ export function FeedbackSheet({
                     className='flex flex-row items-center gap-2'
                     onClick={() => {
                       // TODO: Delete feedback
-                    }}>
+                    }}
+                  >
                     <Trash2Icon className='h-4 w-4' />
                     Delete
                   </DropdownMenuDestructiveItem>
@@ -244,7 +252,8 @@ export function FeedbackSheet({
                     feedback.findIndex((f) => f.id === currentFeedback.id) === 0
                       ? "You've reached the first post"
                       : 'Go to previous post'
-                  }>
+                  }
+                >
                   <Button
                     size='icon'
                     variant='outline'
@@ -252,7 +261,8 @@ export function FeedbackSheet({
                     disabled={feedback.findIndex((f) => f.id === currentFeedback.id) === 0}
                     onClick={() => {
                       navigateFeedback('previous');
-                    }}>
+                    }}
+                  >
                     <ChevronUp className='h-4 w-4' />
                   </Button>
                 </DefaultTooltip>
@@ -261,7 +271,8 @@ export function FeedbackSheet({
                     feedback.findIndex((f) => f.id === currentFeedback.id) === feedback.length - 1
                       ? "You've reached the last post"
                       : 'Go to next post'
-                  }>
+                  }
+                >
                   <Button
                     size='icon'
                     variant='outline'
@@ -269,7 +280,8 @@ export function FeedbackSheet({
                     className='text-muted-foreground hover:text-foreground h-6 w-6'
                     onClick={() => {
                       navigateFeedback('next');
-                    }}>
+                    }}
+                  >
                     <ChevronDown className='h-4 w-4' />
                   </Button>
                 </DefaultTooltip>
@@ -296,14 +308,16 @@ export function FeedbackSheet({
                 <div className='flex gap-2.5'>
                   <TabsTrigger
                     value='comments'
-                    className='data-[state=active]:border-foreground hover:border-muted-foreground border-b border-transparent p-1 px-0 transition-colors'>
+                    className='data-[state=active]:border-foreground hover:border-muted-foreground border-b border-transparent p-1 px-0 transition-colors'
+                  >
                     <Button variant='ghost' size='sm' className='text-foreground px-1.5 hover:bg-transparent'>
                       Comments
                     </Button>
                   </TabsTrigger>
                   <TabsTrigger
                     value='activity'
-                    className='data-[state=active]:border-foreground hover:border-muted-foreground border-b border-transparent p-1 px-0 transition-colors'>
+                    className='data-[state=active]:border-foreground hover:border-muted-foreground border-b border-transparent p-1 px-0 transition-colors'
+                  >
                     <Button variant='ghost' size='sm' className='text-foreground px-1.5 hover:bg-transparent'>
                       Activity
                     </Button>
@@ -358,7 +372,8 @@ export function FeedbackSheet({
                   className='text-muted-foreground hover:text-foreground h-7 w-7'
                   onClick={() => {
                     copyToClipboard('Link', formatRootUrl(slug, `/feedback/${currentFeedback.id}`));
-                  }}>
+                  }}
+                >
                   <LinkIcon className='h-4 w-4' />
                 </Button>
               </DefaultTooltip>
@@ -366,7 +381,8 @@ export function FeedbackSheet({
                 <Button
                   size='icon'
                   variant='ghost'
-                  className='text-muted-foreground hover:text-foreground h-7 w-7'>
+                  className='text-muted-foreground hover:text-foreground h-7 w-7'
+                >
                   <PinIcon className='h-4 w-4' />
                 </Button>
               </DefaultTooltip>
@@ -374,7 +390,8 @@ export function FeedbackSheet({
                 <Button
                   size='icon'
                   variant='ghost'
-                  className='text-muted-foreground hover:text-foreground h-7 w-7'>
+                  className='text-muted-foreground hover:text-foreground h-7 w-7'
+                >
                   <EyeOffIcon className='h-4 w-4' />
                 </Button>
               </DefaultTooltip>
@@ -397,7 +414,8 @@ export function FeedbackSheet({
                   )}
                   onClick={() => {
                     upvoteFeedback({});
-                  }}>
+                  }}
+                >
                   <ChevronUp className='h-4 w-4' />
                   {currentFeedback.upvotes}
                 </Button>
@@ -454,7 +472,8 @@ export function FeedbackSheet({
                 variant='ghost'
                 size='sm'
                 className='text-secondary-foreground w-1/2 justify-between'
-                disabled>
+                disabled
+              >
                 <div className='flex items-center gap-1.5'>
                   <CalendarClockIcon className='text-foreground/60 h-4 w-4' />
                   ETA

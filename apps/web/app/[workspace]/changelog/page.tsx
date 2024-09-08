@@ -1,14 +1,14 @@
-import { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { Separator } from '@feedbase/ui/components/separator';
-import { fontMono } from '@feedbase/ui/styles/fonts';
+import SubscribeToEmailUpdates from '@/components/modals/subscribe-email-modal';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import SubscribeToEmailUpdates from '@/components/modals/subscribe-email-modal';
-import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import { Separator } from '@feedbase/ui/components/separator';
+import { fontMono } from '@feedbase/ui/styles/fonts';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { workspace: string };
@@ -92,7 +92,8 @@ export default async function Changelogs({ params }: Props) {
           <SubscribeToEmailUpdates workspaceSlug={params.workspace}>
             <button
               type='button'
-              className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
+              className='hover:text-foreground/95 text-highlight transition-colors duration-200'
+            >
               Subscribe to Updates
             </button>
           </SubscribeToEmailUpdates>
@@ -106,7 +107,8 @@ export default async function Changelogs({ params }: Props) {
                 href={`https://x.com/${workspaceConfig.changelog_twitter_handle}`}
                 target='_blank'
                 rel='noopener noreferrer'
-                className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
+                className='hover:text-foreground/95 text-highlight transition-colors duration-200'
+              >
                 Follow us on Twitter
               </Link>
 
@@ -119,7 +121,8 @@ export default async function Changelogs({ params }: Props) {
             href={`/api/v1/${params.workspace}/atom`}
             target='_blank'
             rel='noopener noreferrer'
-            className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
+            className='hover:text-foreground/95 text-highlight transition-colors duration-200'
+          >
             Subscribe to Atom Feed
           </Link>
         </div>
@@ -136,7 +139,8 @@ export default async function Changelogs({ params }: Props) {
               {/* // Row Splitting up date and Content  */}
               <div
                 className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
-                key={changelog.id}>
+                key={changelog.id}
+              >
                 {/* Date */}
                 <div className='relative flex'>
                   <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>

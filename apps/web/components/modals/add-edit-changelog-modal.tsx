@@ -1,6 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { DatePicker } from '@/components/shared/date-picker';
+import FileDrop from '@/components/shared/file-drop';
+import { Icons } from '@/components/shared/icons/icons-static';
+import RichTextEditor from '@/components/shared/tiptap-editor';
+import DefaultTooltip from '@/components/shared/tooltip';
+import type { ChangelogProps } from '@/lib/types';
+import { fetcher } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,15 +33,9 @@ import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { Textarea } from '@feedbase/ui/components/textarea';
 import { format } from 'date-fns';
 import { Bell, Calendar } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
-import { ChangelogProps } from '@/lib/types';
-import { fetcher } from '@/lib/utils';
-import { DatePicker } from '@/components/shared/date-picker';
-import FileDrop from '@/components/shared/file-drop';
-import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
-import DefaultTooltip from '@/components/shared/tooltip';
 
 export function AddChangelogModal({
   children,
@@ -123,10 +123,10 @@ export function AddChangelogModal({
           publish_date: new Date().toISOString(),
         });
         if (createType === 'publish') {
-          return `Changelog was published successfully!`;
+          return 'Changelog was published successfully!';
         }
 
-        return `New draft was created successfully!`;
+        return 'New draft was created successfully!';
       },
       error: (err) => {
         return err;
@@ -276,7 +276,8 @@ export function AddChangelogModal({
                   <Button
                     size='icon'
                     variant='ghost'
-                    className='text-muted-foreground hover:text-foreground h-7 w-7'>
+                    className='text-muted-foreground hover:text-foreground h-7 w-7'
+                  >
                     <Icons.Sparkles className='h-3.5 w-3.5' />
                   </Button>
                 </DefaultTooltip>
@@ -298,7 +299,8 @@ export function AddChangelogModal({
                 date={new Date(data.publish_date ?? '')}
                 setDate={(date: Date | undefined) => {
                   setData({ ...data, publish_date: date?.toISOString() ?? null });
-                }}>
+                }}
+              >
                 <Button variant='ghost' className='w-fit justify-end font-normal'>
                   {data.publish_date ? (
                     <>
@@ -331,7 +333,8 @@ export function AddChangelogModal({
                   publish_date: new Date().toISOString(),
                 });
               }}
-              className='shrink-0'>
+              className='shrink-0'
+            >
               Cancel
             </Button>
           </ResponsiveDialogClose>
@@ -355,7 +358,8 @@ export function AddChangelogModal({
                 data.content === changelogData?.content &&
                 data.summary === changelogData?.summary &&
                 data.publish_date === changelogData?.publish_date)
-            }>
+            }
+          >
             {isEdit ? 'Update' : 'Save as Draft'}
           </Button>
           <AlertDialog
@@ -371,21 +375,23 @@ export function AddChangelogModal({
               }
 
               setAlertOpen(open);
-            }}>
+            }}
+          >
             <AlertDialogTrigger>
               <DefaultTooltip
                 content={
                   findMissingFields().length > 0
                     ? `Please fill out the following fields: ${findMissingFields().join(', ')}`
                     : data.publish_date !== null && new Date(data.publish_date) > new Date()
-                    ? 'Changelog scheduling is coming soon!'
-                    : ''
+                      ? 'Changelog scheduling is coming soon!'
+                      : ''
                 }
                 disabled={
                   findMissingFields().length === 0 &&
                   !(data.publish_date !== null && new Date(data.publish_date) > new Date())
                 }
-                className='cursor-not-allowed'>
+                className='cursor-not-allowed'
+              >
                 <Button
                   disabled={
                     findMissingFields().length > 0 ||
@@ -394,7 +400,8 @@ export function AddChangelogModal({
                       data.summary === changelogData?.summary &&
                       data.publish_date === changelogData?.publish_date) ||
                     (data.publish_date !== null && new Date(data.publish_date) > new Date())
-                  }>
+                  }
+                >
                   {/* If publish date is in the future, show "Schedule" else "Publish" */}
                   {data.publish_date && new Date(data.publish_date) > new Date() ? 'Schedule' : 'Publish'}
                 </Button>
@@ -416,7 +423,8 @@ export function AddChangelogModal({
                   checked={notifySubscribers}
                   onCheckedChange={(checked) => {
                     checked ? setNotifySubscribers(true) : setNotifySubscribers(false);
-                  }}>
+                  }}
+                >
                   <Bell className='h-3.5 w-3.5' />
                 </Checkbox>
                 <Label htmlFor='notify_subscribers' className='flex flex-row items-center'>
@@ -442,7 +450,8 @@ export function AddChangelogModal({
 
                     // Close modal
                     setOpen(false);
-                  }}>
+                  }}
+                >
                   Publish
                 </AlertDialogAction>
               </AlertDialogFooter>

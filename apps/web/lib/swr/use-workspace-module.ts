@@ -1,6 +1,6 @@
+import type { WorkspaceModuleProps } from '@/lib/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { WorkspaceModuleProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
 export default function useWorkspaceModuleConfig() {

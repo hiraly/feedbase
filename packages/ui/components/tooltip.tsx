@@ -1,8 +1,8 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
+import * as React from 'react';
 
 const TooltipProvider = TooltipPrimitive.Provider;
 

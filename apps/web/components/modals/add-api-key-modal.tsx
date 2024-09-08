@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { Icons } from '@/components/shared/icons/icons-static';
+import type { WorkspaceApiKeyProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -22,9 +23,8 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Check, CheckIcon, ChevronDownIcon, ClipboardList } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { WorkspaceApiKeyProps } from '@/lib/types';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function AddApiKeyDialog({
   children,
@@ -99,7 +99,8 @@ export default function AddApiKeyDialog({
               setIsLoading(true);
               createApiKey();
             }}
-            className='flex flex-col gap-4'>
+            className='flex flex-col gap-4'
+          >
             <ResponsiveDialogHeader>
               <ResponsiveDialogTitle>Create a new API Key</ResponsiveDialogTitle>
               <ResponsiveDialogDescription>
@@ -147,7 +148,8 @@ export default function AddApiKeyDialog({
                       key='public_access'
                       onSelect={() => {
                         setPermission('public_access');
-                      }}>
+                      }}
+                    >
                       <div className='flex flex-col items-start'>
                         <p>Public Access</p>
                         <p className='text-foreground/70 text-sm '>
@@ -167,7 +169,8 @@ export default function AddApiKeyDialog({
                       key='full_access'
                       onSelect={() => {
                         setPermission('full_access');
-                      }}>
+                      }}
+                    >
                       <div className='flex flex-col items-start'>
                         <p>Full Access</p>
                         <p className='text-foreground/70 text-sm '>
@@ -195,7 +198,8 @@ export default function AddApiKeyDialog({
                   type='button'
                   onClick={() => {
                     setName('');
-                  }}>
+                  }}
+                >
                   Cancel
                 </Button>
               </ResponsiveDialogClose>
@@ -230,7 +234,8 @@ export default function AddApiKeyDialog({
                   setHasCopied(false);
                 }, 2000);
               }}
-              type='button'>
+              type='button'
+            >
               {token}
 
               {hasCopied ? (
@@ -250,7 +255,8 @@ export default function AddApiKeyDialog({
                 variant='default'
                 onClick={() => {
                   setToken('');
-                }}>
+                }}
+              >
                 Close
               </Button>
             </ResponsiveDialogClose>

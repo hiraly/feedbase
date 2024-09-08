@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /*
     Generate atom feed for workspace changelog

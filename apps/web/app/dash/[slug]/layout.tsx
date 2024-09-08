@@ -1,8 +1,3 @@
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { getCurrentUser, getUserWorkspaces } from '@/lib/api/user';
-import { DASH_DOMAIN } from '@/lib/constants';
-import { SidebarTabsProps } from '@/lib/types';
 import DashboardHeader from '@/components/layout/header';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
@@ -13,6 +8,11 @@ import {
   SettingsIcon,
   TagLabelIcon,
 } from '@/components/shared/icons/icons-animated';
+import { getCurrentUser, getUserWorkspaces } from '@/lib/api/user';
+import { DASH_DOMAIN } from '@/lib/constants';
+import type { SidebarTabsProps } from '@/lib/types';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const tabs: SidebarTabsProps = {
   Modules: [
@@ -79,7 +79,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   // Retrieve the currently active tab
   const activeTab = Object.values(tabs)
-    .flatMap((tabArray) => tabArray)
+    .flat()
     .find((tab) => pathname?.includes(tab.slug));
 
   return (

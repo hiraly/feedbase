@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@feedbase/ui/components/card';
-import { ChartConfig, ChartContainer, ChartTooltip } from '@feedbase/ui/components/chart';
+import { type ChartConfig, ChartContainer, ChartTooltip } from '@feedbase/ui/components/chart';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Bar, LabelList, BarChart as ReBarChart, XAxis, YAxis } from 'recharts';
 
@@ -29,7 +29,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function BarChart() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const CustomCursor = (props: any) => {
     const { x, y, width, height, points, className } = props;
 
@@ -99,7 +99,8 @@ export function BarChart() {
             layout='vertical'
             margin={{
               right: 16,
-            }}>
+            }}
+          >
             <YAxis
               dataKey='month'
               type='category'

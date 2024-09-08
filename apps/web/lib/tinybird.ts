@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-import { NextRequest, userAgent } from 'next/server';
+import { type NextRequest, userAgent } from 'next/server';
 
 export async function recordClick({
   req,

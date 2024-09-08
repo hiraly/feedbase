@@ -1,11 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { Icons } from '@/components/shared/icons/icons-static';
+import RichTextEditor from '@/components/shared/tiptap-editor';
+import { actionFetcher } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
 import { Toggle } from '@feedbase/ui/components/toggle';
-import { Editor } from '@tiptap/react';
+import type { Editor } from '@tiptap/react';
 import {
   Check,
   Code2Icon,
@@ -17,11 +19,9 @@ import {
   LucideItalic,
   Trash2Icon,
 } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import { actionFetcher } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
 
 export default function CommentInput({
   workspaceSlug,
@@ -88,7 +88,8 @@ export default function CommentInput({
             pressed={activeMarks.includes('bold')}
             onPressedChange={() => {
               commentEditor.current?.chain().focus().toggleMark('bold').run();
-            }}>
+            }}
+          >
             <LucideBold className='h-4 w-4' />
           </Toggle>
           <Toggle
@@ -96,7 +97,8 @@ export default function CommentInput({
             onPressedChange={() => {
               commentEditor.current?.chain().focus().toggleMark('italic').run();
             }}
-            className='h-6 w-6'>
+            className='h-6 w-6'
+          >
             <LucideItalic className='h-4 w-4' />
           </Toggle>
           <Button
@@ -105,7 +107,8 @@ export default function CommentInput({
             onClick={() => {
               commentEditor.current?.commands.toggleBulletList();
             }}
-            className='text-muted-foreground hover:text-foreground h-6 w-6'>
+            className='text-muted-foreground hover:text-foreground h-6 w-6'
+          >
             <List className='h-4 w-4' />
           </Button>
           <Button
@@ -114,7 +117,8 @@ export default function CommentInput({
             onClick={() => {
               commentEditor.current?.commands.toggleOrderedList();
             }}
-            className='text-muted-foreground hover:text-foreground h-6 w-6'>
+            className='text-muted-foreground hover:text-foreground h-6 w-6'
+          >
             <ListOrderedIcon className='h-4 w-4' />
           </Button>
           <Popover
@@ -129,12 +133,14 @@ export default function CommentInput({
                   setLinkInput(link);
                 }
               }
-            }}>
+            }}
+          >
             <PopoverTrigger asChild>
               <Button
                 size='icon'
                 variant='ghost'
-                className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                className='text-muted-foreground hover:text-foreground h-6 w-6'
+              >
                 <LinkIcon className='h-4 w-4' />
               </Button>
             </PopoverTrigger>
@@ -156,7 +162,8 @@ export default function CommentInput({
                       href: linkInput.includes('http') ? linkInput : `https://${linkInput}`,
                     })
                     .run();
-                }}>
+                }}
+              >
                 <Input
                   placeholder='Enter URL'
                   value={linkInput}
@@ -170,7 +177,8 @@ export default function CommentInput({
                     type='submit'
                     size='icon'
                     variant='ghost'
-                    className='text-muted-foreground hover:text-foreground h-6 w-6 shrink-0'>
+                    className='text-muted-foreground hover:text-foreground h-6 w-6 shrink-0'
+                  >
                     <Check className='h-4 w-4' />
                   </Button>
                   <Button
@@ -180,7 +188,8 @@ export default function CommentInput({
                     className='text-muted-foreground hover:text-foreground h-6 w-6 shrink-0'
                     onClick={() => {
                       commentEditor.current?.chain().focus().unsetLink().run();
-                    }}>
+                    }}
+                  >
                     <Trash2Icon className='h-4 w-4' />
                   </Button>
                 </div>
@@ -194,7 +203,8 @@ export default function CommentInput({
             onClick={() => {
               commentEditor.current?.commands.toggleCodeBlock();
             }}
-            className='text-muted-foreground hover:text-foreground h-6 w-6'>
+            className='text-muted-foreground hover:text-foreground h-6 w-6'
+          >
             <Code2Icon className='h-4 w-4' />
           </Button>
         </div>
@@ -210,7 +220,8 @@ export default function CommentInput({
           onClick={async () => {
             await postComment({ content: commentContent, reply_to_id: parentCommentId });
             if (onPostComment) onPostComment();
-          }}>
+          }}
+        >
           {isPostingComment ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
           Post {parentCommentId ? 'reply' : 'comment'}
         </Button>

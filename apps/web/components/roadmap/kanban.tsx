@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import { FeedbackSheet } from '@/components/feedback/dashboard/feedback-sheet';
+import { STATUS_OPTIONS } from '@/lib/constants';
+import type { FeedbackWithUserProps } from '@/lib/types';
 import {
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   DragOverlay,
-  DragStartEvent,
+  type DragStartEvent,
   PointerSensor,
   useSensor,
   useSensors,
@@ -11,10 +13,8 @@ import {
 import { Button } from '@feedbase/ui/components/button';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import { ChevronUp, LayoutGrid, LucideIcon, Plus } from 'lucide-react';
-import { STATUS_OPTIONS } from '@/lib/constants';
-import { FeedbackWithUserProps } from '@/lib/types';
-import { FeedbackSheet } from '@/components/feedback/dashboard/feedback-sheet';
+import { ChevronUp, LayoutGrid, type LucideIcon, Plus } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
 import { Draggable } from './draggable';
 import { Droppable } from './droppable';
 
@@ -53,7 +53,8 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
         <Button
           variant='outline'
           size='icon'
-          className='text-foreground/60 hover:text-foreground/80 hover:border-foreground/20 hover:bg-background h-6 w-6'>
+          className='text-foreground/60 hover:text-foreground/80 hover:border-foreground/20 hover:bg-background h-6 w-6'
+        >
           <LayoutGrid className='h-3.5 w-3.5' />
         </Button>
 
@@ -63,7 +64,8 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
               <button
                 className='bg-background group/tag hover:border-foreground/20 hidden h-6 flex-shrink-0 flex-wrap items-center gap-2 rounded-lg border  px-2 transition-colors hover:cursor-pointer md:flex'
                 key={tag.name.toLowerCase()}
-                type='button'>
+                type='button'
+              >
                 {/* Tag color */}
                 <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                 {/* Tag name */}
@@ -126,7 +128,8 @@ export default function FeedbackKanban({
           className={cn(
             'flex h-full w-full gap-3 overflow-x-auto p-5',
             publicBoard ? 'custom-scrollbar min-h-full p-0' : 'pt-5'
-          )}>
+          )}
+        >
           {columns.map(({ label, icon: Icon }, index) => {
             if (hideEmptyColumns && !data[label]?.length) return null;
             const randomCount = randomCounts[index];
@@ -134,7 +137,8 @@ export default function FeedbackKanban({
             return (
               <div
                 className='bg-secondary/50 dark:bg-root relative flex h-full w-full min-w-[350px] flex-col gap-3 overflow-y-auto rounded-md p-3 dark:brightness-110'
-                key={label}>
+                key={label}
+              >
                 {/* Header Row */}
                 <div className='flex items-center justify-between dark:brightness-90'>
                   <div className='flex items-center gap-2'>
@@ -146,7 +150,8 @@ export default function FeedbackKanban({
                     <Button
                       variant='ghost'
                       size='icon'
-                      className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                      className='text-muted-foreground hover:text-foreground h-6 w-6'
+                    >
                       <Plus className='h-3.5 w-3.5' />
                     </Button>
                   ) : null}
@@ -162,9 +167,11 @@ export default function FeedbackKanban({
                       <span>Drop here</span>
                       <span className='text-muted-foreground text-sm'>Items are sorted by {sortedBy}</span>
                     </div>
-                  }>
+                  }
+                >
                   {isValidating
                     ? [...Array(randomCount)].map((_, i) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                         <Skeleton key={`skeleton-${i}`} className='h-20 w-full brightness-[0.98]' />
                       ))
                     : data[label]?.map((item) => (
@@ -172,12 +179,14 @@ export default function FeedbackKanban({
                           key={item.id}
                           initialFeedback={item}
                           feedback={data[label]}
-                          disabled={publicBoard}>
+                          disabled={publicBoard}
+                        >
                           <Draggable
                             key={item.id}
                             id={item.id}
                             disabled={publicBoard}
-                            className='bg-root z-50 flex h-fit w-full flex-col gap-3 rounded-md border p-3'>
+                            className='bg-root z-50 flex h-fit w-full flex-col gap-3 rounded-md border p-3'
+                          >
                             <FeedbackCard feedback={item} />
                           </Draggable>
                         </FeedbackSheet>
@@ -193,7 +202,8 @@ export default function FeedbackKanban({
             transition: 'transform 0.1s cubic-bezier(0.54, 1.5, 0.38, 1.11)',
             cursor: 'grabbing',
             zIndex: 9999,
-          }}>
+          }}
+        >
           {activeItem ? (
             <div className='bg-root flex h-fit w-full flex-col gap-3 rounded-md border p-3'>
               <FeedbackCard feedback={activeItem} />

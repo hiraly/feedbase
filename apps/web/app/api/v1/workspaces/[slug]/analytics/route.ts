@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { getWorkspaceAnalytics } from '@/lib/api/workspace';
+import { type NextRequest, NextResponse } from 'next/server';
 
 /*
   Get Analytics

@@ -1,7 +1,7 @@
 import { sendEmail } from '@/emails';
 import WorkspaceInviteEmail from '@/emails/workspace-invite';
 import { withUserAuth, withWorkspaceAuth } from '../auth';
-import { ExtendedInviteProps, ProfileProps, TeamInviteProps } from '../types';
+import type { ExtendedInviteProps, ProfileProps, TeamInviteProps } from '../types';
 import { formatRootUrl, isValidEmail } from '../utils';
 
 // Get all workspace invites
@@ -16,7 +16,7 @@ export const getWorkspaceInvites = withWorkspaceAuth<ExtendedInviteProps[]>(
     const { data: invites, error: invitesError } = await supabase
       .from('workspace_invite')
       .select('*, workspace:workspace_id (name, slug), creator:creator_id (full_name)')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // If any errors, return error
     if (invitesError) {
@@ -88,7 +88,7 @@ export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', e
       const { data: isMember, error: isMemberError } = await supabase
         .from('workspace_member')
         .select()
-        .eq('workspace_id', workspace!.id)
+        .eq('workspace_id', workspace?.id!)
         .eq('member_id', profile.id)
         .single();
 
@@ -107,7 +107,7 @@ export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', e
     const { data: alreadyInvited, error: alreadyInvitedError } = await supabase
       .from('workspace_invite')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('email', email);
 
     // If any errors, return error
@@ -123,7 +123,7 @@ export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', e
     // Create invite
     const { data: invite, error: inviteError } = await supabase
       .from('workspace_invite')
-      .insert({ workspace_id: workspace!.id, email, creator_id: user!.id })
+      .insert({ workspace_id: workspace?.id!, email, creator_id: user?.id })
       .select('*, creator:creator_id (full_name, email)')
       .single();
 
@@ -137,13 +137,13 @@ export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', e
 
     // Send email to user
     const { error: emailError } = await sendEmail({
-      subject: `You've been invited to join ${workspace!.name} on Feedbase`,
+      subject: `You've been invited to join ${workspace?.name} on Feedbase`,
       email,
       react: WorkspaceInviteEmail({
         email,
         invitedByFullName: inviteData.creator.full_name,
         invitedByEmail: inviteData.creator.email,
-        workspaceName: workspace!.name,
+        workspaceName: workspace?.name!,
         inviteLink: formatRootUrl('dash', `/invite/${inviteData.id}`),
       }),
     })
@@ -193,7 +193,7 @@ export const acceptWorkspaceInvite = (inviteId: string, cType: 'server' | 'route
     }
 
     // Validate invite user
-    if (invite.email !== user!.email) {
+    if (invite.email !== user?.email) {
       return { data: null, error: { message: 'Invalid invite', status: 400 } };
     }
 
@@ -213,7 +213,7 @@ export const acceptWorkspaceInvite = (inviteId: string, cType: 'server' | 'route
     // Add user to workspace
     const { error: memberError } = await supabase
       .from('workspace_member')
-      .insert({ workspace_id: invite.workspace_id, member_id: user!.id })
+      .insert({ workspace_id: invite.workspace_id, member_id: user?.id })
       .single();
 
     // If any errors, return error

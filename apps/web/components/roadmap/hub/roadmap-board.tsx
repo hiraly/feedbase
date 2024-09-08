@@ -1,14 +1,14 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
+import { FilterFeedback } from '@/components/feedback/common/feedback-filters';
+import FeedbackKanban from '@/components/roadmap/kanban';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useFeedback from '@/lib/swr/use-feedback';
-import { FeedbackWithUserProps } from '@/lib/types';
-import { FilterFeedback } from '@/components/feedback/common/feedback-filters';
-import FeedbackKanban from '@/components/roadmap/kanban';
+import type { FeedbackWithUserProps } from '@/lib/types';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import RoadmapList from './roadmap-list';
 
 type sortingOptions = 'upvotes' | 'created' | 'trending';
@@ -28,13 +28,13 @@ export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | '
     let groupedFeedback: Record<string, FeedbackWithUserProps[]> = {};
 
     // Initialize the groupedFeedback object with empty arrays for each status in STATUS_OPTIONS
-    STATUS_OPTIONS.forEach(({ label }) => {
+    for (const { label } of STATUS_OPTIONS) {
       groupedFeedback[label] = [];
-    });
+    }
 
     const statusOptions = new Set(['in review', 'planned', 'in progress', 'completed', 'rejected']);
 
-    filteredFeedback.forEach((feedback) => {
+    for (const feedback of filteredFeedback) {
       const { status } = feedback;
       const normalizedStatus = status ? status.toLowerCase().replace(/\s/g, ' ') : '';
 
@@ -45,7 +45,7 @@ export default function RoadmapBoard({ style = 'kanban' }: { style: 'kanban' | '
 
         groupedFeedback[label].push(feedback);
       }
-    });
+    }
 
     // Remove empty groups if style === 'kanban'
     if (style === 'kanban') {

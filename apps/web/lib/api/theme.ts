@@ -1,5 +1,5 @@
 import { withWorkspaceAuth } from '@/lib/auth';
-import { WorkspaceThemeProps } from '@/lib/types';
+import type { WorkspaceThemeProps } from '@/lib/types';
 
 // Get workspace theme by slug
 export const getWorkspaceTheme = withWorkspaceAuth<WorkspaceThemeProps['Row']>(
@@ -13,7 +13,7 @@ export const getWorkspaceTheme = withWorkspaceAuth<WorkspaceThemeProps['Row']>(
     const { data: theme, error: themeError } = await supabase
       .from('workspace_theme')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors
@@ -42,7 +42,7 @@ export const updateWorkspaceTheme = (
     const { data: updatedTheme, error: updateError } = await supabase
       .from('workspace_theme')
       .update(data)
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .select()
       .single();
 

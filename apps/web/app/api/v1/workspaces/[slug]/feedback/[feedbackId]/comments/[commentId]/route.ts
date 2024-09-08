@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { deleteCommentForFeedbackById } from '@/lib/api/comment';
+import { NextResponse } from 'next/server';
 
 /*
     Delete comment for feedback by id

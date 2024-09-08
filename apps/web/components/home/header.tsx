@@ -1,6 +1,8 @@
 'use client';
 
-import Link from 'next/link';
+import { Icons } from '@/components/shared/icons/icons-static';
+import useScroll from '@/lib/hooks/use-scroll';
+import { formatRootUrl } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
 import {
   Sheet,
@@ -12,9 +14,7 @@ import {
 } from '@feedbase/ui/components/sheet';
 import { cn } from '@feedbase/ui/lib/utils';
 import { MenuIcon } from 'lucide-react';
-import useScroll from '@/lib/hooks/use-scroll';
-import { formatRootUrl } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
+import Link from 'next/link';
 
 export const navTabs = [
   {
@@ -40,7 +40,8 @@ export default function HomeNav() {
         className={cn(
           'flex w-full max-w-screen-2xl flex-row items-center justify-between',
           scrolled && 'justify-center'
-        )}>
+        )}
+      >
         {/* Logo */}
         <Link href='/'>
           <Icons.LogoText className='fill-foreground w-24' />
@@ -51,12 +52,14 @@ export default function HomeNav() {
           className={cn(
             'hover:bg-background hidden h-[46px] flex-row items-center justify-center gap-2 rounded-full px-2 py-2.5 transition-all hover:border sm:flex',
             scrolled && 'hidden'
-          )}>
+          )}
+        >
           {navTabs.map((tab) => (
             <Link
               href={tab.href}
               className='text-foreground/80 hover:border-border hover:bg-foreground/5 flex h-8 items-center justify-center rounded-full border border-transparent px-3 text-sm  transition-all'
-              key={tab.label.toLowerCase()}>
+              key={tab.label.toLowerCase()}
+            >
               {tab.label}
             </Link>
           ))}
@@ -67,12 +70,14 @@ export default function HomeNav() {
           className={cn(
             'bg-background fixed top-4 flex h-[46px] -translate-y-full transform flex-row items-center justify-center gap-2 rounded-full border px-2 py-2.5 opacity-0 shadow-md transition-transform',
             scrolled && 'translate-y-0 opacity-100'
-          )}>
+          )}
+        >
           {navTabs.map((tab) => (
             <Link
               href={tab.href}
               className='text-foreground/80 hover:border-border hover:bg-foreground/5 flex h-8 items-center justify-center rounded-full border border-transparent px-3 text-sm  transition-all'
-              key={tab.label.toLowerCase()}>
+              key={tab.label.toLowerCase()}
+            >
               {tab.label}
             </Link>
           ))}
@@ -81,7 +86,8 @@ export default function HomeNav() {
             <Link href={formatRootUrl('dash', '/signup')}>
               <Button
                 className='border-background h-8 min-w-fit shrink-0 rounded-full border px-2.5 text-sm font-normal sm:inline-flex'
-                size='sm'>
+                size='sm'
+              >
                 Get Started
               </Button>
             </Link>

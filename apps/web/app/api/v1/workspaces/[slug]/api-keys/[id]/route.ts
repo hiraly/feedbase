@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { deleteWorkspaceApiKey } from '@/lib/api/api-key';
+import { NextResponse } from 'next/server';
 
 /*
   Delete api key for a workspace

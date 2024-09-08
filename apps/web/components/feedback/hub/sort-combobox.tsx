@@ -1,11 +1,11 @@
 'use client';
 
-import * as React from 'react';
 import { Button } from '@feedbase/ui/components/button';
 import { Command, CommandGroup, CommandItem } from '@feedbase/ui/components/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Check, ChevronDown } from 'lucide-react';
+import * as React from 'react';
 
 export const sortOptions = ['Newest', 'Oldest', 'Best', 'Worst'];
 
@@ -35,7 +35,8 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
           className={cn(
             'text-foreground/60 bg-root hover:bg-accent/50 hover:text-foreground/90 group flex h-7 w-fit items-center justify-between gap-1.5 font-light transition-colors'
           )}
-          size='sm'>
+          size='sm'
+        >
           {currentItem ? (
             <div className='flex flex-row items-center gap-[6px] font-light'>{currentItem}</div>
           ) : (
@@ -57,7 +58,8 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
                   setOpen(false);
                   onSelect?.(currentItem?.toLowerCase() === currentValue ? '' : currentValue);
                 }}
-                className='flex flex-row items-center gap-[6px] font-light'>
+                className='flex flex-row items-center gap-[6px] font-light'
+              >
                 {item}
 
                 {/* Checkmark */}

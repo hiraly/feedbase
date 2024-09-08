@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import { createFeedback, getAllBoardFeedback, getAllWorkspaceFeedback } from '@/lib/api/feedback';
-import { FeedbackWithUserInputProps } from '@/lib/types';
+import type { FeedbackWithUserInputProps } from '@/lib/types';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 

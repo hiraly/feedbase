@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import type { FeedbackBoardProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
-import { FeedbackBoardProps } from '@/lib/types';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function FeedbackBoardList({
   boards,
@@ -38,7 +38,8 @@ export default function FeedbackBoardList({
             className={cn(
               'text-secondary-foreground w-full justify-start text-sm font-normal',
               !currentBoard && 'text-foreground'
-            )}>
+            )}
+          >
             View All Boards
           </Button>
         </Link>
@@ -48,16 +49,18 @@ export default function FeedbackBoardList({
               searchParams.toString() ? `?${searchParams.toString()}` : ''
             }`}
             key={board.id}
-            passHref>
+            passHref
+          >
             <Button
-              variant={currentBoard?.id === board.id ? 'outline' : 'ghost'}
+              variant={currentboard?.id! === board.id ? 'outline' : 'ghost'}
               onClick={() => {
                 setCurrentBoard(board);
               }}
               className={cn(
                 'text-secondary-foreground w-full justify-start text-sm font-normal',
-                currentBoard?.id === board.id && 'text-foreground'
-              )}>
+                currentboard?.id! === board.id && 'text-foreground'
+              )}
+            >
               {board.name}
             </Button>
           </Link>
@@ -68,9 +71,10 @@ export default function FeedbackBoardList({
       <div className='flex w-full flex-row items-center justify-center pt-2'>
         <Link
           className='text-muted-foreground hover:text-secondary-foreground text-xs transition-colors duration-150 hover:cursor-pointer hover:underline'
-          href="https://feedbase.app"
+          href='https://feedbase.app'
           target='_blank'
-          rel='noreferrer'>
+          rel='noreferrer'
+        >
           Powered by Feedbase
         </Link>
       </div>

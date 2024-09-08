@@ -1,15 +1,15 @@
-import type { Metadata } from 'next';
-import Image from 'next/image';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import { Icons } from '@/components/shared/icons/icons-static';
+import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
+import { formatRootUrl } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { fontMono } from '@feedbase/ui/styles/fonts';
-import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
-import { formatRootUrl } from '@/lib/utils';
-import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
-import { Icons } from '@/components/shared/icons/icons-static';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { workspace: string; id: string };
@@ -87,7 +87,8 @@ export default async function ChangelogPage({ params }: Props) {
       {/* // Row Splitting up date and Content  */}
       <div
         className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
-        key={changelog.id}>
+        key={changelog.id}
+      >
         {/* Back Button */}
         <div className='relative flex'>
           <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>
@@ -158,7 +159,8 @@ export default async function ChangelogPage({ params }: Props) {
                   changelog.author.full_name
                 }!&url=${formatRootUrl(params.workspace, `/changelog/${changelog.slug}`)}`}
                 target='_blank'
-                rel='noopener noreferrer'>
+                rel='noopener noreferrer'
+              >
                 <Icons.Twitter className='h-6 w-6' />
               </Link>
             </div>
@@ -168,8 +170,7 @@ export default async function ChangelogPage({ params }: Props) {
           <div
             // TODO: Change this to not be html but markdown
             // prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 should only be applied if codeblock is not in pre
-            className={`${fontMono.variable} prose prose-invert prose-p:font-light prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code: prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal w-0 min-w-full `}
-            // => LUM-32
+            className={`${fontMono.variable} prose prose-invert prose-p:font-light prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal w-0 min-w-full `}
             dangerouslySetInnerHTML={{ __html: changelog.content! }}
           />
 
@@ -182,13 +183,15 @@ export default async function ChangelogPage({ params }: Props) {
               'flex w-full flex-row items-center justify-between py-8',
               changelogIndex === 0 && 'justify-end',
               changelogIndex === changelogs.length - 1 && 'justify-start'
-            )}>
+            )}
+          >
             {/* Previous */}
             {changelogIndex !== 0 && (
               <div>
                 <Link
                   href={`/changelog/${changelogs[changelogIndex - 1]?.slug}`}
-                  className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'>
+                  className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'
+                >
                   ← {changelogs[changelogIndex - 1]?.title}
                 </Link>
               </div>
@@ -199,7 +202,8 @@ export default async function ChangelogPage({ params }: Props) {
               <div>
                 <Link
                   href={`/changelog/${changelogs[changelogIndex + 1]?.slug}`}
-                  className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'>
+                  className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'
+                >
                   {changelogs[changelogIndex + 1]?.title} →
                 </Link>
               </div>

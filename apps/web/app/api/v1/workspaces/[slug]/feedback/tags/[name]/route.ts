@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { deleteFeedbackTagByName } from '@/lib/api/feedback';
+import { NextResponse } from 'next/server';
 
 /*
     Delete tag by name

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import {
@@ -13,8 +13,9 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { Textarea } from '@feedbase/ui/components/textarea';
+import type React from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function FeedbackModal({
   children,
@@ -109,7 +110,8 @@ export default function FeedbackModal({
             variant='default'
             disabled={isLoading || !title || !description}
             className='h-10 w-full transform-gpu rounded-lg transition-transform duration-200 active:scale-95'
-            onClick={handleClick}>
+            onClick={handleClick}
+          >
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : 'Send Feedback'}
           </Button>
         </ResponsiveDialogFooter>

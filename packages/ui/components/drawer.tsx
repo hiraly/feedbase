@@ -1,7 +1,7 @@
 'use client';
 
-import * as React from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
+import * as React from 'react';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 const Drawer = ({
@@ -38,7 +38,8 @@ const DrawerContent = React.forwardRef<
         'bg-root fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[10px] border px-4',
         className
       )}
-      {...props}>
+      {...props}
+    >
       {!hideDragger && <div className='bg-secondary mx-auto mt-4 h-2 w-[100px] rounded-full' />}
       {children}
     </DrawerPrimitive.Content>

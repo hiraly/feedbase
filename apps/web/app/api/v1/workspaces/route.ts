@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { getUserWorkspaces } from '@/lib/api/user';
 import { createWorkspace } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /*
     Create Workspace

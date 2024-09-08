@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { upvoteCommentForFeedbackById } from '@/lib/api/comment';
+import { NextResponse } from 'next/server';
 
 /*
     Upvote comment for feedback by id

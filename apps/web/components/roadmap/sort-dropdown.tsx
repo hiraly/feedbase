@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -11,7 +10,8 @@ import {
 } from '@feedbase/ui/components/dropdown-menu';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Clock3, Flame, ThumbsUp } from 'lucide-react';
-import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function SortFeedbackDropdown() {
   const searchParams = useSearchParams();
@@ -58,7 +58,8 @@ export default function SortFeedbackDropdown() {
           onSelect={() => {
             setCurrentSort('upvotes');
             createQueryString('sort', 'upvotes');
-          }}>
+          }}
+        >
           <ThumbsUp className='h-4 w-4' />
           <span>Upvotes</span>
         </DropdownMenuItem>
@@ -68,7 +69,8 @@ export default function SortFeedbackDropdown() {
           onSelect={() => {
             setCurrentSort('');
             createQueryString('sort', '');
-          }}>
+          }}
+        >
           <Clock3 className='h-4 w-4' />
           <span>Recent</span>
         </DropdownMenuItem>
@@ -78,7 +80,8 @@ export default function SortFeedbackDropdown() {
           onSelect={() => {
             setCurrentSort('trending');
             createQueryString('sort', 'trending');
-          }}>
+          }}
+        >
           <Flame className='h-4 w-4' />
           <span>Trending</span>
         </DropdownMenuItem>

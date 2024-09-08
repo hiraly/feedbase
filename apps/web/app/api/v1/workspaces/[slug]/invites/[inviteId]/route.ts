@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { acceptWorkspaceInvite, deleteWorkspaceInvite } from '@/lib/api/invite';
+import { NextResponse } from 'next/server';
 
 /*
   Accept workspace invite

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@feedbase/ui/components/button';
 import {
   Card,
@@ -12,6 +11,7 @@ import {
 } from '@feedbase/ui/components/card';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Onboarding() {
@@ -28,7 +28,7 @@ export default function Onboarding() {
   async function onCreateWorkspace(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces`, {
+      fetch('/api/v1/workspaces', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

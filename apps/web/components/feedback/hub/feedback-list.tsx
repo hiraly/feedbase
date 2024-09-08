@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Skeleton } from '@feedbase/ui/components/skeleton';
-import { toast } from 'sonner';
+import FetchError from '@/components/shared/fetch-error';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useFeedback from '@/lib/swr/use-feedback';
-import { FeedbackBoardProps, FeedbackWithUserProps } from '@/lib/types';
-import FetchError from '@/components/shared/fetch-error';
+import type { FeedbackBoardProps, FeedbackWithUserProps } from '@/lib/types';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import FeedbackFilterHeader, { FilterFeedback } from '../common/feedback-filters';
 import FeedbackItem from './feedback-item';
 

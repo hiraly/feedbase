@@ -1,9 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import type { ProfileProps, WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
+import { hslToHex } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -14,8 +12,10 @@ import {
 import { cn } from '@feedbase/ui/lib/utils';
 import { satoshi } from '@feedbase/ui/styles/fonts';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { ProfileProps, WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
-import { hslToHex } from '@/lib/utils';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import AuthModal from '../modals/login-signup-modal';
 import UserDropdown from '../shared/user-dropdown';
 
@@ -58,7 +58,8 @@ export default function Header({
           {/* Branding */}
           <Link
             href={workspace.icon_redirect_url || '/'}
-            className='flex cursor-pointer select-none flex-row items-center gap-3.5'>
+            className='flex cursor-pointer select-none flex-row items-center gap-3.5'
+          >
             {/* Logo Image */}
             {workspace?.icon ? (
               <Image
@@ -75,7 +76,8 @@ export default function Header({
               className={cn(
                 satoshi.variable,
                 'text-foreground/90 font-satoshi text-center text-lg font-medium'
-              )}>
+              )}
+            >
               {workspace?.name}
             </div>
           </Link>
@@ -95,7 +97,8 @@ export default function Header({
                       onSelect={() => {
                         setCurrentTab(tab);
                         router.push('/');
-                      }}>
+                      }}
+                    >
                       All {tab.name}
                     </DropdownMenuItem>
                     {tab.items.map((item) => (
@@ -104,7 +107,8 @@ export default function Header({
                         onSelect={() => {
                           setCurrentTab(item);
                           router.push(item.link);
-                        }}>
+                        }}
+                      >
                         {item.name}
                       </DropdownMenuItem>
                     ))}
@@ -117,7 +121,8 @@ export default function Header({
                     'hover:text-foreground text-secondary-foreground text-sm font-normal transition-colors',
                     currentTab.link === tab.link && 'text-foreground'
                   )}
-                  key={tab.name.toLowerCase()}>
+                  key={tab.name.toLowerCase()}
+                >
                   {tab.name}
                 </Link>
               )

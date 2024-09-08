@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { deleteChangelog, updateChangelog } from '@/lib/api/changelog';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 

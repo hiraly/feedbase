@@ -1,7 +1,6 @@
 'use client';
 
-import React from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { actionFetcher } from '@/lib/utils';
 import {
   CommandDialog,
   CommandEmpty,
@@ -10,9 +9,10 @@ import {
   CommandItem,
   CommandList,
 } from '@feedbase/ui/components/command';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import React from 'react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import { actionFetcher } from '@/lib/utils';
 
 const colors = [
   {
@@ -89,7 +89,8 @@ export function CreateTagModal({
                 createTag({ name: tagName, color: color.hex });
                 setOpen(false);
               }}
-              className='flex h-10 flex-row items-center gap-1 rounded-md  hover:cursor-pointer'>
+              className='flex h-10 flex-row items-center gap-1 rounded-md  hover:cursor-pointer'
+            >
               {/* Color */}
               <div className='ml-2 mt-[1px] h-3 w-3 rounded-full' style={{ backgroundColor: color.hex }} />
 

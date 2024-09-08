@@ -1,6 +1,6 @@
+import type { WorkspaceThemeProps } from '@/lib/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { WorkspaceThemeProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
 export default function useWorkspaceTheme() {

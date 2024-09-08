@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: explicit any
 function useDebounce<T extends (...args: any[]) => any>(
   func: T,
   delay: number

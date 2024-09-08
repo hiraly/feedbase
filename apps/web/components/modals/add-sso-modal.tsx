@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -16,8 +15,9 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { Check, Copy, RefreshCcw } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function AddSSOAuthModal({
   workspaceSlug,
@@ -100,7 +100,8 @@ export default function AddSSOAuthModal({
             Visit the{' '}
             <Link
               className='text-foreground/80 hover:text-foreground  hover:underline'
-              href='https://docs.feedbase.app/integrations/sso'>
+              href='https://docs.feedbase.app/integrations/sso'
+            >
               documentation
             </Link>{' '}
             for more information.
@@ -151,13 +152,15 @@ export default function AddSSOAuthModal({
                         setCopied(false);
                       }, 2000);
                     }}
-                    type='button'>
+                    type='button'
+                  >
                     {copied ? <Check className='h-4 w-4 text-green-500' /> : <Copy className='h-4 w-4' />}
                   </button>
                   <button
                     className='text-foreground/50 inline-flex h-9 w-5 cursor-pointer items-center justify-center'
                     onClick={generateJwtSecret}
-                    type='button'>
+                    type='button'
+                  >
                     <RefreshCcw className='h-4 w-4' />
                   </button>
                 </div>
@@ -175,7 +178,8 @@ export default function AddSSOAuthModal({
               variant='outline'
               onClick={() => {
                 setLoginUrl('');
-              }}>
+              }}
+            >
               Cancel
             </Button>
           </ResponsiveDialogClose>
@@ -187,7 +191,8 @@ export default function AddSSOAuthModal({
               jwtSecret === '' ||
               (!loginUrl.startsWith('http://') && !loginUrl.startsWith('https://')) ||
               isLoading
-            }>
+            }
+          >
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Enable
           </Button>

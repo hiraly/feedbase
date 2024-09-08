@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { formatRootUrl } from '@/lib/utils';
 import {
   Body,
   Button,
@@ -14,7 +14,7 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components';
-import { formatRootUrl } from '@/lib/utils';
+import * as React from 'react';
 
 interface WorkspaceInviteEmailProps {
   email: string;
@@ -62,7 +62,8 @@ export default function WorkspaceInviteEmail({
             <Section className='mb-[32px] mt-[32px] text-center'>
               <Button
                 className='rounded-md bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline'
-                href={inviteLink}>
+                href={inviteLink}
+              >
                 Join the team
               </Button>
             </Section>

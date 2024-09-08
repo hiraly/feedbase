@@ -1,15 +1,15 @@
-import { Metadata } from 'next';
-import { headers } from 'next/headers';
-import { notFound } from 'next/navigation';
-import { Separator } from '@feedbase/ui/components/separator';
-import { getWorkspaceBoards } from '@/lib/api/boards';
-import { getWorkspaceModuleConfig } from '@/lib/api/module';
-import { getCurrentUser } from '@/lib/api/user';
-import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import FeedbackBoardList from '@/components/feedback/hub/board-list';
 import FeedbackHeader from '@/components/feedback/hub/button-header';
 import FeedbackList from '@/components/feedback/hub/feedback-list';
 import AnalyticsWrapper from '@/components/shared/analytics-wrapper';
+import { getWorkspaceBoards } from '@/lib/api/boards';
+import { getWorkspaceModuleConfig } from '@/lib/api/module';
+import { getCurrentUser } from '@/lib/api/user';
+import { getWorkspaceBySlug } from '@/lib/api/workspace';
+import { Separator } from '@feedbase/ui/components/separator';
+import type { Metadata } from 'next';
+import { headers } from 'next/headers';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: { workspace: string };
@@ -63,8 +63,8 @@ export default async function Feedback({ params }: Props) {
   }
 
   // Search for the initial board mathing the pathname by /board/board-name format
-  const initialBoard = boards.find(
-    (board) => pathname?.includes(`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`)
+  const initialBoard = boards.find((board) =>
+    pathname?.includes(`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`)
   );
 
   return (

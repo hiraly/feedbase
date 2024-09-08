@@ -1,20 +1,20 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import AnimatedTabs from '@/components/shared/animated-tabs';
+import FetchError from '@/components/shared/fetch-error';
+import { STATUS_OPTIONS } from '@/lib/constants';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useFeedback from '@/lib/swr/use-feedback';
+import type { FeedbackWithUserProps } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
 import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import { CheckCircle2, ChevronUp, CircleDot, CircleDotDashed, Info, XCircle } from 'lucide-react';
-import { STATUS_OPTIONS } from '@/lib/constants';
-import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import useFeedback from '@/lib/swr/use-feedback';
-import { FeedbackWithUserProps } from '@/lib/types';
-import AnimatedTabs from '@/components/shared/animated-tabs';
-import FetchError from '@/components/shared/fetch-error';
+import { ChevronUp, Info } from 'lucide-react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
 import FeedbackFilterHeader, { FilterFeedback } from '../common/feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
 
@@ -41,7 +41,7 @@ export default function FeedbackList() {
       const currentDate = new Date();
       const diffInDays = Math.floor((currentDate.getTime() - feedbackDate.getTime()) / (1000 * 3600 * 24));
 
-      let dateKey;
+      let dateKey: string;
       if (diffInDays === 0) {
         dateKey = 'Today';
       } else if (diffInDays === 1) {
@@ -55,6 +55,7 @@ export default function FeedbackList() {
       }
 
       return {
+        // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
         ...acc,
         [dateKey]: [...(acc[dateKey] || []), feedback],
       };
@@ -89,13 +90,14 @@ export default function FeedbackList() {
       <FeedbackFilterHeader mutate={mutate} className='border-b px-5' />
 
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
-        {/* eslint-disable react/no-array-index-key */}
         {isLoading && !error ? (
           <div className='flex w-full flex-col'>
             {[...Array(10)].map((_, index) => (
               <div
                 className='flex h-12 w-full flex-row items-center justify-between border border-b-0 p-1 px-2 [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
-                key={`item-${index}`}>
+                // biome-ignore lint/suspicious/noArrayIndexKey: expected
+                key={`item-${index}`}
+              >
                 <div className='flex w-full items-center gap-2 pr-10'>
                   <Skeleton className='h-6 w-6' />
                   <Skeleton className='h-6 w-full' />
@@ -104,6 +106,7 @@ export default function FeedbackList() {
                 <div className='flex items-center gap-2'>
                   {}
                   {Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map((_, innerIndex) => (
+                    // biome-ignore lint/suspicious/noArrayIndexKey: expected
                     <Skeleton key={`inner-item-${innerIndex}`} className='h-6 w-12 rounded-full' />
                   ))}
                   <Skeleton className='h-6 w-6 rounded-full' />
@@ -114,10 +117,8 @@ export default function FeedbackList() {
             ))}
           </div>
         ) : null}
-
         {/* Error State */}
         {error ? <FetchError error={error} mutate={mutate} name='feedback' isValidating={isLoading} /> : null}
-
         {/* Empty State */}
         {filteredFeedback.length === 0 && !isLoading && !error && (
           <div className='flex flex-col items-center gap-2 p-10'>
@@ -133,7 +134,8 @@ export default function FeedbackList() {
                 variant='secondary'
                 onClick={() => {
                   mutate();
-                }}>
+                }}
+              >
                 Refresh
               </Button>
               <Button size='sm' variant='default'>
@@ -142,7 +144,6 @@ export default function FeedbackList() {
             </div>
           </div>
         )}
-
         {/* If filteredFeedback is not empty */}
         {!error &&
           Object.entries(dateSortedFeedback).map(([key, value]) => {
@@ -155,10 +156,12 @@ export default function FeedbackList() {
                       key={feedback.id}
                       feedback={filteredFeedback}
                       initialFeedback={feedback}
-                      asChild>
+                      asChild
+                    >
                       <div
                         className='jusify-between hover:bg-muted/50 group flex h-11 cursor-pointer flex-row items-center border border-b-0 p-1 transition-all [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
-                        key={feedback.id}>
+                        key={feedback.id}
+                      >
                         {/* Upvotes & Title */}
                         <div className='flex h-full w-full min-w-0 flex-row items-center'>
                           {/* Upvotes */}
@@ -176,7 +179,8 @@ export default function FeedbackList() {
                               className={cn(
                                 '-mt-1 text-xs transition-colors',
                                 feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
-                              )}>
+                              )}
+                            >
                               {feedback.upvotes}
                             </div>
                           </div>
@@ -206,7 +210,8 @@ export default function FeedbackList() {
                                     }
 
                                     createQueryParams('tags', tag.name);
-                                  }}>
+                                  }}
+                                >
                                   {/* Tag color */}
                                   <div
                                     className='h-2 w-2 rounded-full'
@@ -244,7 +249,8 @@ export default function FeedbackList() {
                                       }
 
                                       createQueryParams('status', currentStatus.label);
-                                    }}>
+                                    }}
+                                  >
                                     <currentStatus.icon className='text-foreground/60 h-4 w-4' />
                                   </button>
                                 );

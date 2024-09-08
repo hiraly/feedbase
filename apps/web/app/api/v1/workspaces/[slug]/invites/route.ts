@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { createWorkspaceInvite, getWorkspaceInvites } from '@/lib/api/invite';
+import { NextResponse } from 'next/server';
 
 /*
   Get all workspace invites

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { Database } from './lib/supabase';
+import { type CookieOptions, createServerClient } from '@supabase/ssr';
+import { type NextRequest, NextResponse } from 'next/server';
+import type { Database } from './lib/supabase';
 
 export const config = {
   matcher: [
@@ -62,8 +62,8 @@ export default async function middleware(req: NextRequest) {
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   const hostname = req.headers
-    .get('host')!
-    .replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+    .get('host')
+    ?.replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
@@ -72,8 +72,8 @@ export default async function middleware(req: NextRequest) {
   const rootDomain = hostname.includes('localhost')
     ? hostname.split('.').slice(-1)[0]
     : hostname.split('.').length >= 2
-    ? `${hostname.split('.').slice(-2).join('.')}`
-    : null;
+      ? `${hostname.split('.').slice(-2).join('.')}`
+      : null;
 
   // If the request is for a custom domain, rewrite to workspace paths
   if (

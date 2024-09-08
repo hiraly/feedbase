@@ -1,5 +1,5 @@
-import { _request, AuthError } from '../lib/fetch';
-import { ChangelogsResponse } from '../lib/types';
+import { AuthError, _request } from '../lib/fetch';
+import type { ChangelogsResponse } from '../lib/types';
 
 /**
  * Represents the Feedbase class for interacting with the Feedbase API.
@@ -38,15 +38,18 @@ export class Feedbase {
         if (res.status === 401 || res.status === 403) {
           throw new AuthError(res.data.error);
         }
-        console.error(res);
         throw new Error(res.data.error);
       }
 
       return { data: { changelogs: res.data }, error: null };
-    } catch (err: any) {
-      console.error(err);
-
-      return { data: { changelogs: null }, error: { name: err.name, message: err.message } };
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return { data: { changelogs: null }, error: { name: err.name, message: err.message } };
+      }
+      return {
+        data: { changelogs: null },
+        error: { name: 'UnknownError', message: 'An unknown error occurred' },
+      };
     }
   }
 
@@ -87,15 +90,17 @@ export class Feedbase {
         if (res.status === 401 || res.status === 403) {
           throw new AuthError(res.data.error);
         }
-        console.error(res);
         throw new Error(res.data.error);
       }
-
       return { data: { feedback: res.data }, error: null };
-    } catch (err: any) {
-      console.error(err);
-
-      return { data: { feedback: null }, error: { name: err.name, message: err.message } };
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        return { data: { feedback: null }, error: { name: err.name, message: err.message } };
+      }
+      return {
+        data: { feedback: null },
+        error: { name: 'UnknownError', message: 'An unknown error occurred' },
+      };
     }
   }
 }

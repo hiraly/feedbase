@@ -1,4 +1,4 @@
-import { Inter, JetBrains_Mono } from '@next/font/google'; // eslint-disable-line
+import { Inter, JetBrains_Mono } from '@next/font/google';
 import localFont from '@next/font/local';
 
 export const fontSans = Inter({

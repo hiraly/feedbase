@@ -1,6 +1,6 @@
-import React from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { cn } from '@feedbase/ui/lib/utils';
+import type React from 'react';
 
 export function Draggable(props: {
   id: string;
@@ -18,7 +18,8 @@ export function Draggable(props: {
       ref={setNodeRef}
       {...listeners}
       {...attributes}
-      className={cn(props.className, isDragging && 'opacity-0')}>
+      className={cn(props.className, isDragging && 'opacity-0')}
+    >
       {props.children}
     </div>
   );

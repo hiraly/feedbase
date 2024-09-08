@@ -1,10 +1,10 @@
-import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { sendBatchEmails } from '@/emails';
 import ChangelogEmail from '@/emails/changelog-email';
-import { PostgrestError } from '@supabase/supabase-js';
-import { decode } from 'base64-arraybuffer';
 import { withWorkspaceAuth } from '@/lib/auth';
-import { ChangelogProps, ChangelogWithAuthorProps, ProfileProps, WorkspaceProps } from '@/lib/types';
+import type { ChangelogProps, ChangelogWithAuthorProps, ProfileProps, WorkspaceProps } from '@/lib/types';
+import type { PostgrestError } from '@supabase/supabase-js';
+import { decode } from 'base64-arraybuffer';
+import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { formatRootUrl, isSlugValid } from '../utils';
 
 // Create Changelog
@@ -21,9 +21,9 @@ export const createChangelog = (
     }
 
     // If theres a thumbnail, which is a base64 string, upload it
-    if (data.thumbnail && data.thumbnail.startsWith('data:image/')) {
+    if (data.thumbnail?.startsWith('data:image/')) {
       // Create unique image path
-      const imagePath = `${workspace!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
+      const imagePath = `${workspace?.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
         .from('workspace')
@@ -62,9 +62,9 @@ export const createChangelog = (
     const { data: changelog, error: changelogError } = await supabase
       .from('changelog')
       .insert({
-        workspace_id: workspace!.id,
+        workspace_id: workspace?.id!,
         slug: data.slug,
-        author_id: user!.id,
+        author_id: user?.id,
         title: data.title,
         summary: data.summary,
         content: data.content,
@@ -85,7 +85,7 @@ export const createChangelog = (
         const { data: subscribers, error: subscribersError } = await supabase
           .from('changelog_subscriber')
           .select('id, email')
-          .eq('workspace_id', workspace!.id);
+          .eq('workspace_id', workspace?.id!);
 
         // Check for errors
         if (subscribersError) {
@@ -96,7 +96,7 @@ export const createChangelog = (
         const { data: profile, error: profileError } = await supabase
           .from('profile')
           .select()
-          .eq('id', user!.id)
+          .eq('id', user?.id)
           .single();
 
         // Check for errors
@@ -125,7 +125,7 @@ export const getAllWorkspaceChangelogs = withWorkspaceAuth<ChangelogWithAuthorPr
     const { data: changelogs, error: changelogsError } = (await supabase
       .from('changelog')
       .select('*, author:profile (full_name, avatar_url)')
-      .eq('workspace_id', workspace!.id)) as {
+      .eq('workspace_id', workspace?.id!)) as {
       data: ChangelogWithAuthorProps[];
       error: PostgrestError | null;
     };
@@ -211,9 +211,9 @@ export const updateChangelog = (
     }
 
     // If theres an image, which is a base64 string, upload it
-    if (data.thumbnail && data.thumbnail.startsWith('data:image/')) {
+    if (data.thumbnail?.startsWith('data:image/')) {
       // Create unique image path
-      const imagePath = `${workspace!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
+      const imagePath = `${workspace?.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
         .from('workspace')
@@ -257,7 +257,8 @@ export const updateChangelog = (
     // Check for errors
     if (currentChangelogError) {
       return { data: null, error: { message: currentChangelogError.message, status: 500 } };
-    } else if (!currentChangelog) {
+    }
+    if (!currentChangelog) {
       return { data: null, error: { message: 'changelog not found', status: 404 } };
     }
 
@@ -269,7 +270,7 @@ export const updateChangelog = (
         const { data: subscribers, error: subscribersError } = await supabase
           .from('changelog_subscriber')
           .select('id, email')
-          .eq('workspace_id', workspace!.id);
+          .eq('workspace_id', workspace?.id!);
 
         // Check for errors
         if (subscribersError) {
@@ -280,7 +281,7 @@ export const updateChangelog = (
         const { data: profile, error: profileError } = await supabase
           .from('profile')
           .select()
-          .eq('id', user!.id)
+          .eq('id', user?.id)
           .single();
 
         // Check for errors
@@ -310,7 +311,8 @@ export const updateChangelog = (
     // Check for errors
     if (changelogError) {
       return { data: null, error: { message: changelogError.message, status: 500 } };
-    } else if (!changelog || changelog.length === 0) {
+    }
+    if (!changelog || changelog.length === 0) {
       return { data: null, error: { message: 'changelog not found', status: 404 } };
     }
 
@@ -336,7 +338,8 @@ export const deleteChangelog = (id: string, slug: string, cType: 'server' | 'rou
     // Check for errors
     if (changelogError) {
       return { data: null, error: { message: changelogError.message, status: 500 } };
-    } else if (!deletedChangelog || deletedChangelog.length === 0) {
+    }
+    if (!deletedChangelog || deletedChangelog.length === 0) {
       return { data: null, error: { message: 'changelog not found', status: 404 } };
     }
 
@@ -370,11 +373,11 @@ const sendChangelogEmail = async (
   }, []);
 
   // Send email to each group
-  subscriberGroups.forEach(async (group) => {
+  for (const group of subscriberGroups) {
     // For each group, create react emails
     const emails = group.map((email) =>
       ChangelogEmail({
-        subId: subscribers.find((subscriber) => subscriber.email === email)!.id,
+        subId: subscribers.find((subscriber) => subscriber.email === email)?.id!,
         workspaceSlug: workspace.slug,
         changelog: {
           title: data.title,
@@ -398,7 +401,7 @@ const sendChangelogEmail = async (
       headers: group.map((email) => ({
         'List-Unsubscribe': formatRootUrl(
           workspace.slug,
-          `/changelogs/unsubscribe?subId=${subscribers.find((subscriber) => subscriber.email === email)!.id}`
+          `/changelogs/unsubscribe?subId=${subscribers.find((subscriber) => subscriber.email === email)?.id}`
         ),
       })),
       reactEmails: emails,
@@ -414,7 +417,7 @@ const sendChangelogEmail = async (
     if (emailError) {
       return { data: null, error: { message: emailError.message, status: 500 } };
     }
-  });
+  }
 };
 
 // Get changelog subscribers
@@ -429,7 +432,7 @@ export const getChangelogSubscribers = (slug: string, cType: 'server' | 'route')
     const { data: subscribers, error: subscribersError } = await supabase
       .from('changelog_subscriber')
       .select('id, email')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (subscribersError) {

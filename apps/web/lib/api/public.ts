@@ -1,11 +1,11 @@
-import { PostgrestError } from '@supabase/supabase-js';
 import { withWorkspaceAuth } from '@/lib/auth';
-import {
+import type {
   ChangelogSubscriberProps,
   ChangelogWithAuthorProps,
   FeedbackTagProps,
   FeedbackWithUserProps,
 } from '@/lib/types';
+import type { PostgrestError } from '@supabase/supabase-js';
 
 // Get Public Workspace Changelogs
 export const getPublicWorkspaceChangelogs = withWorkspaceAuth<ChangelogWithAuthorProps[]>(
@@ -19,7 +19,7 @@ export const getPublicWorkspaceChangelogs = withWorkspaceAuth<ChangelogWithAutho
     const { data: changelogs, error: changelogsError } = (await supabase
       .from('changelog')
       .select('author:profile (full_name, avatar_url), *')
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('published', true)) as { data: ChangelogWithAuthorProps[]; error: PostgrestError | null };
 
     // Check for errors
@@ -44,7 +44,7 @@ export const getPublicWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProp
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
       .select('*, user:profile (avatar_url, full_name)')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (feedbackError) {
@@ -55,15 +55,15 @@ export const getPublicWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProp
     const feedbackData = feedback as unknown as FeedbackWithUserProps[];
 
     // Convert raw tags to tags and remove raw tags
-    feedbackData.forEach((feedback) => {
+    for (const feedback of feedbackData) {
       feedback.tags = feedback.raw_tags as unknown as FeedbackTagProps['Row'][];
-    });
+    }
 
     // Get team members
     const { data: teamMembers, error: teamMembersError } = await supabase
       .from('workspace_member')
       .select('profile (full_name, avatar_url), *')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (teamMembersError) {
@@ -71,9 +71,9 @@ export const getPublicWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProp
     }
 
     // Set team members
-    feedbackData.forEach((feedback) => {
+    for (const feedback of feedbackData) {
       feedback.user.isTeamMember = teamMembers.some((member) => member.member_id === feedback.user_id);
-    });
+    }
 
     // If user logged in, get upvoted feedback
     if (user) {
@@ -93,9 +93,9 @@ export const getPublicWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProp
 
       // Add has upvoted
       if (upvotedFeedbackIds.length > 0) {
-        feedbackData.forEach((feedback) => {
+        for (const feedback of feedbackData) {
           feedback.has_upvoted = upvotedFeedbackIds.includes(feedback.id);
-        });
+        }
       }
     }
 
@@ -121,7 +121,7 @@ export const subscribeToWorkspaceChangelogs = (workspaceSlug: string, email: str
     const { data: existingSubscriber } = await supabase
       .from('changelog_subscriber')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('email', email)
       .single();
 
@@ -133,7 +133,7 @@ export const subscribeToWorkspaceChangelogs = (workspaceSlug: string, email: str
     // Subscribe to workspace changelogs
     const { data: subscriber, error: subscriberError } = await supabase
       .from('changelog_subscriber')
-      .insert({ workspace_id: workspace!.id, email })
+      .insert({ workspace_id: workspace?.id!, email })
       .select()
       .single();
 

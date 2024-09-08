@@ -396,7 +396,6 @@
 //   useEffect(() => {
 //     if (domainStatus === 'unverified') fetchDomainData();
 //     // In this case, we don't want to re-run this effect if domainStatus changes as it would cause an infinite loop
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
 //   }, []);
 
 //   return (

@@ -1,7 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import SettingsCard from '@/components/settings/settings-card';
+import CopyCheckIcon from '@/components/shared/copy-check-icon';
+import FetchError from '@/components/shared/fetch-error';
+import { Icons } from '@/components/shared/icons/icons-static';
+import InputGroup from '@/components/shared/input-group';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { actionFetcher, formatRootUrl } from '@/lib/utils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,15 +33,10 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import useWorkspace from '@/lib/swr/use-workspace';
-import { actionFetcher, formatRootUrl } from '@/lib/utils';
-import SettingsCard from '@/components/settings/settings-card';
-import CopyCheckIcon from '@/components/shared/copy-check-icon';
-import FetchError from '@/components/shared/fetch-error';
-import { Icons } from '@/components/shared/icons/icons-static';
-import InputGroup from '@/components/shared/input-group';
 
 export default function SSOSettings({ params }: { params: { slug: string } }) {
   const [ssoConfig, setSsoConfig] = useState<{
@@ -103,7 +103,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
             </Link>
             .
           </>
-        }>
+        }
+      >
         <Skeleton className='col-span-2 h-80 w-full' />
       </SettingsCard>
     );
@@ -122,7 +123,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
             </Link>
             .
           </>
-        }>
+        }
+      >
         <div className='col-span-2 h-full w-full'>
           <FetchError error={error} mutate={mutate} name='workspace' isValidating={isUpdatingWorkspaceSSO} />
         </div>
@@ -137,8 +139,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
       onCheckedChange={async (checked) => {
         setSsoConfig({ ...ssoConfig, enabled: checked });
         toast.promise(updateWorkspaceSSO({ method: 'PATCH', enabled: checked }), {
-          loading: ssoConfig.enabled ? `Disabling Single Sign-On` : `Enabling Single Sign-On`,
-          success: ssoConfig.enabled ? `Single Sign-On disabled` : `Single Sign-On enabled`,
+          loading: ssoConfig.enabled ? 'Disabling Single Sign-On' : 'Enabling Single Sign-On',
+          success: ssoConfig.enabled ? 'Single Sign-On disabled' : 'Single Sign-On enabled',
           error: () => {
             setSsoConfig({ ...ssoConfig, enabled: !checked });
             return `Failed to ${ssoConfig.enabled ? 'disable' : 'enable'} Single Sign-On`;
@@ -165,7 +167,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
           url: ssoConfig.url,
           secret: ssoConfig.secret,
         });
-      }}>
+      }}
+    >
       <div className='col-span-1 -mt-1 w-full space-y-1'>
         <Label className='text-foreground/70 text-sm '>Login Url</Label>
         <Input
@@ -200,7 +203,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
                       setOpen(true);
                     }
                   }}
-                  disabled={isGenerating || isUpdatingWorkspaceSSO}>
+                  disabled={isGenerating || isUpdatingWorkspaceSSO}
+                >
                   {isGenerating ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
                   {ssoConfig.secret ? 'Regenerate' : 'Generate'}
                 </Button>
@@ -218,7 +222,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
                   <AlertDialogAction
                     onClick={async () => {
                       await generateJwtSecret({});
-                    }}>
+                    }}
+                  >
                     Continue
                   </AlertDialogAction>
                 </AlertDialogFooter>
@@ -270,7 +275,8 @@ export default function SSOSettings({ params }: { params: { slug: string } }) {
                   disabled={!hasCopied}
                   onClick={() => {
                     toast.success('Token copied to clipboard');
-                  }}>
+                  }}
+                >
                   Done
                 </Button>
               </ResponsiveDialogClose>

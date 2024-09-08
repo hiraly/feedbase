@@ -1,6 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { PROSE_CN } from '@/lib/constants';
+import type { CommentProps as CommentDbProps, CommentWithUserProps } from '@/lib/types';
+import { actionFetcher, formatRootUrl } from '@/lib/utils';
 import {
   Accordion,
   AccordionContent,
@@ -19,12 +21,10 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { mutate } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { PROSE_CN } from '@/lib/constants';
-import { CommentProps as CommentDbProps, CommentWithUserProps } from '@/lib/types';
-import { actionFetcher, formatRootUrl } from '@/lib/utils';
 import CommentInput from './comment-input';
 
 // Define a type for the props
@@ -73,7 +73,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
         mutate(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`);
       },
       onError: () => {
-        toast.error(`Failed to delete comment.`);
+        toast.error('Failed to delete comment.');
       },
     }
   );
@@ -160,7 +160,8 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
             <Button
               variant='ghost'
               className='text-foreground/60 -mr-3 flex h-8 w-8 hover:bg-transparent'
-              size='icon'>
+              size='icon'
+            >
               <MoreVertical className='h-4 w-4' />
             </Button>
           </DropdownMenuTrigger>
@@ -169,7 +170,8 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               className='flex flex-row items-center gap-2'
               onClick={() => {
                 deleteComment({ method: 'DELETE' });
-              }}>
+              }}
+            >
               <Trash2Icon className='h-4 w-4' />
               Delete
             </DropdownMenuDestructiveItem>
@@ -205,12 +207,14 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               size='sm'
               onClick={() => {
                 upvoteComment({});
-              }}>
+              }}
+            >
               <span
                 className={cn(
                   'hover:text-highlight flex flex-row items-center gap-1 transition-all duration-200',
                   comment.has_upvoted ? 'text-highlight' : 'text-foreground/60'
-                )}>
+                )}
+              >
                 {comment.has_upvoted ? 'Upvoted' : 'Upvote'}
               </span>
 
@@ -225,7 +229,8 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               size='sm'
               onClick={() => {
                 setIsReplying(!isReplying);
-              }}>
+              }}
+            >
               Reply
             </Button>
 
@@ -240,7 +245,8 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
                 );
 
                 toast.success('Copied link to clipboard.');
-              }}>
+              }}
+            >
               Share
             </Button>
           </div>
@@ -265,7 +271,8 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               value={!isCollapsed ? commentData.id : ''}
               onValueChange={() => {
                 setIsCollapsed((prev) => !prev);
-              }}>
+              }}
+            >
               <AccordionItem value={commentData.id} className='border-none p-0'>
                 <AccordionTrigger className='text-secondary-foreground flex h-full w-full flex-row items-center justify-start gap-1.5 p-0 text-sm'>
                   {!isCollapsed ? 'Hide' : 'Show'} {commentData.replies?.length} replies

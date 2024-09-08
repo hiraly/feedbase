@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { SearchIcon } from '@/components/shared/icons/icons-animated';
+import LottiePlayer from '@/components/shared/lottie-player';
+import useDebounce from '@/lib/hooks/use-debounce';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Plus, X } from 'lucide-react';
-import useDebounce from '@/lib/hooks/use-debounce';
-import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import { SearchIcon } from '@/components/shared/icons/icons-animated';
-import LottiePlayer from '@/components/shared/lottie-player';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FilterCombobox } from '../common/filter-combobox';
 
 export default function FeedbackHeader() {
@@ -41,7 +41,8 @@ export default function FeedbackHeader() {
             className={cn(
               'bg-background relative flex h-8 w-8 items-center gap-1 overflow-hidden rounded-md border transition-all',
               searchActive && 'w-60'
-            )}>
+            )}
+          >
             <Input
               placeholder='Search feedback'
               onClick={(e) => {
@@ -80,7 +81,8 @@ export default function FeedbackHeader() {
               }}
               onMouseLeave={() => {
                 setAnimate(false);
-              }}>
+              }}
+            >
               {/* Icon */}
               <LottiePlayer
                 lottieSrc={SearchIcon}

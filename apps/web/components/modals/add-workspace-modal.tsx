@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import InputGroup from '@/components/shared/input-group';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -13,8 +13,8 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import InputGroup from '@/components/shared/input-group';
 
 export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
@@ -29,7 +29,7 @@ export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNo
 
   async function onCreateWorkspace() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces`, {
+      fetch('/api/v1/workspaces', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -116,7 +116,8 @@ export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNo
               onClick={() => {
                 setName('');
                 setSlug('');
-              }}>
+              }}
+            >
               Cancel
             </Button>
           </ResponsiveDialogClose>
@@ -124,7 +125,8 @@ export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNo
             type='submit'
             className='w-fit'
             onClick={onCreateWorkspace}
-            disabled={name === '' || slug === ''}>
+            disabled={name === '' || slug === ''}
+          >
             Create Workspace
           </Button>
         </ResponsiveDialogFooter>

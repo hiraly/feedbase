@@ -1,6 +1,6 @@
 import { createBrowserClient } from '@supabase/ssr';
-import { SupabaseClient } from '@supabase/supabase-js';
-import { ApiResponse } from './types';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import type { ApiResponse } from './types';
 
 export function isSlugValid(slug: string) {
   // check if slug contains invalid characters
@@ -19,45 +19,43 @@ export function formatRootUrl(subdomain?: string, path?: string) {
   }`;
 }
 
-/* eslint-disable */
-// TODO: Fix eslint-disable
 export const formatHtmlToMd = (htmlString: string): string => {
+  let formattedString = htmlString;
+
   // Replace <strong> with ** for bold text
-  htmlString = htmlString.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
+  formattedString = formattedString.replace(/<strong>(.*?)<\/strong>/g, '**$1**');
 
   // Replace <em> with * for italic text
-  htmlString = htmlString.replace(/<em>(.*?)<\/em>/g, '*$1*');
+  formattedString = formattedString.replace(/<em>(.*?)<\/em>/g, '*$1*');
 
   // Replace <a> with [text](url) for links
-  htmlString = htmlString.replace(/<a href="(.*?)">(.*?)<\/a>/g, '[$2]($1)');
+  formattedString = formattedString.replace(/<a href="(.*?)">(.*?)<\/a>/g, '[$2]($1)');
 
   // Replace <ul> and <li> with dashes for unordered lists
-  htmlString = htmlString.replace(/<ul>(.*?)<\/ul>/gs, (match, p1) => {
-    const listItems = p1.trim().replace(/<li>(.*?)<\/li>/g, '- $1');
-    return listItems;
+  formattedString = formattedString.replace(/<ul>[\s\S]*?<\/ul>/g, (match) => {
+    return match.replace(/<li>(.*?)<\/li>/g, '- $1').replace(/<\/?ul>/g, '');
   });
 
   // Replace <ol> and <li> with numbers for ordered lists
-  htmlString = htmlString.replace(/<ol>(.*?)<\/ol>/gs, (match, p1) => {
-    const listItems = p1.trim().replace(/<li>(.*?)<\/li>/g, (_: string, item: string) => `1. ${item}`);
-    return listItems;
+  formattedString = formattedString.replace(/<ol>[\s\S]*?<\/ol>/g, (match) => {
+    let counter = 1;
+    return match.replace(/<li>(.*?)<\/li>/g, (_, item) => `${counter++}. ${item}`).replace(/<\/?ol>/g, '');
   });
 
   // Replace <p> tags with two spaces and a newline character
-  htmlString = htmlString.replace(/<p>(.*?)<\/p>/gs, '$1  \n');
+  formattedString = formattedString.replace(/<p>([\s\S]*?)<\/p>/g, '$1  \n');
 
   // Replace <code> with backticks for inline code
-  htmlString = htmlString.replace(/<code>(.*?)<\/code>/g, '`$1`');
+  formattedString = formattedString.replace(/<code>(.*?)<\/code>/g, '`$1`');
 
   // Replace <pre> and <code> with triple backticks for code blocks
-  htmlString = htmlString.replace(/<pre><code>(.*?)<\/code><\/pre>/gs, '```\n$1\n```');
+  formattedString = formattedString.replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/g, '```\n$1\n```');
 
   // Handle line breaks
-  htmlString = htmlString.replace(/<br\s*\/?>/g, '  \n');
+  formattedString = formattedString.replace(/<br\s*\/?>/g, '  \n');
 
-  return htmlString;
+  return formattedString;
 };
-/* eslint-enable */
 
 // Create api key token
 export function generateApiToken(prefix: string, length: number): string {
@@ -77,7 +75,7 @@ interface SWRError extends Error {
 }
 
 // Fetcher function for SWR
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: explicit any
 export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
   const res = await fetch(input, init);
 
@@ -92,7 +90,7 @@ export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit
 }
 
 // Action fetcher function for SWR
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: explicit any
 export async function actionFetcher<JSON = any>(
   input: RequestInfo,
   { arg }: { arg: Record<string, unknown>; method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE' }
@@ -124,29 +122,29 @@ export function hexToHSL(H: string | null | undefined) {
   if (!H) return;
 
   // Convert hex to RGB first
-  let r = 0,
-    g = 0,
-    b = 0;
+  let r = 0;
+  let g = 0;
+  let b = 0;
   if (H.length === 4) {
-    r = parseInt(H[1] + H[1], 16);
-    g = parseInt(H[2] + H[2], 16);
-    b = parseInt(H[3] + H[3], 16);
+    r = Number.parseInt(H[1] + H[1], 16);
+    g = Number.parseInt(H[2] + H[2], 16);
+    b = Number.parseInt(H[3] + H[3], 16);
   } else if (H.length === 7) {
-    r = parseInt(H[1] + H[2], 16);
-    g = parseInt(H[3] + H[4], 16);
-    b = parseInt(H[5] + H[6], 16);
+    r = Number.parseInt(H[1] + H[2], 16);
+    g = Number.parseInt(H[3] + H[4], 16);
+    b = Number.parseInt(H[5] + H[6], 16);
   }
 
   // Then to HSL
   r /= 255;
   g /= 255;
   b /= 255;
-  const cmin = Math.min(r, g, b),
-    cmax = Math.max(r, g, b),
-    delta = cmax - cmin;
-  let h = 0,
-    s = 0,
-    l = 0;
+  const cmin = Math.min(r, g, b);
+  const cmax = Math.max(r, g, b);
+  const delta = cmax - cmin;
+  let h = 0;
+  let s = 0;
+  let l = 0;
 
   if (delta === 0) h = 0;
   else if (cmax === r) h = ((g - b) / delta) % 6;
@@ -173,11 +171,13 @@ export function hslToHex(hsl: string | null) {
 
   const [hStr, sStr, lStr] = hsl.replaceAll('%', '').split(' ');
 
-  const h: number = parseFloat(hStr) / 360;
-  const s: number = parseFloat(sStr) / 100;
-  const l: number = parseFloat(lStr) / 100;
+  const h: number = Number.parseFloat(hStr) / 360;
+  const s: number = Number.parseFloat(sStr) / 100;
+  const l: number = Number.parseFloat(lStr) / 100;
 
-  let r: number, g: number, b: number;
+  let r: number;
+  let g: number;
+  let b: number;
 
   if (s === 0) {
     r = l;
@@ -344,7 +344,7 @@ export async function signInAnonymously() {
 }
 
 // Function to check if two objects are equal
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: explicit any
 export function areObjectsEqual(obj1: any, obj2: any): boolean {
   // Check if the objects are the same reference
   if (obj1 === obj2) return true;

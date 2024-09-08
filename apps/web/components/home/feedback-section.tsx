@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import BentoCardWrapper from '@/components/home/spotlight-card';
+import { PROSE_CN } from '@/lib/constants';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { PROSE_CN } from '@/lib/constants';
-import BentoCardWrapper from '@/components/home/spotlight-card';
 import RichTextEditor from '../shared/tiptap-editor';
 
 // const demoTags = [
@@ -75,7 +75,8 @@ export default function FeedbackSection() {
                   className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-200 hover:bg-transparent active:scale-[80%]'
                   onClick={(event) => {
                     setUpvotes(upvotes === 62 ? 63 : 62);
-                  }}>
+                  }}
+                >
                   {/* Arrow */}
                   <ChevronUp
                     className={cn(
@@ -89,7 +90,8 @@ export default function FeedbackSection() {
                     className={cn(
                       'text-sm  transition-colors',
                       upvotes === 63 ? 'text-foreground' : 'text-foreground/60'
-                    )}>
+                    )}
+                  >
                     {upvotes}
                   </div>
                 </Button>
@@ -191,7 +193,8 @@ export default function FeedbackSection() {
                         error: 'Failed to post comment.',
                       }
                     );
-                  }}>
+                  }}
+                >
                   Post Comment
                 </Button>
               </div>

@@ -1,7 +1,4 @@
-import { Metadata } from 'next';
-import { cookies } from 'next/headers';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { UserAuthForm } from '@/components/shared/user-auth-form';
 import {
   Card,
   CardContent,
@@ -11,7 +8,10 @@ import {
   CardTitle,
 } from '@feedbase/ui/components/card';
 import { createServerClient } from '@supabase/ssr';
-import { UserAuthForm } from '@/components/shared/user-auth-form';
+import type { Metadata } from 'next';
+import { cookies } from 'next/headers';
+import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Sign in to Feedbase',

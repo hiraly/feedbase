@@ -1,6 +1,6 @@
+import type { FeedbackWithUserProps } from '@/lib/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
 export default function useFeedback(publicOnly?: boolean) {

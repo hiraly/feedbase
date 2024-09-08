@@ -1,6 +1,6 @@
-import { LucideIcon } from 'lucide-react';
-import { Database } from '@/lib/supabase';
-import { IconObject } from '@/components/shared/icons/icons-animated';
+import type { IconObject } from '@/components/shared/icons/icons-animated';
+import type { Database } from '@/lib/supabase';
+import type { LucideIcon } from 'lucide-react';
 
 // DB Types
 export type WorkspaceProps = Database['public']['Tables']['workspace'];

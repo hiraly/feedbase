@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Icons } from '@/components/shared/icons/icons-static';
+import RichTextEditor from '@/components/shared/tiptap-editor';
+import type { CommentWithUserProps, ProfileProps } from '@/lib/types';
+import { formatRootUrl } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -14,11 +16,9 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, MoreVertical } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { CommentWithUserProps, ProfileProps } from '@/lib/types';
-import { formatRootUrl } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
 import AuthModal from '../../modals/login-signup-modal';
 
 // Define a type for the props
@@ -221,14 +221,16 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
               <Button
                 variant='ghost'
                 className='text-foreground/60 -mr-3 flex h-8 w-8 hover:bg-transparent'
-                size='icon'>
+                size='icon'
+              >
                 <MoreVertical className='h-4 w-4' />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-[160px]'>
               <DropdownMenuItem
                 className='text-destructive focus:text-destructive flex flex-row items-center gap-2 '
-                onClick={onDelete}>
+                onClick={onDelete}
+              >
                 <Icons.Trash className='fill-destructive h-4 w-4' />
                 Delete
               </DropdownMenuItem>
@@ -268,12 +270,14 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
                   if (!user) return;
 
                   onUpvote();
-                }}>
+                }}
+              >
                 <span
                   className={cn(
                     'hover:text-highlight flex flex-row items-center gap-1 transition-all duration-200',
                     comment.has_upvoted ? 'text-highlight' : 'text-foreground/60'
-                  )}>
+                  )}
+                >
                   {comment.has_upvoted ? 'Upvoted' : 'Upvote'}
                 </span>
 
@@ -292,7 +296,8 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
                   if (!user) return;
 
                   setIsReplying(!isReplying);
-                }}>
+                }}
+              >
                 Reply
               </Button>
             </AuthModal>
@@ -308,7 +313,8 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
                 );
 
                 toast.success('Copied link to clipboard.');
-              }}>
+              }}
+            >
               Share
             </Button>
           </div>
@@ -334,7 +340,8 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
                   disabled={
                     // disabled if content is 0 or its only html tags
                     replyContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
-                  }>
+                  }
+                >
                   {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                   Post Reply
                 </Button>

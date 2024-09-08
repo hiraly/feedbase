@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
+import { useEffect } from 'react';
 
 export default function AnalyticsWrapper({
   children,

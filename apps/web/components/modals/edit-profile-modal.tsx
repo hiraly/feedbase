@@ -1,8 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import type { ProfileProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -15,8 +13,10 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { ProfileProps } from '@/lib/types';
 
 export default function UpdateProfileModal({
   user,
@@ -31,7 +31,7 @@ export default function UpdateProfileModal({
 
   async function onUpdateProfile() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/profile`, {
+      fetch('/api/v1/profile', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ export default function UpdateProfileModal({
   }
 
   const onChangePicture = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: explicit any
     (e: any) => {
       const file = e.target.files[0];
       if (file) {
@@ -103,7 +103,8 @@ export default function UpdateProfileModal({
             <div className='group flex h-[65px] w-[65px] items-center justify-center transition-all'>
               <label
                 htmlFor='dropzone-file'
-                className='bg-background hover:bg-background/90 group-hover:bg-background/90 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-md border'>
+                className='bg-background hover:bg-background/90 group-hover:bg-background/90 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-md border'
+              >
                 <p className='text-foreground/70 absolute hidden text-xs group-hover:block group-hover:transition-all group-hover:duration-300'>
                   Upload
                 </p>
@@ -164,7 +165,8 @@ export default function UpdateProfileModal({
           <Button
             type='submit'
             onClick={onUpdateProfile}
-            disabled={name === '' || (name === user.full_name && avatar === user.avatar_url)}>
+            disabled={name === '' || (name === user.full_name && avatar === user.avatar_url)}
+          >
             Update Profile
           </Button>
         </ResponsiveDialogFooter>

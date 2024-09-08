@@ -1,7 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import SettingsCard from '@/components/settings/settings-card';
+import FetchError from '@/components/shared/fetch-error';
+import { Icons } from '@/components/shared/icons/icons-static';
+import InputGroup from '@/components/shared/input-group';
+import useWorkspace from '@/lib/swr/use-workspace';
+import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -17,15 +21,11 @@ import { fontMono } from '@feedbase/ui/styles/fonts';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { Check, CheckIcon, ClipboardList, RefreshCcw, Trash2Icon } from 'lucide-react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
-import useWorkspace from '@/lib/swr/use-workspace';
-import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
-import SettingsCard from '@/components/settings/settings-card';
-import FetchError from '@/components/shared/fetch-error';
-import { Icons } from '@/components/shared/icons/icons-static';
-import InputGroup from '@/components/shared/input-group';
 
 interface domainData {
   name: string;
@@ -161,7 +161,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               onClick={async () => {
                 submitDomainVerification({ name: domain });
               }}
-              disabled={isSubmittingDomain || !domain}>
+              disabled={isSubmittingDomain || !domain}
+            >
               {isSubmittingDomain ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
               Connect
             </Button>
@@ -174,7 +175,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               disabled={isRemovingDomain}
               onClick={async () => {
                 removeDomain({ method: 'DELETE' });
-              }}>
+              }}
+            >
               {isRemovingDomain ? (
                 <Icons.Spinner className='h-3.5 w-3.5 animate-spin' />
               ) : (
@@ -210,7 +212,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               onSelect={() => {
                 updateWorkspace({ method: 'PATCH', custom_domain_redirect: 'direct_redirect' });
                 setRedirectRule('direct_redirect');
-              }}>
+              }}
+            >
               <div className='flex flex-col items-start gap-0.5'>
                 <span>Redirect direct path</span>
                 <span className='text-muted-foreground text-xs'>
@@ -231,7 +234,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               onSelect={() => {
                 updateWorkspace({ method: 'PATCH', custom_domain_redirect: 'root_redirect' });
                 setRedirectRule('root_redirect');
-              }}>
+              }}
+            >
               <div className='flex flex-col items-start gap-0.5'>
                 <span>Redirect to root</span>
                 <span className='text-muted-foreground text-xs '>
@@ -252,7 +256,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
               onSelect={() => {
                 updateWorkspace({ method: 'PATCH', custom_domain_redirect: 'no_redirect' });
                 setRedirectRule('no_redirect');
-              }}>
+              }}
+            >
               <div className='flex flex-col items-start gap-0.5'>
                 <span>Don&apos;t Redirect</span>
                 <span className='text-muted-foreground text-xs '>
@@ -301,12 +306,14 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                       <TabsList className='bg-background gap-1 rounded-lg border p-0.5'>
                         <TabsTrigger
                           value='a'
-                          className='data-[state=active]:bg-muted data-[state=active]:text-secondary-foreground data-[state=active]:border-border h-full rounded-md border border-transparent px-1.5 py-1 text-sm'>
+                          className='data-[state=active]:bg-muted data-[state=active]:text-secondary-foreground data-[state=active]:border-border h-full rounded-md border border-transparent px-1.5 py-1 text-sm'
+                        >
                           A Record (Recommended)
                         </TabsTrigger>
                         <TabsTrigger
                           value='cname'
-                          className='data-[state=active]:bg-muted data-[state=active]:text-secondary-foreground data-[state=active]:border-border h-full rounded-md border border-transparent px-1.5 py-1 text-sm'>
+                          className='data-[state=active]:bg-muted data-[state=active]:text-secondary-foreground data-[state=active]:border-border h-full rounded-md border border-transparent px-1.5 py-1 text-sm'
+                        >
                           CNAME Record
                         </TabsTrigger>
                       </TabsList>
@@ -319,7 +326,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                           domainMutate();
                         }}
                         disabled={domainIsValidating}
-                        className='text-secondary-foreground hover:text-foreground'>
+                        className='text-secondary-foreground hover:text-foreground'
+                      >
                         {domainIsValidating ? (
                           <Icons.Spinner className='h-4 w-4 animate-spin' />
                         ) : (
@@ -340,7 +348,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                           <div className='flex w-full flex-col justify-start gap-2'>
                             <Label className='text-foreground/90 text-sm '>Type</Label>
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                            >
                               A
                             </span>
                           </div>
@@ -351,9 +360,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('@');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 @
                               </span>
 
@@ -372,9 +383,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('76.76.21.21');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 76.76.21.21
                               </span>
 
@@ -392,9 +405,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('86400');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 86400
                               </span>
 
@@ -412,7 +427,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                       <Label className='text-muted-foreground cursor-text select-text text-xs'>
                         Note: If{' '}
                         <span
-                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}
+                        >
                           86400
                         </span>{' '}
                         is not supported for TLL, make sure to use the highest TTL value available.
@@ -430,7 +446,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                           <div className='flex w-full flex-col justify-start gap-2'>
                             <Label className='text-foreground/90 text-sm '>Type</Label>
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                            >
                               CNAME
                             </span>
                           </div>
@@ -441,9 +458,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('www');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 www
                               </span>
 
@@ -462,9 +481,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('76.76.21.21');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 cname.vercel-dns.com
                               </span>
 
@@ -482,9 +503,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                               onClick={() => {
                                 handleCopyToClipboard('86400');
                               }}
-                              type='button'>
+                              type='button'
+                            >
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                              >
                                 86400
                               </span>
 
@@ -502,7 +525,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                       <Label className='text-muted-foreground cursor-text select-text text-xs'>
                         Note: If{' '}
                         <span
-                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}
+                        >
                           86400
                         </span>{' '}
                         is not supported for TLL, make sure to use the highest TTL value available.
@@ -517,7 +541,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                     <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm '>
                       To prove ownership of{' '}
                       <span
-                        className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                        className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}
+                      >
                         {domainData.apexName}
                       </span>
                       , please add the following TXT Record to your DNS settings.
@@ -540,9 +565,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                             onClick={() => {
                               handleCopyToClipboard(domainData.verification[0].domain);
                             }}
-                            type='button'>
+                            type='button'
+                          >
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                            >
                               {domainData.verification[0].domain}
                             </span>
 
@@ -561,9 +588,11 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                             onClick={() => {
                               handleCopyToClipboard(domainData.verification[0].value);
                             }}
-                            type='button'>
+                            type='button'
+                          >
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}
+                            >
                               {domainData.verification[0].value}
                             </span>
 
@@ -581,7 +610,8 @@ export default function DomainSettings({ params }: { params: { slug: string } })
                     <Label className='text-foreground/80 cursor-text select-text text-sm '>
                       Warning: If{' '}
                       <span
-                        className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                        className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}
+                      >
                         {domainData.apexName}
                       </span>{' '}
                       is already in use, the TXT Record will transfer away from the existing domain ownership

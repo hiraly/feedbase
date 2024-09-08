@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { OpenAPIV3 } from 'openapi-types';
+import type { OpenAPIV3 } from 'openapi-types';
 
 /*
   OpenAPI Documentation

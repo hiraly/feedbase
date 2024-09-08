@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { DotLottieCommonPlayer, DotLottiePlayer } from '@dotlottie/react-player';
+import { type DotLottieCommonPlayer, DotLottiePlayer } from '@dotlottie/react-player';
 import { useTheme } from 'next-themes';
+import { useEffect, useRef } from 'react';
 
 interface LottieSrc {
   dark: Record<string, unknown> | string;

@@ -1,4 +1,5 @@
-import Link from 'next/link';
+import type { WorkspaceProps } from '@/lib/types';
+import { formatRootUrl } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -9,8 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@feedbase/ui/components/card';
-import { WorkspaceProps } from '@/lib/types';
-import { formatRootUrl } from '@/lib/utils';
+import Link from 'next/link';
 import { Icons } from '../shared/icons/icons-static';
 
 export default function WorkspaceOverview({ workspaces }: { workspaces: WorkspaceProps['Row'][] }) {
@@ -32,7 +32,8 @@ export default function WorkspaceOverview({ workspaces }: { workspaces: Workspac
           <Link
             key={workspace.id}
             href={`/${workspace.slug}`}
-            className='group flex w-full border-x border-b p-2 first:rounded-t-md first:border-t last:rounded-b-md'>
+            className='group flex w-full border-x border-b p-2 first:rounded-t-md first:border-t last:rounded-b-md'
+          >
             <div className='group-hover:bg-muted/[0.45] flex h-full w-full flex-col gap-2 rounded-sm p-3 group-hover:cursor-pointer'>
               <div className='flex flex-row items-center gap-3.5'>
                 <Avatar className='bg-muted h-10 w-10 rounded-md border hover:cursor-pointer'>

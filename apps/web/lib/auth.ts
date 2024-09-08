@@ -1,9 +1,5 @@
-import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
-import { cookies, headers } from 'next/headers';
-import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { PostgrestError, SupabaseClient, UserMetadata } from '@supabase/supabase-js';
-import { Database } from '@/lib/supabase';
-import {
+import type { Database } from '@/lib/supabase';
+import type {
   ApiResponse,
   ErrorProps,
   FeedbackBoardProps,
@@ -12,6 +8,10 @@ import {
   WorkspaceModuleProps,
   WorkspaceProps,
 } from '@/lib/types';
+import { type CookieOptions, createServerClient } from '@supabase/ssr';
+import type { PostgrestError, SupabaseClient, UserMetadata } from '@supabase/supabase-js';
+import type { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+import { cookies, headers } from 'next/headers';
 
 export interface ClientCookiesConfig {
   cookies: {
@@ -30,7 +30,7 @@ function createCookiesConfig(
     cookies: {},
   };
 
-  operations.forEach((operation) => {
+  for (const operation of operations) {
     switch (operation) {
       case 'get':
         config.cookies.get = (name: string) => cookieStore.get(name)?.value;
@@ -46,7 +46,7 @@ function createCookiesConfig(
       default:
         throw new Error(`Invalid operation: ${operation as string}`);
     }
-  });
+  }
 
   return config;
 }

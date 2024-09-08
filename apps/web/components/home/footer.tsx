@@ -1,8 +1,8 @@
 'use client';
 
-import Link from 'next/link';
-import { cn } from '@feedbase/ui/lib/utils';
 import { formatRootUrl } from '@/lib/utils';
+import { cn } from '@feedbase/ui/lib/utils';
+import Link from 'next/link';
 import { Icons } from '../shared/icons/icons-static';
 import { navTabs } from './header';
 
@@ -16,7 +16,8 @@ export default function HomeFooter({ fixed }: { fixed?: boolean }) {
             href={formatRootUrl('', '/twitter')}
             target='_blank'
             rel='noopener noreferrer'
-            className='select-none'>
+            className='select-none'
+          >
             <Icons.Twitter className='fill-foreground/60 hover:fill-foreground/90 h-5 w-5 transition duration-200 ease-in-out' />
           </Link>
 
@@ -24,7 +25,8 @@ export default function HomeFooter({ fixed }: { fixed?: boolean }) {
             href={formatRootUrl('', '/github')}
             target='_blank'
             rel='noopener noreferrer'
-            className='select-none'>
+            className='select-none'
+          >
             <Icons.Github className='text-foreground/60 hover:text-foreground/90 h-5 w-5 transition duration-200 ease-in-out' />
           </Link>
         </div>
@@ -35,7 +37,8 @@ export default function HomeFooter({ fixed }: { fixed?: boolean }) {
             <Link
               href={tab.href}
               className='text-foreground/70 hover:text-foreground/90 text-sm  transition duration-200 ease-in-out'
-              key={tab.label.toLowerCase()}>
+              key={tab.label.toLowerCase()}
+            >
               {tab.label}
             </Link>
           ))}

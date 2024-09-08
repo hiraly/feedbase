@@ -9,7 +9,7 @@ export async function _request(
   url: string,
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   token?: string,
-  body?: any
+  body?: Record<string, unknown>
 ) {
   let res: Response;
 
@@ -23,8 +23,6 @@ export async function _request(
       ...(body ? { body: JSON.stringify(body) } : {}),
     });
   } catch (err) {
-    console.error(err);
-
     // fetch failed, likely due to a network or CORS error
     throw new Error(`Unable to ${method} ${url}: ${err}`);
   }
@@ -33,8 +31,6 @@ export async function _request(
     const data = await res.json();
     return { data, status: res.status };
   } catch (err) {
-    console.error(err);
-
     // fetch failed, likely due to a network or CORS error
     throw new Error(`Unable to ${method} ${url}: ${err}`);
   }

@@ -1,5 +1,5 @@
 import { withFeedbackAuth } from '../auth';
-import { CommentProps, CommentWithUserProps } from '../types';
+import type { CommentProps, CommentWithUserProps } from '../types';
 
 // Create comment for feedback by id
 export const createCommentForFeedbackById = (
@@ -42,7 +42,7 @@ export const createCommentForFeedbackById = (
       .from('comment')
       .insert({
         feedback_id: data.feedback_id,
-        user_id: user!.id,
+        user_id: user?.id,
         content: data.content,
         reply_to_id: data.reply_to_id,
       })
@@ -59,8 +59,8 @@ export const createCommentForFeedbackById = (
       .from('notification')
       .insert({
         type: 'comment',
-        workspace_id: workspace!.id,
-        initiator_id: user!.id,
+        workspace_id: workspace?.id!,
+        initiator_id: user?.id,
         feedback_id: data.feedback_id,
         comment_id: comment.id,
       })
@@ -83,7 +83,7 @@ export const getCommentsForFeedbackById = withFeedbackAuth<CommentWithUserProps[
     const { data: comments, error: commentsError } = await supabase
       .from('comment')
       .select('*, user:user_id (*)')
-      .eq('feedback_id', feedback!.id);
+      .eq('feedback_id', feedback?.id!);
 
     // Check for errors
     if (commentsError) {
@@ -97,7 +97,7 @@ export const getCommentsForFeedbackById = withFeedbackAuth<CommentWithUserProps[
     const { data: teamMembers, error: teamMembersError } = await supabase
       .from('workspace_member')
       .select('profile (full_name, avatar_url), *')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     if (teamMembersError) {
       return { data: null, error: { message: teamMembersError.message, status: 500 } };
@@ -189,7 +189,7 @@ export const deleteCommentForFeedbackById = (
     }
 
     // Make sure user is the author of the comment
-    if (comment.user_id !== user!.id) {
+    if (comment.user_id !== user?.id) {
       return { data: null, error: { message: 'only the author of the comment can delete it.', status: 403 } };
     }
 
@@ -245,7 +245,7 @@ export const upvoteCommentForFeedbackById = (
       const { data: upvoter, error: upvoterError } = await supabase
         .from('comment_upvoter')
         .select()
-        .eq('profile_id', user!.id)
+        .eq('profile_id', user?.id)
         .eq('comment_id', commentId)
         .single();
 
@@ -276,7 +276,7 @@ export const upvoteCommentForFeedbackById = (
       // Create upvote
       const { error: upvoteError } = await supabase
         .from('comment_upvoter')
-        .insert({ profile_id: user!.id, comment_id: commentId })
+        .insert({ profile_id: user?.id, comment_id: commentId })
         .select()
         .single();
 

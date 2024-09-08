@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { subscribeToWorkspaceChangelogs, unsubscribeFromWorkspaceChangelogs } from '@/lib/api/public';
+import { NextResponse } from 'next/server';
 
 /*
   Subscribe to workspace changelogs

@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
+import { NextResponse } from 'next/server';
 
 /* 
   Get workspace module config

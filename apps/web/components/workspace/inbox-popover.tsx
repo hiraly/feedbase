@@ -1,6 +1,7 @@
 'use client';
 
-import Link from 'next/link';
+import type { NotificationProps, ProfileProps } from '@/lib/types';
+import { fetcher, formatRootUrl } from '@/lib/utils';
 import { Avatar, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@feedbase/ui/components/drawer';
@@ -8,9 +9,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
 import useMediaQuery from '@feedbase/ui/lib/hooks/use-media-query';
 import { Archive, Bell } from 'lucide-react';
+import Link from 'next/link';
 import useSWR from 'swr';
-import { NotificationProps, ProfileProps } from '@/lib/types';
-import { fetcher, formatRootUrl } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 
 // Helper function to format time ago
@@ -74,7 +74,8 @@ function renderNotifications({
             }`
           )}
           key={notification.id}
-          className='min-h-16 hover:bg-foreground/5 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5 last:border-b-0'>
+          className='min-h-16 hover:bg-foreground/5 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5 last:border-b-0'
+        >
           {/* Icon */}
           {notification.workspace.icon ? (
             <Avatar className='h-[40px] w-[40px] border hover:cursor-pointer'>
@@ -114,7 +115,8 @@ function renderNotifications({
                 e.preventDefault();
                 e.stopPropagation();
                 archiveNotification(notification.id);
-              }}>
+              }}
+            >
               <Archive className='h-4 w-4' />
             </Button>
           ) : null}
@@ -132,7 +134,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
     data: notifications,
     isLoading,
     mutate,
-  } = useSWR<NotificationProps[]>(`/api/v1/profile/notifications`, fetcher);
+  } = useSWR<NotificationProps[]>('/api/v1/profile/notifications', fetcher);
 
   // Archive notification
   // TODO: use mutate with optimistic ui here for smoother experience
@@ -175,7 +177,8 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
           <Button
             variant='ghost'
             size='icon'
-            className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'>
+            className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'
+          >
             <Bell className='h-4 w-4' />
             {inboxNotifications?.length !== 0 && !isLoading && (
               <span className='bg-foreground absolute -right-[1px] -top-[1px] h-2.5 w-2.5 rounded-full' />
@@ -187,12 +190,14 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
             <TabsList className='h-fit w-full justify-start gap-3 rounded-none border-b bg-transparent p-0 px-3'>
               <TabsTrigger
                 value='inbox'
-                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
+                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'
+              >
                 Inbox
               </TabsTrigger>
               <TabsTrigger
                 value='archive'
-                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
+                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'
+              >
                 Archive
               </TabsTrigger>
             </TabsList>
@@ -224,7 +229,8 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
         <Button
           variant='ghost'
           size='icon'
-          className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'>
+          className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'
+        >
           <Bell className='h-4 w-4' />
           {inboxNotifications?.length !== 0 && !isLoading && (
             <span className='bg-foreground absolute -right-[1px] -top-[1px] h-2.5 w-2.5 rounded-full' />
@@ -236,12 +242,14 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
           <TabsList className='h-fit w-full justify-start gap-3 rounded-none border-b bg-transparent p-0 px-3'>
             <TabsTrigger
               value='inbox'
-              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
+              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'
+            >
               Inbox
             </TabsTrigger>
             <TabsTrigger
               value='archive'
-              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
+              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'
+            >
               Archive
             </TabsTrigger>
           </TabsList>

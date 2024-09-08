@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getWorkspaceBoards } from '@/lib/api/boards';
+import { NextResponse } from 'next/server';
 
 /* 
   Get all workspace boards

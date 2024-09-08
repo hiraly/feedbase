@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getWorkspaceTheme, updateWorkspaceTheme } from '@/lib/api/theme';
+import { NextResponse } from 'next/server';
 
 /*
   Get workspace theme

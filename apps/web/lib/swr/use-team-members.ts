@@ -1,6 +1,6 @@
+import type { TeamMemberProps } from '@/lib/types';
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { TeamMemberProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
 export default function useTeamMembers() {

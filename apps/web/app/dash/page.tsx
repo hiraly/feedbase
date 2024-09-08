@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
-import { getUserWorkspaces } from '@/lib/api/user';
 import Onboarding from '@/components/workspace/onboarding';
 import WorkspaceOverview from '@/components/workspace/workspace-overview';
+import { getUserWorkspaces } from '@/lib/api/user';
+import { redirect } from 'next/navigation';
 
 export default async function Workspaces() {
   const { data: workspaces, error } = await getUserWorkspaces('server');

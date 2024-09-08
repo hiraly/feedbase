@@ -205,7 +205,7 @@
 //   }
 
 //   const onChangePicture = useCallback(
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     // biome-ignore lint/suspicious/noExplicitAny: explicit any
 //     (e: any) => {
 //       // setFileError(null);
 //       const file = e.target.files[0];

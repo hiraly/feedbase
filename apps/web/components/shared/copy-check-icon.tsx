@@ -1,8 +1,8 @@
 'use client';
 
-import { useCallback, useState } from 'react';
 import { cn } from '@feedbase/ui/lib/utils';
 import { CheckIcon, CopyIcon } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
 export default function CopyCheckIcon({
   content,

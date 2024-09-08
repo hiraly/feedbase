@@ -1,18 +1,18 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Separator } from '@feedbase/ui/components/separator';
-import { CalendarRange, CircleDashed, CircleDotDashed } from 'lucide-react';
-import { toast } from 'sonner';
-import useSWRMutation from 'swr/mutation';
+import FeedbackFilterHeader, { FilterFeedback } from '@/components/feedback/common/feedback-filters';
+import AnimatedTabs from '@/components/shared/animated-tabs';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useFeedback from '@/lib/swr/use-feedback';
-import { FeedbackWithUserProps } from '@/lib/types';
+import type { FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher } from '@/lib/utils';
-import FeedbackFilterHeader, { FilterFeedback } from '@/components/feedback/common/feedback-filters';
-import AnimatedTabs from '@/components/shared/animated-tabs';
+import { Separator } from '@feedbase/ui/components/separator';
+import { CalendarRange, CircleDashed, CircleDotDashed } from 'lucide-react';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
+import useSWRMutation from 'swr/mutation';
 import FeedbackKanban from '../kanban';
 
 type sortingOptions = 'upvotes' | 'created' | 'trending';

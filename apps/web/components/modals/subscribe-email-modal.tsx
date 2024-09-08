@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -14,8 +14,8 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import { useState } from 'react';
 import { toast } from 'sonner';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function SubscribeToEmailUpdates({
   workspaceSlug,
@@ -64,7 +64,8 @@ export default function SubscribeToEmailUpdates({
             setIsLoading(true);
             subscribeToEmailUpdates();
           }}
-          className='flex flex-col sm:gap-4'>
+          className='flex flex-col sm:gap-4'
+        >
           <ResponsiveDialogHeader>
             <ResponsiveDialogTitle>Subscribe to Email Updates</ResponsiveDialogTitle>
             <ResponsiveDialogDescription>

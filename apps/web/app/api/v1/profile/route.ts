@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { updateUserProfile } from '@/lib/api/user';
+import { NextResponse } from 'next/server';
 
 /* 
     Update Profile

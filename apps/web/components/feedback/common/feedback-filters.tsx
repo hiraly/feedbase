@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useActiveFilters } from '@/lib/hooks/use-active-filters';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useFeedbackBoards from '@/lib/swr/use-boards';
+import useTags from '@/lib/swr/use-tags';
+import type { FeedbackFilterProps, FeedbackWithUserProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
@@ -17,19 +20,17 @@ import {
   CircleDashed,
   CircleX,
   LayoutGrid,
-  LucideIcon,
+  type LucideIcon,
   Plus,
   Tag,
   Tags,
   TextCursorInputIcon,
   X,
 } from 'lucide-react';
-import { KeyedMutator } from 'swr';
-import { useActiveFilters } from '@/lib/hooks/use-active-filters';
-import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import useFeedbackBoards from '@/lib/swr/use-boards';
-import useTags from '@/lib/swr/use-tags';
-import { FeedbackFilterProps, FeedbackWithUserProps } from '@/lib/types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import type { KeyedMutator } from 'swr';
 
 // Filter Action Dropdown Option Props
 interface FilterActionDropdownOptions {
@@ -52,7 +53,8 @@ function FilterActionDropdown({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent
-        className={cn(current.toLowerCase() === options[0].label.toLowerCase() && 'flex flex-col-reverse')}>
+        className={cn(current.toLowerCase() === options[0].label.toLowerCase() && 'flex flex-col-reverse')}
+      >
         {options.map((option) => (
           <DropdownMenuItem key={option.label} className='flex gap-1.5' onSelect={option.onSelect}>
             <option.icon className='text-foreground/60 group-hover:text-foreground h-4 w-4 transition-colors' />
@@ -85,7 +87,8 @@ function FeedbackFilter({
       <FilterActionDropdown options={action.options} current={action.label}>
         <Button
           variant='ghost'
-          className='text-secondary-foreground dark:text-muted-foreground dark:hover:text-foreground hover:text-foreground h-full rounded-none border-x px-2 text-xs font-normal'>
+          className='text-secondary-foreground dark:text-muted-foreground dark:hover:text-foreground hover:text-foreground h-full rounded-none border-x px-2 text-xs font-normal'
+        >
           {action.label}
         </Button>
       </FilterActionDropdown>
@@ -94,7 +97,8 @@ function FeedbackFilter({
         size='sm'
         variant='ghost'
         className='text-muted-foreground hover:text-foreground h-full rounded-none border-l px-1.5 font-normal'
-        onClick={onClear}>
+        onClick={onClear}
+      >
         <X className='h-4 w-4' />
       </Button>
     </div>
@@ -133,8 +137,8 @@ export function FilterFeedback(
         if (feedbackFilters.tags.i.length > 0 || feedbackFilters.tags.e.length > 0) {
           if (
             feedbackFilters.tags.i.length > 0 &&
-            !feedbackFilters.tags.i.some(
-              (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+            !feedbackFilters.tags.i.some((tag) =>
+              feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
             )
           ) {
             return false;
@@ -142,8 +146,8 @@ export function FilterFeedback(
 
           if (
             feedbackFilters.tags.e.length > 0 &&
-            feedbackFilters.tags.e.some(
-              (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+            feedbackFilters.tags.e.some((tag) =>
+              feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
             )
           ) {
             return false;
@@ -208,12 +212,12 @@ export function FilterFeedback(
   const sortedFeedback = useMemo(() => {
     // Sort the feedback
     return [...filteredFeedback].sort((a, b) => {
-      let upvoteScoreA: number,
-        upvoteScoreB: number,
-        commentScoreA: number,
-        commentScoreB: number,
-        trendingScoreA: number,
-        trendingScoreB: number;
+      let upvoteScoreA: number;
+      let upvoteScoreB: number;
+      let commentScoreA: number;
+      let commentScoreB: number;
+      let trendingScoreA: number;
+      let trendingScoreB: number;
 
       switch (searchParams.get('sort')) {
         case 'trending':
@@ -239,7 +243,6 @@ export function FilterFeedback(
           return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.get('sort')]);
 
   return {
@@ -267,7 +270,6 @@ export default function FeedbackFilterHeader({
   useEffect(() => {
     mutate(undefined, { revalidate: true });
     setFeedbackFilters(activeFilters);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, mutate]);
 
   // Check if all values are null, undefined, or empty
@@ -277,7 +279,8 @@ export default function FeedbackFilterHeader({
     return Object.values(filter).every((value) => {
       if (typeof value === 'string') {
         return value === null || value === undefined || value === '';
-      } else if (typeof value === 'object' && value !== null) {
+      }
+      if (typeof value === 'object' && value !== null) {
         return Object.values(value).every((subValue) => {
           if (Array.isArray(subValue)) {
             return subValue.length === 0;
@@ -306,7 +309,8 @@ export default function FeedbackFilterHeader({
         className={cn(
           'flex h-fit w-full flex-wrap items-center justify-start gap-2.5 py-3 text-xs',
           className
-        )}>
+        )}
+      >
         {/* Search */}
         {feedbackFilters.search ? (
           <FeedbackFilter

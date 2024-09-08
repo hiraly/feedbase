@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { createWorkspaceSSOSecret } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /* 
   Generate random jwt secret

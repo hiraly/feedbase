@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { getWorkspaceMembers } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /*
     Get all members of a workspace

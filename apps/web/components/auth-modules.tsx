@@ -1,11 +1,11 @@
 'use client';
 
-import { createContext, useContext, useState } from 'react';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
 import { createBrowserClient } from '@supabase/ssr';
-import { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { createContext, useContext, useState } from 'react';
 import { toast } from 'sonner';
 import { Icons } from './shared/icons/icons-static';
 
@@ -125,7 +125,8 @@ const EmailSignUp = ({ label = 'Continue with Email' }: { label?: string }) => {
       toast.error('Please enter your name!');
       setLoading(false);
       return;
-    } else if (!email) {
+    }
+    if (!email) {
       toast.error('Please enter your email!');
       setLoading(false);
       return;

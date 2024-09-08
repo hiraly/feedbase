@@ -1,6 +1,6 @@
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ReadonlyURLSearchParams } from 'next/navigation';
 
 type QueryParam = [string, string];
 

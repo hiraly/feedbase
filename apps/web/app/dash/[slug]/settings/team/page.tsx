@@ -1,6 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import SettingsCard from '@/components/settings/settings-card';
+import FetchError from '@/components/shared/fetch-error';
+import { Icons } from '@/components/shared/icons/icons-static';
+import useTeamInvites from '@/lib/swr/use-team-invites';
+import useTeamMembers from '@/lib/swr/use-team-members';
+import type { ExtendedInviteProps, TeamMemberProps } from '@/lib/types';
+import { actionFetcher, formatTimeAgo } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -14,15 +20,9 @@ import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import useTeamInvites from '@/lib/swr/use-team-invites';
-import useTeamMembers from '@/lib/swr/use-team-members';
-import { ExtendedInviteProps, TeamMemberProps } from '@/lib/types';
-import { actionFetcher, formatTimeAgo } from '@/lib/utils';
-import SettingsCard from '@/components/settings/settings-card';
-import FetchError from '@/components/shared/fetch-error';
-import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function TeamSettings({ params }: { params: { slug: string } }) {
   const {
@@ -131,10 +131,10 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                     {filter === 'all'
                       ? 'All'
                       : filter === 'admins'
-                      ? 'Admins'
-                      : filter === 'members'
-                      ? 'Members'
-                      : 'Invites'}
+                        ? 'Admins'
+                        : filter === 'members'
+                          ? 'Members'
+                          : 'Invites'}
                     <ChevronsUpDown className='text-secondary-foreground ml-2 h-3.5 w-3.5' />
                   </Button>
                 </DropdownMenuTrigger>
@@ -142,25 +142,29 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                   <DropdownMenuItem
                     onSelect={() => {
                       setFilter('all');
-                    }}>
+                    }}
+                  >
                     All
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       setFilter('admins');
-                    }}>
+                    }}
+                  >
                     Admins
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       setFilter('members');
-                    }}>
+                    }}
+                  >
                     Members
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onSelect={() => {
                       setFilter('invites');
-                    }}>
+                    }}
+                  >
                     Pending Invites
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -189,7 +193,8 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
       <SettingsCard
         title='Invite a Team Member'
         description='Invite a new team member to this workspace.'
-        className='gap-5'>
+        className='gap-5'
+      >
         <div className='col-span-1 -mt-1 w-full space-y-1'>
           <Label className='text-foreground/70 text-sm '>Email</Label>
           <form
@@ -197,7 +202,8 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
             onSubmit={(e) => {
               e.preventDefault();
               sendInvite({ email: inviteEmail });
-            }}>
+            }}
+          >
             <Input
               type='email'
               className='w-full'
@@ -236,10 +242,10 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                   {filter === 'all'
                     ? 'All'
                     : filter === 'admins'
-                    ? 'Admins'
-                    : filter === 'members'
-                    ? 'Members'
-                    : 'Invites'}
+                      ? 'Admins'
+                      : filter === 'members'
+                        ? 'Members'
+                        : 'Invites'}
                   <ChevronsUpDown className='text-secondary-foreground ml-2 h-3.5 w-3.5' />
                 </Button>
               </DropdownMenuTrigger>
@@ -247,25 +253,29 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                 <DropdownMenuItem
                   onSelect={() => {
                     setFilter('all');
-                  }}>
+                  }}
+                >
                   All
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
                     setFilter('admins');
-                  }}>
+                  }}
+                >
                   Admins
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
                     setFilter('members');
-                  }}>
+                  }}
+                >
                   Members
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onSelect={() => {
                     setFilter('invites');
-                  }}>
+                  }}
+                >
                   Pending Invites
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -294,7 +304,8 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                 filteredMembers?.map((member: TeamMemberProps) => (
                   <div
                     key={member.id}
-                    className='flex h-fit w-full items-center justify-between border-b py-3.5 last:border-b-0'>
+                    className='flex h-fit w-full items-center justify-between border-b py-3.5 last:border-b-0'
+                  >
                     <div className='flex w-full items-center gap-3'>
                       <Avatar className='h-[30px] w-[30px] rounded-full'>
                         <AvatarImage src={member.avatar_url || ''} alt={member.full_name} />
@@ -333,7 +344,8 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                 filteredInvites?.map((invite: ExtendedInviteProps) => (
                   <div
                     key={invite.id}
-                    className='flex h-fit w-full items-center justify-between border-b py-3.5 last:border-b-0'>
+                    className='flex h-fit w-full items-center justify-between border-b py-3.5 last:border-b-0'
+                  >
                     <div className='flex w-full items-center gap-3'>
                       <Avatar className='h-[30px] w-[30px] rounded-full'>
                         <AvatarFallback className='bg-secondary select-none text-sm'>
@@ -365,7 +377,8 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                             confirmCheckText='Confirm revoke?'
                             onSelect={() => {
                               revokeInvite(invite.id);
-                            }}>
+                            }}
+                          >
                             Revoke
                           </DropdownMenuDestructiveItem>
                         </DropdownMenuContent>

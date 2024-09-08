@@ -1,5 +1,5 @@
 import { withWorkspaceAuth } from '@/lib/auth';
-import { WorkspaceModuleProps } from '@/lib/types';
+import type { WorkspaceModuleProps } from '@/lib/types';
 
 // Get workspace module by slug
 export const getWorkspaceModuleConfig = withWorkspaceAuth<WorkspaceModuleProps['Row']>(
@@ -13,7 +13,7 @@ export const getWorkspaceModuleConfig = withWorkspaceAuth<WorkspaceModuleProps['
     const { data: module, error: moduleError } = await supabase
       .from('workspace_module')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors
@@ -42,7 +42,7 @@ export const updateWorkspaceModuleConfig = (
     const { data: updatedModule, error: updateError } = await supabase
       .from('workspace_module')
       .update(data)
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors

@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useParams, usePathname } from 'next/navigation';
+import LottiePlayer from '@/components/shared/lottie-player';
+import type { SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
 import { cn } from '@feedbase/ui/lib/utils';
-import { SidebarTabProps, SidebarTabsProps } from '@/lib/types';
-import LottiePlayer from '@/components/shared/lottie-player';
+import Link from 'next/link';
+import { useParams, usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function NavTabs({
   tabs,
@@ -42,7 +42,8 @@ export default function NavTabs({
             <Link
               href={`/${workspaceSlug}/${tab.slug}`}
               key={tab.slug}
-              className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
+              className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}
+            >
               <Button
                 variant='ghost'
                 onMouseEnter={() => {
@@ -54,7 +55,8 @@ export default function NavTabs({
                 className={cn(
                   'text-foreground/70 hover:text-foreground w-full items-center justify-start gap-1 border border-transparent p-1',
                   activeTab === tab.slug && 'bg-secondary text-foreground hover:bg-secondary'
-                )}>
+                )}
+              >
                 {/* Icon */}
                 {tab.icon ? (
                   <div className='flex transform-none flex-row items-center justify-center p-1'>

@@ -1,5 +1,5 @@
 import { withWorkspaceAuth } from '../auth';
-import { WorkspaceIntegrationProps } from '../types';
+import type { WorkspaceIntegrationProps } from '../types';
 
 // Get workspace integrations by slug
 export const getWorkspaceIntegrations = withWorkspaceAuth<WorkspaceIntegrationProps['Row']>(
@@ -13,7 +13,7 @@ export const getWorkspaceIntegrations = withWorkspaceAuth<WorkspaceIntegrationPr
     const { data: integrations, error: integrationsError } = await supabase
       .from('workspace_integration')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors
@@ -42,7 +42,7 @@ export const updateWorkspaceIntegrations = (
     const { data: updatedIntegrations, error: updateError } = await supabase
       .from('workspace_integration')
       .update(data)
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors

@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { updateWorkspaceBySlug } from '@/lib/api/workspace';
+import { NextResponse } from 'next/server';
 
 /*
   Update SSO configuration

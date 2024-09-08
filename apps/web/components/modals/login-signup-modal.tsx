@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@feedbase/ui/components/button';
 import {
   ResponsiveDialog,
@@ -10,6 +9,7 @@ import {
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
+import { useState } from 'react';
 import Auth, { EmailSignIn, EmailSignUp, GitHub } from '../auth-modules';
 
 export default function AuthModal({ children, disabled }: { children: React.ReactNode; disabled?: boolean }) {
@@ -35,7 +35,8 @@ export default function AuthModal({ children, disabled }: { children: React.Reac
               setAuthType(authType === 'sign-in' ? 'sign-up' : 'sign-in');
             }}
             variant='outline'
-            className='-mt-3'>
+            className='-mt-3'
+          >
             {authType === 'sign-in' ? 'Register with Email' : 'Sign in with Email'}
           </Button>
 

@@ -1,12 +1,12 @@
 import './globals.css';
-import { Metadata, Viewport } from 'next';
-import Script from 'next/script';
+import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider';
+import { formatRootUrl } from '@/lib/utils';
 import { cn } from '@feedbase/ui/lib/utils';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistSans } from 'geist/font/sans';
+import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Toaster } from 'sonner';
-import { formatRootUrl } from '@/lib/utils';
-import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Feedbase',

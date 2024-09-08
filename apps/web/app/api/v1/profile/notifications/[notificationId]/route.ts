@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { archiveUserNotification } from '@/lib/api/user';
+import { NextResponse } from 'next/server';
 
 /*
   Archive a notification

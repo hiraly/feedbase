@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { createWorkspaceApiKey, getWorkspaceApiKeys } from '@/lib/api/api-key';
-import { ApiKeyPermissions } from '@/lib/types';
+import type { ApiKeyPermissions } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 /*
   Get all API keys for a workspace

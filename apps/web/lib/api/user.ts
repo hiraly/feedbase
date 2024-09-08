@@ -1,6 +1,6 @@
 import { decode } from 'base64-arraybuffer';
 import { withUserAuth } from '../auth';
-import { NotificationProps, ProfileProps, WorkspaceProps } from '../types';
+import type { NotificationProps, ProfileProps, WorkspaceProps } from '../types';
 import { uploadToSupabaseStorage } from '../utils';
 
 // Get current user
@@ -41,7 +41,7 @@ export const getUserWorkspaces = withUserAuth<WorkspaceProps['Row'][]>(async (us
   const { data: workspaces, error: workspacesError } = await supabase
     .from('workspace_member')
     .select('workspace (*)')
-    .eq('member_id', user!.id);
+    .eq('member_id', user?.id);
 
   // Check for errors
   if (workspacesError || !workspaces) {

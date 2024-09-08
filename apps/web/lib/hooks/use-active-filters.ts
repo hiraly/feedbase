@@ -1,7 +1,7 @@
 'use client';
 
-import { ReadonlyURLSearchParams } from 'next/navigation';
-import { FeedbackBoardProps, FeedbackFilterProps, FeedbackTagProps } from '@/lib/types';
+import type { FeedbackBoardProps, FeedbackFilterProps, FeedbackTagProps } from '@/lib/types';
+import type { ReadonlyURLSearchParams } from 'next/navigation';
 import { STATUS_OPTIONS } from '../constants';
 
 export function useActiveFilters(

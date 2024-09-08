@@ -1,6 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { Icons } from '@/components/shared/icons/icons-static';
+import type { WorkspaceThemeProps } from '@/lib/types';
+import { hexToHSL, hslToHex } from '@/lib/utils';
 import { Badge } from '@feedbase/ui/components/badge';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
@@ -17,9 +19,7 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
-import { WorkspaceThemeProps } from '@/lib/types';
-import { hexToHSL, hslToHex } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
+import { useState } from 'react';
 
 // Helper component
 function ColorInput({
@@ -35,7 +35,8 @@ function ColorInput({
         className={cn(
           'text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r',
           value === '' ? 'px-3' : 'px-2'
-        )}>
+        )}
+      >
         {value === '' ? '#' : <div className='h-3 w-3 rounded-sm' style={{ backgroundColor: value }} />}
       </div>
       <Input
@@ -210,11 +211,13 @@ export default function CustomizeThemeModal({
           {/* Small wireframe replica of website with color scheme */}
           <div
             className='flex h-96 w-full flex-col gap-4 overflow-y-hidden rounded-md border'
-            style={{ backgroundColor: colorScheme.root || '', textDecorationStyle: 'solid' }}>
+            style={{ backgroundColor: colorScheme.root || '', textDecorationStyle: 'solid' }}
+          >
             {/* Header */}
             <div
               className='flex flex-row items-center justify-between border-b p-4'
-              style={{ borderColor: colorScheme.border || '' }}>
+              style={{ borderColor: colorScheme.border || '' }}
+            >
               <Icons.LogoText
                 className='fill-foreground h-6 w-20'
                 style={{ fill: colorScheme.foreground || '' }}
@@ -224,7 +227,8 @@ export default function CustomizeThemeModal({
                 style={{
                   backgroundColor: colorScheme.background || '',
                   color: colorScheme.foreground || '',
-                }}>
+                }}
+              >
                 Login
               </div>
             </div>
@@ -237,7 +241,8 @@ export default function CustomizeThemeModal({
                 </p>
                 <p
                   className='text-foreground text-xs '
-                  style={{ color: colorScheme.foreground || '', opacity: 0.5 }}>
+                  style={{ color: colorScheme.foreground || '', opacity: 0.5 }}
+                >
                   Have a suggestion or found a bug? Let us know!
                 </p>
               </div>
@@ -250,7 +255,8 @@ export default function CustomizeThemeModal({
                       backgroundColor: colorScheme.secondary_background || '',
                       borderColor: colorScheme.border || '',
                       color: colorScheme.foreground || '',
-                    }}>
+                    }}
+                  >
                     New
                   </div>
                   <div
@@ -259,7 +265,8 @@ export default function CustomizeThemeModal({
                       backgroundColor: colorScheme.secondary_background || '',
                       borderColor: colorScheme.border || '',
                       color: colorScheme.foreground || '',
-                    }}>
+                    }}
+                  >
                     Top
                   </div>
                 </div>
@@ -271,7 +278,8 @@ export default function CustomizeThemeModal({
                       backgroundColor: colorScheme.secondary_background || '',
                       borderColor: colorScheme.border || '',
                       color: colorScheme.foreground || '',
-                    }}>
+                    }}
+                  >
                     Search
                   </div>
                   <div
@@ -280,7 +288,8 @@ export default function CustomizeThemeModal({
                       backgroundColor: colorScheme.secondary_background || '',
                       borderColor: colorScheme.border || '',
                       color: colorScheme.foreground || '',
-                    }}>
+                    }}
+                  >
                     Post
                   </div>
                 </div>
@@ -289,11 +298,14 @@ export default function CustomizeThemeModal({
               {[...Array(4)].map((_, i) => (
                 <div
                   className='flex w-full rounded-md border'
-                  key={`feedback-${i}`} // eslint-disable-line react/no-array-index-key
-                  style={{ borderColor: colorScheme.border || '' }}>
+                  // biome-ignore lint/suspicious/noArrayIndexKey: expected
+                  key={`feedback-${i}`}
+                  style={{ borderColor: colorScheme.border || '' }}
+                >
                   <div
                     className='flex h-full w-6 items-center justify-center border-r'
-                    style={{ borderColor: colorScheme.border || '' }}>
+                    style={{ borderColor: colorScheme.border || '' }}
+                  >
                     <ChevronUp
                       className='text-foreground/50 h-4 w-4'
                       style={{ color: colorScheme.foreground || '' }}
@@ -303,12 +315,14 @@ export default function CustomizeThemeModal({
                   <div className='flex flex-col p-1'>
                     <p
                       className='text-foreground/80 text-[11px] '
-                      style={{ color: colorScheme.foreground || '' }}>
+                      style={{ color: colorScheme.foreground || '' }}
+                    >
                       Demo Feedback Idea
                     </p>
                     <p
                       className='text-foreground text-[10px] '
-                      style={{ color: colorScheme.foreground || '', opacity: 0.6 }}>
+                      style={{ color: colorScheme.foreground || '', opacity: 0.6 }}
+                    >
                       This is a demo feedback message to test theming.
                     </p>
                   </div>
@@ -337,7 +351,8 @@ export default function CustomizeThemeModal({
                   accent: hexToHSL(colorScheme.accent) || '',
                   border: hexToHSL(colorScheme.border) || '',
                 }));
-              }}>
+              }}
+            >
               Set theme
             </Button>
           </ResponsiveDialogClose>

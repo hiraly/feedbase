@@ -1,6 +1,6 @@
 // import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { withFeedbackAuth, withFeedbackBoardAuth, withWorkspaceAuth } from '../auth';
-import {
+import type {
   FeedbackProps,
   FeedbackTagProps,
   FeedbackUpvoter,
@@ -29,7 +29,7 @@ export const createFeedback = (
       const { data: workspaceTags, error: tagsError } = await supabase
         .from('feedback_tag')
         .select()
-        .eq('workspace_id', board!.workspace_id);
+        .eq('workspace_id', board?.workspace_id!);
 
       // Check for errors
       if (tagsError) {
@@ -68,7 +68,7 @@ export const createFeedback = (
 
       // Convert tags into raw tags json array objects: [{name: name, color: color}]
       data.raw_tags = workspaceTags
-        .filter((tag) => data.tags!.includes(tag.id))
+        .filter((tag) => data.tags?.includes(tag.id))
         .map((tag) => {
           return { name: tag.name, color: tag.color };
         });
@@ -217,9 +217,9 @@ export const createFeedback = (
         content: data.content,
         status: data.status,
         raw_tags: data.raw_tags,
-        board_id: board!.id,
-        workspace_id: board!.workspace_id,
-        user_id: data.user !== undefined ? data.user_id : user!.id,
+        board_id: board?.id!,
+        workspace_id: board?.workspace_id!,
+        user_id: data.user !== undefined ? data.user_id : user?.id,
       })
       .select('*, user:user_id (*)')
       .single();
@@ -302,7 +302,7 @@ export const updateFeedbackByID = (
       const { data: workspaceTags, error: tagsError } = await supabase
         .from('feedback_tag')
         .select()
-        .eq('workspace_id', workspace!.id);
+        .eq('workspace_id', workspace?.id!);
 
       // Check for errors
       if (tagsError) {
@@ -318,7 +318,7 @@ export const updateFeedbackByID = (
       const invalidTags: string[] = [];
 
       // Loop through tags
-      data.tags.forEach((tag) => {
+      for (const tag of data.tags) {
         // Check if tag exists
         const tagExists = workspaceTags.find((t) => t.id === tag);
 
@@ -326,7 +326,7 @@ export const updateFeedbackByID = (
         if (!tagExists) {
           invalidTags.push(tag);
         }
-      });
+      }
 
       // If invalid tags, return error
       if (invalidTags.length > 0) {
@@ -341,7 +341,7 @@ export const updateFeedbackByID = (
 
       // Convert tags into raw tags json array objects: [{name: name, color: color}]
       data.raw_tags = workspaceTags
-        .filter((tag) => data.tags!.includes(tag.id))
+        .filter((tag) => data.tags?.includes(tag.id))
         .map((tag) => {
           return { name: tag.name, color: tag.color };
         });
@@ -351,13 +351,13 @@ export const updateFeedbackByID = (
     const { data: updatedFeedback, error: updatedFeedbackError } = await supabase
       .from('feedback')
       .update({
-        title: data.title ? data.title : feedback!.title,
-        content: data.content ? data.content : feedback!.content,
-        status: data.status !== undefined ? data.status : feedback!.status,
-        raw_tags: data.raw_tags ? data.raw_tags : feedback!.raw_tags,
-        board_id: data.board_id ? data.board_id : feedback!.board_id,
+        title: data.title ? data.title : feedback?.title,
+        content: data.content ? data.content : feedback?.content,
+        status: data.status !== undefined ? data.status : feedback?.status,
+        raw_tags: data.raw_tags ? data.raw_tags : feedback?.raw_tags,
+        board_id: data.board_id ? data.board_id : feedback?.board_id,
       })
-      .eq('id', feedback!.id)
+      .eq('id', feedback?.id!)
       .select()
       .single();
 
@@ -382,7 +382,7 @@ export const getFeedbackById = withFeedbackAuth<FeedbackWithUserProps>(
     const { data: upvoters, error: upvotersError } = await supabase
       .from('feedback_upvoter')
       .select()
-      .eq('feedback_id', feedback!.id);
+      .eq('feedback_id', feedback?.id!);
 
     // Check for errors
     if (upvotersError) {
@@ -390,7 +390,7 @@ export const getFeedbackById = withFeedbackAuth<FeedbackWithUserProps>(
     }
 
     // Check if user has upvoted
-    const hasUpvoted = upvoters.find((upvoter) => upvoter.profile_id === user!.id);
+    const hasUpvoted = upvoters.find((upvoter) => upvoter.profile_id === user?.id);
 
     // Convert feedback to unknown type and then to test type
     const feedbackData = feedback as unknown as FeedbackWithUserProps;
@@ -418,7 +418,7 @@ export const deleteFeedbackById = withFeedbackAuth<FeedbackProps['Row']>(
     const { data: deletedFeedback, error: deleteError } = await supabase
       .from('feedback')
       .delete()
-      .eq('id', feedback!.id)
+      .eq('id', feedback?.id!)
       .select()
       .single();
 
@@ -444,7 +444,7 @@ export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
     const { data: upvoters, error: upvotersError } = await supabase
       .from('feedback_upvoter')
       .select('profile (*), created_at')
-      .eq('feedback_id', feedback!.id)
+      .eq('feedback_id', feedback?.id!)
       .order('created_at', { ascending: false });
 
     // Check for errors
@@ -474,7 +474,7 @@ export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'se
     const { data: workspaceModuleConfig, error: workspaceModuleConfigError } = await supabase
       .from('workspace_module')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .single();
 
     // Check for errors
@@ -483,7 +483,7 @@ export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'se
     }
 
     // Check if anonymous upvoting is enabled
-    if (!workspaceModuleConfig.feedback_anon_upvoting && user!.is_anonymous) {
+    if (!workspaceModuleConfig.feedback_anon_upvoting && user?.is_anonymous) {
       return { data: null, error: { message: 'anonymous upvoting is not allowed.', status: 403 } };
     }
 
@@ -491,8 +491,8 @@ export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'se
     const { data: upvoter, error: upvoterError } = await supabase
       .from('feedback_upvoter')
       .select()
-      .eq('profile_id', user!.id)
-      .eq('feedback_id', feedback!.id);
+      .eq('profile_id', user?.id)
+      .eq('feedback_id', feedback?.id!);
 
     // Check for errors
     if (upvoterError) {
@@ -504,8 +504,8 @@ export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'se
       const { data: createdUpvote, error: createError } = await supabase
         .from('feedback_upvoter')
         .insert({
-          profile_id: user!.id,
-          feedback_id: feedback!.id,
+          profile_id: user?.id,
+          feedback_id: feedback?.id!,
         })
         .select()
         .single();
@@ -523,8 +523,8 @@ export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'se
     const { data: deletedUpvote, error: deleteError } = await supabase
       .from('feedback_upvoter')
       .delete()
-      .eq('profile_id', user!.id)
-      .eq('feedback_id', feedback!.id)
+      .eq('profile_id', user?.id)
+      .eq('feedback_id', feedback?.id!)
       .select()
       .single();
 
@@ -549,7 +549,7 @@ export const getAllBoardFeedback = withFeedbackBoardAuth<FeedbackWithUserProps[]
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
       .select('*, user:user_id (*), board:board_id (*)')
-      .eq('board_id', board!.id);
+      .eq('board_id', board?.id!);
 
     // Check for errors
     if (feedbackError) {
@@ -560,7 +560,7 @@ export const getAllBoardFeedback = withFeedbackBoardAuth<FeedbackWithUserProps[]
     const { data: userUpvotes, error: userUpvotesError } = await supabase
       .from('feedback_upvoter')
       .select()
-      .eq('profile_id', user!.id);
+      .eq('profile_id', user?.id);
 
     // Check for errors
     if (userUpvotesError) {
@@ -602,7 +602,7 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
       .select('*, user:user_id (*), board:board_id (*)')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (feedbackError) {
@@ -621,7 +621,7 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
     const { data: userUpvotes, error: userUpvotesError } = await supabase
       .from('feedback_upvoter')
       .select()
-      .eq('profile_id', user!.id);
+      .eq('profile_id', user?.id);
 
     // Check for errors
     if (userUpvotesError) {
@@ -659,7 +659,7 @@ export const createFeedbackTag = (
     const { data: tagExists, error: tagExistsError } = await supabase
       .from('feedback_tag')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('name', data.name);
 
     // Check for errors
@@ -678,7 +678,7 @@ export const createFeedbackTag = (
       .insert({
         name: data.name,
         color: data.color,
-        workspace_id: workspace!.id,
+        workspace_id: workspace?.id!,
       })
       .select()
       .single();
@@ -704,7 +704,7 @@ export const deleteFeedbackTagByName = (workspaceSlug: string, tagName: string, 
     const { data: tag, error: tagError } = await supabase
       .from('feedback_tag')
       .select()
-      .eq('workspace_id', workspace!.id)
+      .eq('workspace_id', workspace?.id!)
       .eq('name', tagName)
       .single();
 
@@ -742,7 +742,7 @@ export const getAllFeedbackTags = withWorkspaceAuth<FeedbackTagProps['Row'][]>(
     const { data: tags, error: tagsError } = await supabase
       .from('feedback_tag')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (tagsError) {

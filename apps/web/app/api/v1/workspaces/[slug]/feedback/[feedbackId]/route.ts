@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { deleteFeedbackById, getFeedbackById, updateFeedbackByID } from '@/lib/api/feedback';
-import { FeedbackWithUserInputProps } from '@/lib/types';
+import type { FeedbackWithUserInputProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 /*
     Get Workspace Feedback by ID

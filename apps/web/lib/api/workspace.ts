@@ -1,7 +1,7 @@
-import { decode } from 'base64-arraybuffer';
 import { withUserAuth, withWorkspaceAuth } from '@/lib/auth';
-import { AnalyticsProps, TeamMemberProps, WorkspaceProps } from '@/lib/types';
+import type { AnalyticsProps, TeamMemberProps, WorkspaceProps } from '@/lib/types';
 import { isSlugValid, isValidUrl, uploadToSupabaseStorage } from '@/lib/utils';
+import { decode } from 'base64-arraybuffer';
 
 // Get Workspace
 export const getWorkspaceBySlug = withWorkspaceAuth<WorkspaceProps['Row']>(
@@ -75,11 +75,11 @@ export const updateWorkspaceBySlug = (
     }
 
     // If base64 icon is provided, upload to storage
-    if (data.icon && data.icon.startsWith('data:image')) {
+    if (data.icon?.startsWith('data:image')) {
       const { data: iconUploadUrl, error } = await uploadToSupabaseStorage(
         supabase,
         'workspaces',
-        `${workspace!.slug}/icon.png`,
+        `${workspace?.slug}/icon.png`,
         decode(data.icon.split(',')[1]),
         'image/png',
         true
@@ -95,11 +95,11 @@ export const updateWorkspaceBySlug = (
     }
 
     // If base64 opengraph image is provided, upload to storage
-    if (data.opengraph_image && data.opengraph_image.startsWith('data:image')) {
+    if (data.opengraph_image?.startsWith('data:image')) {
       const { data: opengraphUpload, error: opengraphError } = await uploadToSupabaseStorage(
         supabase,
         'workspaces',
-        `${workspace!.slug}/opengraph.png`,
+        `${workspace?.slug}/opengraph.png`,
         decode(data.opengraph_image.split(',')[1]),
         'image/png',
         true
@@ -130,7 +130,7 @@ export const updateWorkspaceBySlug = (
         sso_auth_enabled: data.sso_auth_enabled,
         sso_auth_url: data.sso_auth_url,
       })
-      .eq('id', workspace!.id)
+      .eq('id', workspace?.id!)
       .select()
       .single();
 
@@ -155,7 +155,7 @@ export const deleteWorkspaceBySlug = withWorkspaceAuth<WorkspaceProps['Row']>(
     const { data: deletedWorkspace, error: deleteError } = await supabase
       .from('workspace')
       .delete()
-      .eq('id', workspace!.id)
+      .eq('id', workspace?.id!)
       .select()
       .single();
 
@@ -181,7 +181,7 @@ export const getWorkspaceMembers = withWorkspaceAuth<TeamMemberProps[]>(
     const { data: members, error: membersError } = await supabase
       .from('workspace_member')
       .select('profile (*), created_at')
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (membersError) {
@@ -276,7 +276,7 @@ export const getWorkspaceAnalytics = (
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (feedbackError) {
@@ -287,7 +287,7 @@ export const getWorkspaceAnalytics = (
     const { data: changelogs, error: changelogsError } = await supabase
       .from('changelog')
       .select()
-      .eq('workspace_id', workspace!.id);
+      .eq('workspace_id', workspace?.id!);
 
     // Check for errors
     if (changelogsError) {
@@ -370,7 +370,7 @@ export const createWorkspaceSSOSecret = (slug: string, cType: 'server' | 'route'
     const { error: updateError } = await supabase
       .from('workspace')
       .update({ sso_auth_secret_id: secretId })
-      .eq('id', workspace!.id)
+      .eq('id', workspace?.id!)
       .select()
       .single();
 

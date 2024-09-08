@@ -1,13 +1,13 @@
 'use client';
 
-import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from '@feedbase/ui/components/chart';
+import * as React from 'react';
 import { CartesianGrid, Line, LineChart as ReLineChart, XAxis } from 'recharts';
 
 const chartData = [
@@ -145,7 +145,10 @@ export function LineChart() {
                 key={chart}
                 data-active={activeChart === chart}
                 className='data-[active=true]:bg-muted/50 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-l sm:border-t-0 sm:px-8 sm:py-6'
-                onClick={() => { setActiveChart(chart); }}>
+                onClick={() => {
+                  setActiveChart(chart);
+                }}
+              >
                 <span className='text-muted-foreground text-xs'>{chartConfig[chart].label}</span>
                 <span className='text-lg font-bold leading-none sm:text-3xl'>
                   {total[key as keyof typeof total].toLocaleString()}
@@ -163,7 +166,8 @@ export function LineChart() {
             margin={{
               left: 12,
               right: 12,
-            }}>
+            }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey='date'

@@ -26,7 +26,8 @@ export default function InputGroup({
           className={cn(
             'text-muted-foreground bg-muted dark:bg-accent flex select-none items-center justify-center rounded-l-md border-r p-2 px-2.5',
             groupClassName
-          )}>
+          )}
+        >
           {prefix}
         </div>
       ) : null}
@@ -42,7 +43,8 @@ export default function InputGroup({
           className={cn(
             'text-foreground/50 bg-muted dark:bg-accent flex select-none items-center justify-center rounded-r-md border-l px-2.5 py-2',
             groupClassName
-          )}>
+          )}
+        >
           {suffix}
         </div>
       ) : null}

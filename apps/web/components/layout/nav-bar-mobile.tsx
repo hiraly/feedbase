@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import type { SidebarTabProps, SidebarTabsProps, WorkspaceProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
-import { SidebarTabProps, SidebarTabsProps, WorkspaceProps } from '@/lib/types';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Icons } from '../shared/icons/icons-static';
 
 const navTabs = [
@@ -74,18 +74,21 @@ export default function NavbarMobile({
         'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden',
         // If iOS and PWA, add padding to bottom
         isPWA ? 'h-[88px] pb-6' : ''
-      )}>
+      )}
+    >
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
           href={`/${currentWorkspace.slug}/${tab.slug}`}
           key={tab.slug}
-          className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
+          className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'
+        >
           <Button
             variant='ghost'
             className={cn(
               'items-centerjustify-center h-full w-full gap-1 border border-transparent p-2 hover:bg-transparent'
-            )}>
+            )}
+          >
             {/* Icon */}
             {activeTab === tab.slug ? (
               <tab.solid className={cn('h-5 w-5 fill-white', tab.slug === 'analytics' ? 'h-7 w-7' : '')} />

@@ -1,10 +1,10 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import type { WorkspaceProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@feedbase/ui/components/card';
+import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { WorkspaceProps } from '@/lib/types';
 
 export default function UnsubscribeChangelogCard({
   workspace,
@@ -43,8 +43,8 @@ export default function UnsubscribeChangelogCard({
     toast.promise(promise, {
       loading: 'Unsubscribing...',
       success: () => {
-        router.push(`/`);
-        return `Unsubscribed! Redirecting...`;
+        router.push('/');
+        return 'Unsubscribed! Redirecting...';
       },
       error: (err) => {
         return err;

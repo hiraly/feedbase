@@ -5,7 +5,8 @@ export default function ChangelogPageLoading() {
   return (
     <div
       className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
-      key={0 /* Provide a unique key for each skeleton */}>
+      key={0 /* Provide a unique key for each skeleton */}
+    >
       {/* Back Button */}
       <div className='relative flex'>
         <div className='flex w-full pb-4 pr-5 md:w-[200px] md:pb-0'>

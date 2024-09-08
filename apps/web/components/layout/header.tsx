@@ -1,8 +1,8 @@
-import Link from 'next/link';
-import { ProfileProps, WorkspaceProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 import UserDropdown from '@/components/shared/user-dropdown';
 import InboxPopover from '@/components/workspace/inbox-popover';
+import type { ProfileProps, WorkspaceProps } from '@/lib/types';
+import Link from 'next/link';
 import WorkspaceDropdown from '../workspace/workspace-dropdown';
 
 export default function DashboardHeader({

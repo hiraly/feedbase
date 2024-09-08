@@ -5,18 +5,12 @@
   "types": "./dist/index.d.ts",
   "license": "MIT",
   "private": false,
-  "keywords": [
-    "feedbase",
-    "client",
-    "api"
-  ],
+  "keywords": ["feedbase", "client", "api"],
   "bugs": {
     "url": "https://github.com/chroxify/feedbase/issues"
   },
   "homepage": "https://docs.feedbase.app",
-  "files": [
-    "./dist/**"
-  ],
+  "files": ["./dist/**"],
   "scripts": {
     "build": "tsup"
   },

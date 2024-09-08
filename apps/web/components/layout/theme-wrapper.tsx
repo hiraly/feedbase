@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import type { WorkspaceThemeProps } from '@/lib/types';
 import { useServerInsertedHTML } from 'next/navigation';
-import { createStyleRegistry, StyleRegistry } from 'styled-jsx';
-import { WorkspaceThemeProps } from '@/lib/types';
+import type React from 'react';
+import { useState } from 'react';
+import { StyleRegistry, createStyleRegistry } from 'styled-jsx';
 
 export default function CustomThemeWrapper({
   children,
@@ -12,7 +13,6 @@ export default function CustomThemeWrapper({
   children: React.ReactNode;
   workspaceTheme: WorkspaceThemeProps['Row'];
 }) {
-  // eslint-disable-next-line react/hook-use-state
   const [jsxStyleRegistry] = useState(() => createStyleRegistry());
 
   useServerInsertedHTML(() => {

@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import NumberAnimation from '@/components/shared/animated-number';
+import { STATUS_OPTIONS } from '@/lib/constants';
+import type { FeedbackWithUserProps } from '@/lib/types';
+import { formatTimeAgo } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import { ChevronUp, LucideIcon } from 'lucide-react';
-import { STATUS_OPTIONS } from '@/lib/constants';
-import { FeedbackWithUserProps } from '@/lib/types';
-import { formatTimeAgo } from '@/lib/utils';
-import NumberAnimation from '@/components/shared/animated-number';
+import { ChevronUp, type LucideIcon } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { useMemo } from 'react';
 
 function FeedbackItem({
   feedback,
@@ -22,7 +22,8 @@ function FeedbackItem({
   return (
     <div
       className='jusify-between hover:bg-muted/30 group flex h-14 cursor-pointer flex-row items-center border border-b-0 p-1 transition-all [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
-      key={feedback.id}>
+      key={feedback.id}
+    >
       {/* Upvotes & Title */}
       <div className='flex h-full w-full min-w-0 flex-row items-center gap-1.5'>
         {/* Upvotes */}
@@ -32,7 +33,8 @@ function FeedbackItem({
             size='sm'
             onClick={() => {
               onUpvote(feedback.id);
-            }}>
+            }}
+          >
             {/* Arrow */}
             <ChevronUp
               className={cn(
@@ -81,7 +83,8 @@ function FeedbackItem({
                   }
 
                   // createQueryParams('tags', tag.name);
-                }}>
+                }}
+              >
                 {/* Tag color */}
                 <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                 {/* Tag name */}
@@ -115,7 +118,8 @@ function FeedbackItem({
                     }
 
                     // createQueryParams('status', currentStatus.label);
-                  }}>
+                  }}
+                >
                   <currentStatus.icon className='text-foreground/60 h-4 w-4' />
                 </button>
               );

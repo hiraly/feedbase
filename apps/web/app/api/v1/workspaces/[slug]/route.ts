@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { deleteWorkspaceBySlug, getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
-import { WorkspaceProps } from '@/lib/types';
+import type { WorkspaceProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 /*
     Get workspace by slug

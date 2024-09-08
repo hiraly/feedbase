@@ -39,7 +39,7 @@
       "name": "API Reference",
       "url": "api-reference"
     },
-    { 
+    {
       "name": "SDK Reference",
       "url": "sdk-reference"
     }
@@ -84,10 +84,7 @@
     },
     {
       "group": "Public API",
-      "pages": [
-        "api-reference/endpoint/public/get--changelogs",
-        "api-reference/endpoint/public/get--atom"
-      ]
+      "pages": ["api-reference/endpoint/public/get--changelogs", "api-reference/endpoint/public/get--atom"]
     },
     {
       "group": "Project API",
@@ -110,9 +107,7 @@
         },
         {
           "group": "Project Members",
-          "pages": [
-            "api-reference/endpoint/project-members/get-projects-members"
-          ]
+          "pages": ["api-reference/endpoint/project-members/get-projects-members"]
         },
         {
           "group": "Project Config",

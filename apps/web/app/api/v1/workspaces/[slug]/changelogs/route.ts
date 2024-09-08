@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { createChangelog, getAllWorkspaceChangelogs } from '@/lib/api/changelog';
-import { ChangelogProps } from '@/lib/types';
+import type { ChangelogProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 

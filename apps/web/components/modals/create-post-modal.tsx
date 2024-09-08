@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import * as React from 'react';
-import { useParams, usePathname } from 'next/navigation';
+import { Icons } from '@/components/shared/icons/icons-static';
+import type { FeedbackBoardProps, FeedbackProps } from '@/lib/types';
+import { actionFetcher, signInAnonymously } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
 import { Command, CommandGroup, CommandItem } from '@feedbase/ui/components/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
@@ -14,14 +14,14 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { Switch } from '@feedbase/ui/components/switch';
 import { cn } from '@feedbase/ui/lib/utils';
-import { Editor } from '@tiptap/react';
+import type { Editor } from '@tiptap/react';
 import { Check, ChevronRight } from 'lucide-react';
+import { useParams, usePathname } from 'next/navigation';
+import { useState } from 'react';
+import * as React from 'react';
 import { toast } from 'sonner';
 import { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { FeedbackBoardProps, FeedbackProps } from '@/lib/types';
-import { actionFetcher, signInAnonymously } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
 import PostInput from '../feedback/common/post-input';
 
 export default function CreatePostModal({
@@ -84,11 +84,11 @@ export default function CreatePostModal({
 
   // Set default board
   React.useEffect(() => {
-    const currentBoard = feedbackBoards.find(
-      (board) => pathname?.includes(`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`)
+    const currentBoard = feedbackBoards.find((board) =>
+      pathname?.includes(`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`)
     );
 
-    setFeedback({ ...feedback, board_id: currentBoard?.id || defaultBoard });
+    setFeedback({ ...feedback, board_id: currentboard?.id! || defaultBoard });
   }, [pathname, feedbackBoards, defaultBoard]);
 
   return (
@@ -102,7 +102,8 @@ export default function CreatePostModal({
                 aria-expanded={open}
                 variant='outline'
                 size='sm'
-                className='text-secondary-foreground -ml-1.5 mt-0.5 h-6 w-fit items-center justify-between gap-1 px-1.5 font-normal'>
+                className='text-secondary-foreground -ml-1.5 mt-0.5 h-6 w-fit items-center justify-between gap-1 px-1.5 font-normal'
+              >
                 <span className='line-clamp-1 flex select-none items-center gap-1.5 text-xs'>
                   {
                     feedbackBoards.find((item) => item.id.toLowerCase() === feedback.board_id.toLowerCase())
@@ -126,7 +127,8 @@ export default function CreatePostModal({
                         setFeedback({ ...feedback, board_id: item.id });
                         setPopoverOpen(false);
                       }}
-                      className='flex flex-row items-center gap-[6px]'>
+                      className='flex flex-row items-center gap-[6px]'
+                    >
                       {/* Status label */}
                       {item.name}
 
@@ -156,8 +158,9 @@ export default function CreatePostModal({
             id='title'
             placeholder='Post title'
             value={feedback?.title}
-            autoFocus
-            onChange={(event) => { setFeedback({ ...feedback, title: event.target.value }); }}
+            onChange={(event) => {
+              setFeedback({ ...feedback, title: event.target.value });
+            }}
             onKeyDown={handleTitleKeyDown}
             className='placeholder:text-muted-foreground text-foreground h-8 w-full bg-transparent px-0 font-medium outline-none'
           />
@@ -166,7 +169,9 @@ export default function CreatePostModal({
           <PostInput
             commentEditor={commentEditor}
             content={feedback.content}
-            setContent={(content) => { setFeedback({ ...feedback, content }); }}
+            setContent={(content) => {
+              setFeedback({ ...feedback, content });
+            }}
           />
         </div>
         <ResponsiveDialogFooter className='items-center justify-end gap-3 border-t px-4 py-3'>
@@ -195,7 +200,8 @@ export default function CreatePostModal({
             }}
             disabled={
               !feedback.title || feedback.content.replace(/<[^>]*>?/gm, '').length === 0 || isMutating
-            }>
+            }
+          >
             {isMutating ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
             Submit Post
           </Button>

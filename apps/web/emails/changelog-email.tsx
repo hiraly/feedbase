@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { formatRootUrl } from '@/lib/utils';
 import {
   Body,
   Column,
@@ -14,7 +14,7 @@ import {
   Section,
   Tailwind,
 } from '@react-email/components';
-import { formatRootUrl } from '@/lib/utils';
+import * as React from 'react';
 
 interface ChangelogEmailProps {
   subId: string;
@@ -86,7 +86,8 @@ export default function ChangelogEmail({ subId, workspaceSlug, changelog }: Chan
                       `/changelog/${changelog.slug}`
                     )}`}
                     target='_blank'
-                    rel='noopener noreferrer'>
+                    rel='noopener noreferrer'
+                  >
                     <Img src='https://svgl.app/library/twitter.svg' className='h-6 w-6' />
                   </Link>
                 </Column>
@@ -105,13 +106,15 @@ export default function ChangelogEmail({ subId, workspaceSlug, changelog }: Chan
             <div className='flex w-full flex-row items-center justify-center gap-5 py-4'>
               <Link
                 href={formatRootUrl(workspaceSlug, `/changelog/unsubscribe?subId=${subId}`)}
-                className='flex items-center gap-2 text-sm text-black/70 underline'>
+                className='flex items-center gap-2 text-sm text-black/70 underline'
+              >
                 Unsubscribe
               </Link>
               <span className='text-sm font-normal text-black/70'>•</span>
               <Link
                 href={formatRootUrl(workspaceSlug, `/changelog/${changelog.slug}`)}
-                className='flex items-center gap-2 text-sm text-black/70 underline'>
+                className='flex items-center gap-2 text-sm text-black/70 underline'
+              >
                 View in browser
               </Link>
             </div>
@@ -119,7 +122,8 @@ export default function ChangelogEmail({ subId, workspaceSlug, changelog }: Chan
             <div className='flex w-full flex-row items-center justify-center'>
               <Link
                 href='https://feedbase.app'
-                className='flex items-center gap-2 text-sm font-normal text-black/70'>
+                className='flex items-center gap-2 text-sm font-normal text-black/70'
+              >
                 <Img
                   src='https://feedbase.app/icon-512x512.png'
                   alt='Feedbase'

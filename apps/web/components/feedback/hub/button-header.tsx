@@ -1,14 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import SortFeedbackDropdown from '@/components/roadmap/sort-dropdown';
+import useDebounce from '@/lib/hooks/use-debounce';
+import useCreateQueryString from '@/lib/hooks/use-query-router';
+import type { FeedbackBoardProps, ProfileProps, WorkspaceModuleProps } from '@/lib/types';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { PlusIcon, Search } from 'lucide-react';
-import useDebounce from '@/lib/hooks/use-debounce';
-import useCreateQueryString from '@/lib/hooks/use-query-router';
-import { FeedbackBoardProps, ProfileProps, WorkspaceModuleProps } from '@/lib/types';
-import SortFeedbackDropdown from '@/components/roadmap/sort-dropdown';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import CreatePostModal from '../../modals/create-post-modal';
 import AuthModal from '../../modals/login-signup-modal';
 import { FilterCombobox } from '../common/filter-combobox';
@@ -68,7 +68,8 @@ export default function FeedbackHeader({
           {(user && !user.is_anonymous) || moduleConfig?.feedback_anon_posting ? (
             <CreatePostModal
               defaultBoard={moduleConfig.feedback_default_board_id}
-              feedbackBoards={feedbackBoards}>
+              feedbackBoards={feedbackBoards}
+            >
               <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>

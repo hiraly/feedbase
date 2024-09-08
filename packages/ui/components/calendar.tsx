@@ -1,9 +1,9 @@
 'use client';
 
-import * as React from 'react';
 import { buttonVariants } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import type * as React from 'react';
 import { DayPicker } from 'react-day-picker';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;

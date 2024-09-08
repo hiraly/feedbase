@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { Button } from '@feedbase/ui/components/button';
 import { Switch } from '@feedbase/ui/components/switch';
 import { cn } from '@feedbase/ui/lib/utils';
+import { useEffect, useState } from 'react';
 import { Icons } from '../shared/icons/icons-static';
 
 export default function SettingsCard({
@@ -66,7 +66,8 @@ export default function SettingsCard({
                 await onSave();
                 setLoading(false);
                 setShowSaveButton(false);
-              }}>
+              }}
+            >
               {loading ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
               Save
             </Button>

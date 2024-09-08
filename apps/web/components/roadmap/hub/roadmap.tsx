@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import FeedbackFilterHeader from '@/components/feedback/common/feedback-filters';
 import { cn } from '@feedbase/ui/lib/utils';
 import { motion } from 'framer-motion';
+import { useParams } from 'next/navigation';
+import { useState } from 'react';
 import { useSWRConfig } from 'swr';
-import FeedbackFilterHeader from '@/components/feedback/common/feedback-filters';
 import { FilterCombobox } from '../../feedback/common/filter-combobox';
 import SortFeedbackDropdown from '../sort-dropdown';
 import RoadmapKanban from './roadmap-board';
@@ -48,7 +48,8 @@ export default function Roadmap() {
               )}
               style={{
                 WebkitTapHighlightColor: 'transparent',
-              }}>
+              }}
+            >
               {activeTab === tab.id && (
                 <motion.span
                   layoutId='bubble'

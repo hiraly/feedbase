@@ -1,7 +1,7 @@
 'use client';
 
+import { AnimatePresence, type AnimationProps, motion } from 'framer-motion';
 import { useEffect, useMemo, useState } from 'react';
-import { AnimatePresence, AnimationProps, motion } from 'framer-motion';
 
 export default function NumberAnimation({
   baseNumber,
@@ -47,14 +47,16 @@ export default function NumberAnimation({
           key={baseNumberMemo}
           variants={numberAnimation.baseNumber}
           animate={animationState}
-          className='text-foreground/60 inline-block text-xs'>
+          className='text-foreground/60 inline-block text-xs'
+        >
           {baseNumberMemo}
         </motion.span>
         <motion.span
           key={baseNumberMemo + 1}
           variants={numberAnimation.incrementedNumber}
           animate={animationState}
-          className='inline-block text-xs'>
+          className='inline-block text-xs'
+        >
           {baseNumberMemo + 1}
         </motion.span>
       </span>

@@ -1,14 +1,14 @@
 'use client';
 
-import Link from 'next/link';
+import NumberAnimation from '@/components/shared/animated-number';
+import { PROSE_CN } from '@/lib/constants';
+import type { FeedbackWithUserProps } from '@/lib/types';
+import { formatTimeAgo, signInAnonymously } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, MessagesSquare } from 'lucide-react';
-import { PROSE_CN } from '@/lib/constants';
-import { FeedbackWithUserProps } from '@/lib/types';
-import { formatTimeAgo, signInAnonymously } from '@/lib/utils';
-import NumberAnimation from '@/components/shared/animated-number';
+import Link from 'next/link';
 import AuthModal from '../../modals/login-signup-modal';
 
 export default function FeedbackItem({
@@ -23,7 +23,8 @@ export default function FeedbackItem({
   return (
     <div
       className='hover:bg-muted/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
-      key={feedback.id}>
+      key={feedback.id}
+    >
       <AuthModal disabled={!forceAuth}>
         <div className='hover:bg-muted/50 flex items-center border-r transition-colors duration-150'>
           {/* Upvotes */}
@@ -36,7 +37,8 @@ export default function FeedbackItem({
 
               // Upvote
               onUpvote(feedback.id);
-            }}>
+            }}
+          >
             {/* Arrow */}
             <ChevronUp
               className={cn(
@@ -57,7 +59,8 @@ export default function FeedbackItem({
       {/* Main Content */}
       <Link
         href={`/feedback/${feedback.id}`}
-        className='flex flex-grow flex-col items-start justify-between gap-3 p-4'>
+        className='flex flex-grow flex-col items-start justify-between gap-3 p-4'
+      >
         <div className='flex flex-col'>
           {/* Title */}
           <span className='text-foreground/90 line-clamp-1 pr-10 text-sm font-medium'>{feedback.title}</span>

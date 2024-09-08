@@ -1,4 +1,4 @@
-import { JSXElementConstructor, ReactElement } from 'react';
+import type { JSXElementConstructor, ReactElement } from 'react';
 import { Resend } from 'resend';
 
 export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -12,7 +12,7 @@ export const sendEmail = async ({
 }: {
   email: string;
   subject: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: explicit any
   react: ReactElement<any, string | JSXElementConstructor<any>>;
   marketing?: boolean;
   test?: boolean;
@@ -40,7 +40,7 @@ export const sendBatchEmails = async ({
 }: {
   emails: string[];
   subject: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: explicit any
   reactEmails: ReactElement<any, string | JSXElementConstructor<any>>[];
   headers?: Record<string, string>[];
   marketing?: boolean;

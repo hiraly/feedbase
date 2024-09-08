@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { createCommentForFeedbackById, getCommentsForFeedbackById } from '@/lib/api/comment';
-import { CommentProps } from '@/lib/types';
+import type { CommentProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 /* 
     Create feedback comment

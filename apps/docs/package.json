@@ -1,5 +1,5 @@
 {
-  "name": "docs",
+  "name": "@feedbase/docs",
   "version": "0.1.0",
   "scripts": {
     "dev": "mintlify dev --port 3001"

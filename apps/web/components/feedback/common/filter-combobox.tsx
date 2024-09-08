@@ -1,7 +1,9 @@
 'use client';
 
-import * as React from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { STATUS_OPTIONS } from '@/lib/constants';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useFeedbackBoards from '@/lib/swr/use-boards';
+import useTags from '@/lib/swr/use-tags';
 import { Button } from '@feedbase/ui/components/button';
 import { Checkbox } from '@feedbase/ui/components/checkbox';
 import {
@@ -23,10 +25,8 @@ import {
   NotebookPen,
   Tags,
 } from 'lucide-react';
-import { STATUS_OPTIONS } from '@/lib/constants';
-import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import useFeedbackBoards from '@/lib/swr/use-boards';
-import useTags from '@/lib/swr/use-tags';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import * as React from 'react';
 
 export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon' }) {
   const [search, setSearch] = React.useState('');
@@ -61,12 +61,14 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
           setPages([]);
         }
         setOpen(!open);
-      }}>
+      }}
+    >
       <PopoverTrigger asChild>
         <Button
           variant='outline'
           className='text-secondary-foreground hover:text-foreground flex items-center gap-1'
-          size={size}>
+          size={size}
+        >
           <Filter className='h-4 w-4' />
           {size === 'icon' ? null : 'Filter'}
         </Button>
@@ -80,7 +82,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
               e.preventDefault();
               setPages((pages) => pages.slice(0, -1));
             }
-          }}>
+          }}
+        >
           <CommandInput placeholder='Filter...' hideIcon value={search} onValueChange={setSearch} autoFocus />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
@@ -90,7 +93,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                   className='group flex items-center gap-2'
                   onSelect={() => {
                     setPages([...pages, 'status']);
-                  }}>
+                  }}
+                >
                   <CircleDashed className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Status
                 </CommandItem>
@@ -98,7 +102,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                   className='group flex items-center gap-2'
                   onSelect={() => {
                     setPages([...pages, 'board']);
-                  }}>
+                  }}
+                >
                   <LayoutGrid className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Board
                 </CommandItem>
@@ -106,7 +111,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                   className='group flex items-center gap-2'
                   onSelect={() => {
                     setPages([...pages, 'tags']);
-                  }}>
+                  }}
+                >
                   <Tags className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Tags
                 </CommandItem>
@@ -118,7 +124,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                   className='group flex items-center gap-2'
                   onSelect={() => {
                     setPages([...pages, 'created-date']);
-                  }}>
+                  }}
+                >
                   <CalendarPlus className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Created Date
                 </CommandItem>
@@ -151,7 +158,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                       // Apply statuses
                       createQueryParams('status', newStatuses.join(','));
-                    }}>
+                    }}
+                  >
                     <Checkbox
                       className={cn(
                         'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
@@ -192,7 +200,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                       // Apply tags
                       createQueryParams('tags', newTags.join(','));
-                    }}>
+                    }}
+                  >
                     <Checkbox
                       className={cn(
                         'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
@@ -219,7 +228,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                     // Close popover
                     setOpen(false);
-                  }}>
+                  }}
+                >
                   1 day ago
                 </CommandItem>
                 <CommandItem
@@ -230,7 +240,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                     // Close popover
                     setOpen(false);
-                  }}>
+                  }}
+                >
                   1 week ago
                 </CommandItem>
 
@@ -242,7 +253,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                     // Close popover
                     setOpen(false);
-                  }}>
+                  }}
+                >
                   1 month ago
                 </CommandItem>
                 <CommandItem
@@ -253,7 +265,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                     // Close popover
                     setOpen(false);
-                  }}>
+                  }}
+                >
                   3 months ago
                 </CommandItem>
                 <CommandItem className='group flex items-center gap-2'>
@@ -284,7 +297,8 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                       // Apply boards
                       createQueryParams('board', newBoards.join(','));
-                    }}>
+                    }}
+                  >
                     <Checkbox
                       className={cn(
                         'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',

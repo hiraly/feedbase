@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
 import { createFeedbackTag, getAllFeedbackTags } from '@/lib/api/feedback';
-import { FeedbackTagProps } from '@/lib/types';
+import type { FeedbackTagProps } from '@/lib/types';
+import { NextResponse } from 'next/server';
 
 /*
     Create new tag

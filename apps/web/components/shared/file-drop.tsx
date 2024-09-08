@@ -1,14 +1,14 @@
 'use client';
 
+import { cn } from '@feedbase/ui/lib/utils';
+import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 /*
   This component is a modified version of Steven Tey's OGSection component from the dub project.
   Big shoutout to him for making this component open source!
   Credits: https://github.com/steven-tey/dub/blob/23cea302493a2e240fb31a75d3bf0da3979a0abc/components/app/modals/add-edit-link-modal/og-section.tsx#L4
 */
-import { Dispatch, useCallback, useState } from 'react';
-import Image from 'next/image';
-import { cn } from '@feedbase/ui/lib/utils';
-import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { type Dispatch, useCallback, useState } from 'react';
 
 export default function FileDrop({
   image,
@@ -50,7 +50,7 @@ export default function FileDrop({
   );
 
   const onChangePicture = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // biome-ignore lint/suspicious/noExplicitAny: explicit any
     (e: any) => {
       setFileError(null);
       const file = e.target.files[0];
@@ -73,7 +73,8 @@ export default function FileDrop({
         className={cn(
           'border-input bg-background hover:bg-accent group relative mt-1 flex h-44 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all',
           className
-        )}>
+        )}
+      >
         <div
           className='absolute z-[5] h-full w-full rounded-md'
           onDragOver={(e) => {
@@ -96,8 +97,7 @@ export default function FileDrop({
             e.stopPropagation();
             setDragActive(false);
             setFileError(null);
-            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
-            const file = e.dataTransfer.files && e.dataTransfer.files[0];
+            const file = e.dataTransfer.files?.[0];
 
             renderFile(file);
           }}
@@ -107,7 +107,8 @@ export default function FileDrop({
             dragActive ? 'border-foreground bg-background cursor-copy border-2 opacity-100' : ''
           } bg-background absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md transition-all ${
             image ? 'opacity-0 group-hover:opacity-100' : 'group-hover:bg-accent'
-          }`}>
+          }`}
+        >
           <CloudArrowUpIcon
             className={`${
               dragActive ? 'scale-110' : 'scale-100'

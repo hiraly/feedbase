@@ -1,13 +1,13 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Skeleton } from '@feedbase/ui/components/skeleton';
-import useCreateQueryString from '@/lib/hooks/use-query-router';
-import useFeedbackComments from '@/lib/swr/use-comments';
-import { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
 import FetchError from '@/components/shared/fetch-error';
 import { Icons } from '@/components/shared/icons/icons-static';
+import useCreateQueryString from '@/lib/hooks/use-query-router';
+import useFeedbackComments from '@/lib/swr/use-comments';
+import type { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect } from 'react';
 import AuthModal from '../../modals/login-signup-modal';
 import Comment from '../comments/comment';
 import CommentInput from '../comments/comment-input';

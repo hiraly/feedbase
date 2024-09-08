@@ -1,8 +1,8 @@
-import Link from 'next/link';
+import SettingsCard from '@/components/settings/settings-card';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
 import { LucideExternalLink } from 'lucide-react';
-import SettingsCard from '@/components/settings/settings-card';
+import Link from 'next/link';
 
 export default function BillingSettings() {
   return (
@@ -14,7 +14,8 @@ export default function BillingSettings() {
           </Label>
           <Link
             href='/dashboard/settings/billing/plan'
-            className='text-muted-foreground hover:text-foreground inline-flex items-center justify-start text-sm transition-colors hover:underline'>
+            className='text-muted-foreground hover:text-foreground inline-flex items-center justify-start text-sm transition-colors hover:underline'
+          >
             View plans
             <LucideExternalLink className='ml-1 inline-block h-4 w-4' />
           </Link>

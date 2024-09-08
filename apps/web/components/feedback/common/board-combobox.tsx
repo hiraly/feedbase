@@ -1,12 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import useFeedbackBoards from '@/lib/swr/use-boards';
 import { Button } from '@feedbase/ui/components/button';
 import { Command, CommandGroup, CommandItem } from '@feedbase/ui/components/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Check, ChevronsUpDownIcon, LayoutGrid } from 'lucide-react';
-import useFeedbackBoards from '@/lib/swr/use-boards';
+import * as React from 'react';
 
 interface ComboboxProps {
   initialBoard: string | null;
@@ -31,7 +31,8 @@ export function BoardCombobox({ initialBoard, onBoardChange }: ComboboxProps) {
           aria-expanded={open}
           variant='ghost'
           size='sm'
-          className='text-secondary-foreground w-1/2 justify-between gap-1'>
+          className='text-secondary-foreground w-1/2 justify-between gap-1'
+        >
           {currentItem ? (
             <div className='flex items-center gap-1.5 truncate'>
               <LayoutGrid className='text-foreground/60 h-4 w-4 shrink-0' />
@@ -60,7 +61,8 @@ export function BoardCombobox({ initialBoard, onBoardChange }: ComboboxProps) {
                   setOpen(false);
                   onBoardChange?.(item.id);
                 }}
-                className='flex flex-row items-center gap-[6px]'>
+                className='flex flex-row items-center gap-[6px]'
+              >
                 {/* Status label */}
                 {item.name}
 

@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import { updateWorkspaceIntegrations } from '@/lib/api/integration';
+import { NextResponse } from 'next/server';
 
 /*
     Update Discord integration
