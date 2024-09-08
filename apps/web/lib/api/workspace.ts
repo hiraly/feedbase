@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { withUserAuth, withWorkspaceAuth } from '@/lib/auth';
 import type { AnalyticsProps, TeamMemberProps, WorkspaceProps } from '@/lib/types';
 import { isSlugValid, isValidUrl, uploadToSupabaseStorage } from '@/lib/utils';
@@ -215,7 +216,7 @@ export const getWorkspaceAnalytics = (
     }
 
     // Check if tinybird variables are set
-    if (!process.env.TINYBIRD_API_URL || !process.env.TINYBIRD_API_KEY) {
+    if (!env.TINYBIRD_API_URL || !env.TINYBIRD_API_KEY) {
       return { data: null, error: { message: 'Tinybird variables not set.', status: 500 } };
     }
 
@@ -229,10 +230,10 @@ export const getWorkspaceAnalytics = (
 
     // Fetch timeseries from Tinybird
     const timeseries = await fetch(
-      `${process.env.TINYBIRD_API_URL}/v0/pipes/timeseries.json?end=${endDate}&start=${startDate}&workspace=${workspace?.slug}`,
+      `${env.TINYBIRD_API_URL}/v0/pipes/timeseries.json?end=${endDate}&start=${startDate}&workspace=${workspace?.slug}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+          Authorization: `Bearer ${env.TINYBIRD_API_KEY}`,
         },
       }
     ).then((res) => res.json());
@@ -244,10 +245,10 @@ export const getWorkspaceAnalytics = (
 
     // Fetch top feedback from Tinybird
     const topFeedback = (await fetch(
-      `${process.env.TINYBIRD_API_URL}/v0/pipes/top_feedback.json?workspace=${workspace?.slug}`,
+      `${env.TINYBIRD_API_URL}/v0/pipes/top_feedback.json?workspace=${workspace?.slug}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+          Authorization: `Bearer ${env.TINYBIRD_API_KEY}`,
         },
       }
     ).then((res) => res.json())) as { data: AnalyticsProps; error: string };
@@ -259,10 +260,10 @@ export const getWorkspaceAnalytics = (
 
     // Fetch top changelogs from Tinybird
     const topChangelogs = (await fetch(
-      `${process.env.TINYBIRD_API_URL}/v0/pipes/top_changelogs.json?workspace=${workspace?.slug}`,
+      `${env.TINYBIRD_API_URL}/v0/pipes/top_changelogs.json?workspace=${workspace?.slug}`,
       {
         headers: {
-          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+          Authorization: `Bearer ${env.TINYBIRD_API_KEY}`,
         },
       }
     ).then((res) => res.json())) as { data: AnalyticsProps; error: string };

@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { cookies } from 'next/headers';
 import { type NextRequest, userAgent } from 'next/server';
 
@@ -13,7 +14,7 @@ export async function recordClick({
   changelogId?: string;
 }) {
   const cookieStore = cookies();
-  const geo = process.env.VERCEL === '1' ? req.geo : null;
+  const geo = env.VERCEL === '1' ? req.geo : null;
   const ua = userAgent(req);
   const referer = req.headers.get('referer');
 
@@ -29,10 +30,10 @@ export async function recordClick({
     });
   }
 
-  const response = await fetch(`${process.env.TINYBIRD_API_URL}/v0/events?name=click_events`, {
+  const response = await fetch(`${env.TINYBIRD_API_URL}/v0/events?name=click_events`, {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+      Authorization: `Bearer ${env.TINYBIRD_API_KEY}`,
     },
     body: JSON.stringify({
       timestamp: new Date(Date.now()).toISOString(),

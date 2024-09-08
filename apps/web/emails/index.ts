@@ -1,7 +1,8 @@
+import { env } from '@/env.mjs';
 import type { JSXElementConstructor, ReactElement } from 'react';
 import { Resend } from 'resend';
 
-export const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+export const resend = env.RESEND_API_KEY ? new Resend(env.RESEND_API_KEY) : null;
 
 export const sendEmail = async ({
   email,

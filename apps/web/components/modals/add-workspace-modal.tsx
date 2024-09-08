@@ -1,6 +1,7 @@
 'use client';
 
 import InputGroup from '@/components/shared/input-group';
+import { env } from '@/env.mjs';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -102,7 +103,7 @@ export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNo
               value={slug}
               onChange={handleSlugChange}
               placeholder='feedbase'
-              suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+              suffix={`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`}
             />
 
             <Label className='text-foreground/50 text-xs '>The subdomain of your workspace.</Label>

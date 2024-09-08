@@ -1,8 +1,9 @@
+import { env } from '@/env.mjs';
 import { CheckCircle2, CircleDashed, CircleDot, CircleDotDashed, XCircle } from 'lucide-react';
 
 export const DASH_DOMAIN =
-  process.env.NEXT_PUBLIC_VERCEL_ENV === 'production'
-    ? `https://dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`
+  env.NEXT_PUBLIC_VERCEL_ENV === 'production'
+    ? `https://dash.${env.NEXT_PUBLIC_ROOT_DOMAIN}`
     : 'http://dash.localhost:3000';
 
 export const PROSE_CN =

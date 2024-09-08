@@ -32,6 +32,7 @@
     "@react-email/tailwind": "0.0.13-canary.1",
     "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "latest",
+    "@t3-oss/env-nextjs": "^0.11.1",
     "@tailwindcss/typography": "^0.5.12",
     "@tiptap/extension-bullet-list": "^2.3.0",
     "@tiptap/extension-character-count": "^2.3.0",
@@ -76,7 +77,8 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "^3.3.3",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
     "@feedbase/tailwind-config": "workspace:*",

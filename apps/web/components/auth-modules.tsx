@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env.mjs';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -30,10 +31,7 @@ const Auth = ({ successRedirect, children }: { successRedirect?: string; childre
   const [isLoading, setIsLoading] = useState(false);
 
   // TODO: Figure out issue with cookieOptions setting and set at root level instead of individually like rn
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createBrowserClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
   const value = { isLoading, setIsLoading, supabase, successRedirect };
 

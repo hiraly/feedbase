@@ -1,5 +1,6 @@
 import { type CookieOptions, createServerClient } from '@supabase/ssr';
 import { type NextRequest, NextResponse } from 'next/server';
+import { env } from './env.mjs';
 import type { Database } from './lib/supabase';
 
 export const config = {
@@ -19,8 +20,8 @@ export const config = {
 export default async function middleware(req: NextRequest) {
   // Create a Supabase client configured to use cookies
   const supabase = createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    env.NEXT_PUBLIC_SUPABASE_URL,
+    env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     {
       cookies: {
         get(name: string) {
@@ -61,30 +62,28 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
-  const hostname = req.headers
-    .get('host')
-    ?.replace('.localhost:3000', `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+  const hostname = req.headers.get('host')?.replace('.localhost:3000', `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
 
   // Get root domain
-  const rootDomain = hostname.includes('localhost')
+  const rootDomain = hostname?.includes('localhost')
     ? hostname.split('.').slice(-1)[0]
-    : hostname.split('.').length >= 2
-      ? `${hostname.split('.').slice(-2).join('.')}`
+    : hostname?.split('.').length! >= 2
+      ? `${hostname?.split('.').slice(-2).join('.')}`
       : null;
 
   // If the request is for a custom domain, rewrite to workspace paths
   if (
-    rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN ||
-    process.env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname)
+    rootDomain !== env.NEXT_PUBLIC_ROOT_DOMAIN ||
+    env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname!)
   ) {
     // Retrieve the workspace from the database
     const { data: workspace, error } = await supabase
       .from('workspace')
       .select()
-      .eq('custom_domain', hostname)
+      .eq('custom_domain', hostname!)
       .eq('custom_domain_verified', true)
       .single();
 
@@ -113,9 +112,9 @@ export default async function middleware(req: NextRequest) {
 
   // rewrites for dash pages
   if (
-    hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
-    (process.env.SUBDOMAIN_HOSTING === 'true' &&
-      hostname === `${process.env.DASHBOARD_SUBDOMAIN}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+    hostname === `dash.${env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+    (env.SUBDOMAIN_HOSTING === 'true' &&
+      hostname === `${env.DASHBOARD_SUBDOMAIN}.${env.NEXT_PUBLIC_ROOT_DOMAIN}`)
   ) {
     // protect all app pages with authentication except for /login, /signup and /invite/*
     if (!session.data.session && path !== '/login' && path !== '/signup' && !path.startsWith('/invite/')) {
@@ -132,7 +131,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrite root application to `/home` folder
-  if (hostname === 'localhost:3000' || hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+  if (hostname === 'localhost:3000' || hostname === env.NEXT_PUBLIC_ROOT_DOMAIN) {
     return NextResponse.rewrite(new URL(`/home${path === '/' ? '' : path}`, req.url), {
       headers: {
         'x-pathname': path,
@@ -142,7 +141,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrite /api to `/api` folder
-  if (hostname === `api.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (hostname === `api.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     return NextResponse.rewrite(new URL(`/api${path}`, req.url), {
       headers: {
         'x-pathname': path,
@@ -154,7 +153,7 @@ export default async function middleware(req: NextRequest) {
   // rewrite everything else to `/[sub-domain]/[path] dynamic route
   return NextResponse.rewrite(
     new URL(
-      `/${hostname.split('.')[0]}${path}${
+      `/${hostname?.split('.')[0]}${path}${
         req.nextUrl.searchParams ? `?${req.nextUrl.searchParams.toString()}` : ''
       }`,
       req.url
@@ -162,7 +161,7 @@ export default async function middleware(req: NextRequest) {
     {
       headers: {
         'x-pathname': path,
-        'x-workspace': hostname.split('.')[0],
+        'x-workspace': hostname!.split('.')[0],
         'x-powered-by': 'Feedbase',
       },
     }

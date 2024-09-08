@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { getWorkspaceAnalytics } from '@/lib/api/workspace';
 import { type NextRequest, NextResponse } from 'next/server';
 
@@ -7,7 +8,7 @@ import { type NextRequest, NextResponse } from 'next/server';
 */
 export async function GET(req: NextRequest, context: { params: { slug: string } }) {
   // Check if tinybird variables are set
-  if (!process.env.TINYBIRD_API_URL || !process.env.TINYBIRD_API_KEY) {
+  if (!env.TINYBIRD_API_URL || !env.TINYBIRD_API_KEY) {
     return NextResponse.json({ error: 'Tinybird variables not set.' }, { status: 500 });
   }
 

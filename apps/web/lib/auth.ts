@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import type { Database } from '@/lib/supabase';
 import type {
   ApiResponse,
@@ -69,22 +70,18 @@ export async function createClient(
   const supabase =
     cType === 'server'
       ? createServerClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          env.NEXT_PUBLIC_SUPABASE_URL,
+          env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
           createCookiesConfig(cookieStore, ['get'])
         )
-      : createServerClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          {
-            ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
-            global: {
-              headers: {
-                fbkey: authHeader ? authHeader.split(' ')[1] : '',
-              },
+      : createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+          ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
+          global: {
+            headers: {
+              fbkey: authHeader ? authHeader.split(' ')[1] : '',
             },
-          }
-        );
+          },
+        });
 
   // If auth header exists, validate api key
   if (authHeader) {

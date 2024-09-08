@@ -8,7 +8,7 @@
     "lineEnding": "lf",
     "lineWidth": 110,
     "attributePosition": "auto",
-    "ignore": ["**/node_modules", "**/.next", "**/.gitignore", "**/.DS_Store"]
+    "ignore": ["**/node_modules", "**/.next", "**/.gitignore", "**/.DS_Store", "**/.turbo"]
   },
   "organizeImports": { "enabled": true },
   "linter": {
@@ -33,7 +33,7 @@
       "complexity": { "noForEach": "warn" },
       "nursery": { "noConsole": "error" }
     },
-    "ignore": ["**/node_modules", "**/.next", "**/.gitignore", "**/.DS_Store"]
+    "ignore": ["**/node_modules", "**/.next", "**/.gitignore", "**/.DS_Store", "**/.turbo"]
   },
   "javascript": {
     "formatter": {

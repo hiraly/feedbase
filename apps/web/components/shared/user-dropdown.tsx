@@ -1,5 +1,6 @@
 'use client';
 
+import { env } from '@/env.mjs';
 import type { ProfileProps } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import {
@@ -25,10 +26,7 @@ export default function UserDropdown({
   iconColor?: string | null;
 }) {
   const [isHover, setIsHover] = useState<string>('');
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createBrowserClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
   function handleLogout() {
     supabase.auth.signOut();

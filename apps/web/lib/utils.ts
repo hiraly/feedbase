@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { createBrowserClient } from '@supabase/ssr';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { ApiResponse } from './types';
@@ -12,11 +13,9 @@ export function isSlugValid(slug: string) {
 }
 
 export function formatRootUrl(subdomain?: string, path?: string) {
-  const protocol = process.env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'https' : 'http';
+  const protocol = env.NEXT_PUBLIC_VERCEL_ENV === 'production' ? 'https' : 'http';
 
-  return `${protocol}://${subdomain ? `${subdomain}.` : ''}${process.env.NEXT_PUBLIC_ROOT_DOMAIN}${
-    path ? path : ''
-  }`;
+  return `${protocol}://${subdomain ? `${subdomain}.` : ''}${env.NEXT_PUBLIC_ROOT_DOMAIN}${path ? path : ''}`;
 }
 
 export const formatHtmlToMd = (htmlString: string): string => {
@@ -322,10 +321,7 @@ export async function uploadToSupabaseStorage(
 
 export async function signInAnonymously() {
   // Create a new Supabase client
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
+  const supabase = createBrowserClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
   // Check if user is already logged in
   const {

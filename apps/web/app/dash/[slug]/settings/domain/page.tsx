@@ -4,6 +4,7 @@ import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import { Icons } from '@/components/shared/icons/icons-static';
 import InputGroup from '@/components/shared/input-group';
+import { env } from '@/env.mjs';
 import useWorkspace from '@/lib/swr/use-workspace';
 import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
 import { Button } from '@feedbase/ui/components/button';
@@ -276,8 +277,7 @@ export default function DomainSettings({ params }: { params: { slug: string } })
         </DropdownMenu>
 
         <Label className='text-muted-foreground text-xs'>
-          Wether to redirect the default {process.env.NEXT_PUBLIC_ROOT_DOMAIN} subdomain to your custom
-          domain.
+          Wether to redirect the default {env.NEXT_PUBLIC_ROOT_DOMAIN} subdomain to your custom domain.
         </Label>
       </div>
 

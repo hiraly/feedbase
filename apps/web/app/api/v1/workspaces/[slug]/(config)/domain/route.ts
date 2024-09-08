@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
 import { NextResponse } from 'next/server';
 
@@ -16,24 +17,24 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   const [configResponse, domainResponse] = await Promise.all([
     fetch(
       `https://api.vercel.com/v6/domains/${workspace.custom_domain}/config${
-        process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
+        env.VERCEL_TEAM_ID ? `?teamId=${env.VERCEL_TEAM_ID}` : ''
       }`,
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
+          Authorization: `Bearer ${env.VERCEL_AUTH_TOKEN}`,
           'Content-Type': 'application/json',
         },
       }
     ),
     fetch(
-      `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${
+      `https://api.vercel.com/v9/projects/${env.VERCEL_PROJECT_ID}/domains/${
         workspace.custom_domain
-      }${process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''}`,
+      }${env.VERCEL_TEAM_ID ? `?teamId=${env.VERCEL_TEAM_ID}` : ''}`,
       {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
+          Authorization: `Bearer ${env.VERCEL_AUTH_TOKEN}`,
           'Content-Type': 'application/json',
         },
       }
@@ -57,13 +58,13 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   // If domain is not verified, try to verify it
   if (!domainData.verified && !configData.misconfigured) {
     const verifyResponse = await fetch(
-      `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${
+      `https://api.vercel.com/v9/projects/${env.VERCEL_PROJECT_ID}/domains/${
         workspace.custom_domain
-      }/verify${process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''}`,
+      }/verify${env.VERCEL_TEAM_ID ? `?teamId=${env.VERCEL_TEAM_ID}` : ''}`,
       {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
+          Authorization: `Bearer ${env.VERCEL_AUTH_TOKEN}`,
           'Content-Type': 'application/json',
         },
       }
@@ -154,13 +155,13 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   const response = await fetch(
-    `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains${
-      process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
+    `https://api.vercel.com/v9/projects/${env.VERCEL_PROJECT_ID}/domains${
+      env.VERCEL_TEAM_ID ? `?teamId=${env.VERCEL_TEAM_ID}` : ''
     }`,
     {
       body: `{\n  "name": "${name}"\n}`,
       headers: {
-        Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
+        Authorization: `Bearer ${env.VERCEL_AUTH_TOKEN}`,
         'Content-Type': 'application/json',
       },
       method: 'POST',
@@ -220,12 +221,12 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
 
   // Delete domain from Vercel
   const response = await fetch(
-    `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${workspace?.custom_domain}${
-      process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
+    `https://api.vercel.com/v9/projects/${env.VERCEL_PROJECT_ID}/domains/${workspace?.custom_domain}${
+      env.VERCEL_TEAM_ID ? `?teamId=${env.VERCEL_TEAM_ID}` : ''
     }`,
     {
       headers: {
-        Authorization: `Bearer ${process.env.VERCEL_AUTH_TOKEN}`,
+        Authorization: `Bearer ${env.VERCEL_AUTH_TOKEN}`,
       },
       method: 'DELETE',
     }

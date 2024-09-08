@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import { createClient } from '@supabase/supabase-js';
 import { type JwtPayload, verify } from 'jsonwebtoken';
@@ -12,11 +13,11 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
     return NextResponse.json({ error: 'Missing redirect_to or jwt param' }, { status: 400 });
   }
 
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+  if (!env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ error: 'Missing SUPABASE_SERVICE_ROLE_KEY env variable' }, { status: 500 });
   }
 
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL!, env.SUPABASE_SERVICE_ROLE_KEY);
 
   // Get workspace by slug
   const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(
@@ -91,7 +92,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   cookies().set(
     `sb-${
       process.env.NODE_ENV === 'production'
-        ? process.env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0].replace('https://', '')
+        ? env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0].replace('https://', '')
         : 'localhost'
     }-auth-token`,
     sessionEncoded,

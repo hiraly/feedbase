@@ -4,6 +4,7 @@ import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import FileDrop from '@/components/shared/file-drop';
 import InputGroup from '@/components/shared/input-group';
+import { env } from '@/env.mjs';
 import useWorkspace from '@/lib/swr/use-workspace';
 import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
 import type { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
@@ -141,7 +142,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   slug: e.target.value,
                 });
               }}
-              suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+              suffix={`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`}
               placeholder='feedbase'
             />
 

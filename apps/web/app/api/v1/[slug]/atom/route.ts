@@ -1,3 +1,4 @@
+import { env } from '@/env.mjs';
 import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import { NextResponse } from 'next/server';
@@ -33,7 +34,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     <title>${workspace.name} Changelog</title>
     <subtitle>${workspace.name}'s Changelog</subtitle>
     <link href="${req.url}" rel="self"/>
-    <link href="${process.env.NEXT_PUBLIC_ROOT_DOMAIN}"/>
+    <link href="${env.NEXT_PUBLIC_ROOT_DOMAIN}"/>
     <updated>${changelogs[0].publish_date}</updated>
     <id>${workspace.id}</id>${changelogs
       .map((post) => {
@@ -41,7 +42,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     <entry>
         <id>${post.id}</id>
         <title>${post.title}</title>
-        <link href="https://${context.params.slug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/changelog/${post.slug}"/>
+        <link href="https://${context.params.slug}.${env.NEXT_PUBLIC_ROOT_DOMAIN}/changelog/${post.slug}"/>
         <updated>${post.publish_date}</updated>
         <author><name>${post.author.full_name}</name></author>
     </entry>`;

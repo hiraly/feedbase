@@ -425,7 +425,7 @@
 //                   onChange={handleSlugChange}
 //                 />
 //                 <div className='text-foreground/50 bg-accent select-none rounded-r-md border-l px-3 py-2'>
-//                   .{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+//                   .{env.NEXT_PUBLIC_ROOT_DOMAIN}
 //                 </div>
 //               </div>
 

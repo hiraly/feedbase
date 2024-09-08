@@ -1,11 +1,13 @@
+import withPWA from 'next-pwa';
 /** @type {import('next').NextConfig} */
+import { env } from './env.mjs';
 
 let hostPath = ['http', 'localhost', '3000'];
-if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-  hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
+if (env.NEXT_PUBLIC_SUPABASE_URL) {
+  hostPath = env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 }
 
-const withPWA = require('next-pwa')({
+const pwaConfig = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
@@ -42,4 +44,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withPWA(nextConfig);
+export default pwaConfig(nextConfig);

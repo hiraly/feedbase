@@ -1,4 +1,5 @@
 import { UserAuthForm } from '@/components/shared/user-auth-form';
+import { env } from '@/env.mjs';
 import {
   Card,
   CardContent,
@@ -21,17 +22,13 @@ export const metadata: Metadata = {
 export default async function SignIn() {
   // Create a Supabase client configured to use cookies
   const cookieStore = cookies();
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
-        },
+  const supabase = createServerClient(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY, {
+    cookies: {
+      get(name: string) {
+        return cookieStore.get(name)?.value;
       },
-    }
-  );
+    },
+  });
 
   // Retrieve possible session
   const {
