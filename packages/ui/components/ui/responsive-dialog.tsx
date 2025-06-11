@@ -64,13 +64,13 @@ const ResponsiveDialogClose: React.FC<
   | React.ComponentProps<typeof DialogCloseWrapper>
   | (React.ComponentProps<typeof DrawerClose> & { hideCloseButton?: boolean })
 > = (props) => {
-  const { hideCloseButton, ...rest } = props as { hideCloseButton?: boolean };
+  const { hideCloseButton, asChild, ...rest } = props as { hideCloseButton?: boolean; asChild?: boolean };
   return useMediaQuery().isMobile ? (
-    <DrawerClose {...rest} asChild />
+    <DrawerClose {...rest} asChild={asChild} />
   ) : (
     <>
-      <DialogCloseWrapper {...rest} />
-      {!hideCloseButton && <DialogClose />}
+      <DialogCloseWrapper {...rest} asChild={asChild} />
+      {!hideCloseButton && !asChild && <DialogClose />}
     </>
   );
 };

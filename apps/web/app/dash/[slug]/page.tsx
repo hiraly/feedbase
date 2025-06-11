@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   // Redirect to changelog
-  redirect(`/${params.slug}/changelog`);
+  redirect(`/${resolvedParams.slug}/changelog`);
 }

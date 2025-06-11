@@ -173,7 +173,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
   if (isMobile) {
     return (
       <Drawer>
-        <DrawerTrigger>
+        <DrawerTrigger asChild>
           <Button
             variant='secondary'
             size='icon'
@@ -222,7 +222,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           variant='secondary'
           size='icon'

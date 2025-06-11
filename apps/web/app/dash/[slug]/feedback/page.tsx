@@ -7,15 +7,16 @@ export default async function Feedback({
   params,
   searchParams,
 }: {
-  params: { slug: string };
-  searchParams: { tag: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ tag: string }>;
 }) {
-  const { data: feedback, error } = await getAllProjectFeedback(params.slug, 'server');
+  const resolvedParams = await params;
+  const { data: feedback, error } = await getAllProjectFeedback(resolvedParams.slug, 'server');
   if (error) {
     return <div>{error.message}</div>;
   }
 
-  const { data: tags, error: tagsError } = await getAllFeedbackTags(params.slug, 'server');
+  const { data: tags, error: tagsError } = await getAllFeedbackTags(resolvedParams.slug, 'server');
   if (tagsError) {
     return <div>{tagsError.message}</div>;
   }

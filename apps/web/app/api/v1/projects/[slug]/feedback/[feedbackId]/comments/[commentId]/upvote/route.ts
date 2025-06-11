@@ -7,12 +7,13 @@ import { upvoteCommentForFeedbackById } from '@/lib/api/comments';
 */
 export async function POST(
   req: Request,
-  context: { params: { slug: string; feedbackId: string; commentId: string } }
+  context: { params: Promise<{ slug: string; feedbackId: string; commentId: string }> }
 ) {
+  const resolvedParams = await context.params;
   const { data: comment, error } = await upvoteCommentForFeedbackById(
-    context.params.commentId,
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.commentId,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 

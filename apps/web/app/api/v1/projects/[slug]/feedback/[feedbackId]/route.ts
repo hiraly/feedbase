@@ -6,10 +6,11 @@ import { FeedbackWithUserInputProps } from '@/lib/types';
     Get Project Feedback by ID
     GET /api/v1/projects/[slug]/feedback/[id]
 */
-export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string; feedbackId: string }> }) {
+  const resolvedParams = await context.params;
   const { data: feedback, error } = await getFeedbackByID(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 
@@ -32,12 +33,16 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
         tags: string[];
     }
 */
-export async function PATCH(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function PATCH(
+  req: Request,
+  context: { params: Promise<{ slug: string; feedbackId: string }> }
+) {
+  const resolvedParams = await context.params;
   const { title, description, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
 
   const { data: feedback, error } = await updateFeedbackByID(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     {
       title: title || '',
       description: description || '',
@@ -62,10 +67,14 @@ export async function PATCH(req: Request, context: { params: { slug: string; fee
     Delete Feedback by ID
     DELETE /api/v1/projects/[slug]/feedback/[id]
 */
-export async function DELETE(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ slug: string; feedbackId: string }> }
+) {
+  const resolvedParams = await context.params;
   const { data: feedback, error } = await deleteFeedbackByID(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 

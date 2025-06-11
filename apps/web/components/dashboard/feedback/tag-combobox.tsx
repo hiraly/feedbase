@@ -127,21 +127,7 @@ export function TagCombobox({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-[200px] p-0' align={align}>
-        <Command
-          filter={(value, search) => {
-            // If whitespace in search, split and search for each word
-            if (search.includes(' ')) {
-              const searchTerms = search.split(' ');
-              for (const term of searchTerms) {
-                if (!value.includes(term.toLowerCase())) return 0;
-              }
-              return 1;
-            }
-
-            if (value.includes(search.toLowerCase())) return 1;
-
-            return 0;
-          }}>
+        <Command shouldFilter={false}>
           <CommandInput
             placeholder='Search tags...'
             className='h-9 font-extralight'

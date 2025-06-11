@@ -5,9 +5,10 @@ import { getPublicProjectChangelogs } from '@/lib/api/public';
 /*
     Generate atom feed for project changelog
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   // Get project data
-  const { data: project, error } = await getProjectBySlug(context.params.slug, 'route', true, false);
+  const { data: project, error } = await getProjectBySlug(resolvedParams.slug, 'route', true, false);
 
   // If any errors thrown, return error
   if (error) {
@@ -15,7 +16,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   }
 
   const { data: changelogs, error: changelogError } = await getPublicProjectChangelogs(
-    context.params.slug,
+    resolvedParams.slug,
     'route',
     true,
     false
@@ -41,7 +42,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     <entry>
         <id>${post.id}</id>
         <title>${post.title}</title>
-        <link href="https://${context.params.slug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/changelog/${post.slug}"/>
+        <link href="https://${resolvedParams.slug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/changelog/${post.slug}"/>
         <updated>${post.publish_date}</updated>
         <author><name>${post.author.full_name}</name></author>
     </entry>`;

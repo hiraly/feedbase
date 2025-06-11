@@ -8,7 +8,8 @@ import { subscribeToProjectChangelogs, unsubscribeFromProjectChangelogs } from '
     email: string,
   }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { email } = await req.json();
 
   // Check if email is provided
@@ -17,7 +18,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Subscribe to project changelogs
-  const { data: subscriber, error } = await subscribeToProjectChangelogs(context.params.slug, email);
+  const { data: subscriber, error } = await subscribeToProjectChangelogs(resolvedParams.slug, email);
 
   // If any errors thrown, return error
   if (error) {
@@ -35,7 +36,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     subId: string,
   }
 */
-export async function DELETE(req: Request, context: { params: { slug: string } }) {
+export async function DELETE(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { subId } = await req.json();
 
   // Check if subId is provided
@@ -44,7 +46,7 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
   }
 
   // Unsubscribe from project changelogs
-  const { error } = await unsubscribeFromProjectChangelogs(context.params.slug, subId);
+  const { error } = await unsubscribeFromProjectChangelogs(resolvedParams.slug, subId);
 
   // If any errors thrown, return error
   if (error) {

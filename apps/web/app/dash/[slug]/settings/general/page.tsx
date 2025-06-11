@@ -1,9 +1,10 @@
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import GeneralConfigCards from '@/components/dashboard/settings/general-cards';
 
-export default async function GeneralSettings({ params }: { params: { slug: string } }) {
+export default async function GeneralSettings({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   // Fetch project data
-  const { data: project, error } = await getProjectBySlug(params.slug, 'server');
+  const { data: project, error } = await getProjectBySlug(resolvedParams.slug, 'server');
 
   if (error) {
     return <div>{error.message}</div>;
@@ -11,7 +12,7 @@ export default async function GeneralSettings({ params }: { params: { slug: stri
 
   // Fetch project config
   const { data: projectConfig, error: projectConfigError } = await getProjectConfigBySlug(
-    params.slug,
+    resolvedParams.slug,
     'server'
   );
 

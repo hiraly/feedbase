@@ -9,13 +9,14 @@ import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import SubscribeToEmailUpdates from '@/components/hub/modals/subscribe-email-modal';
 
 type Props = {
-  params: { project: string };
+  params: Promise<{ project: string }>;
 };
 
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
   // Get project
-  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+  const { data: project, error } = await getProjectBySlug(resolvedParams.project, 'server', true, false);
 
   // If project is undefined redirects to 404
   if (error?.status === 404 || !project) {
@@ -29,8 +30,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Changelogs({ params }: Props) {
+  const resolvedParams = await params;
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
+  const { data: changelogs, error } = await getPublicProjectChangelogs(
+    resolvedParams.project,
+    'server',
+    true,
+    false
+  );
 
   // If error.status redirects to 404
   if (error?.status === 404 || !changelogs) {
@@ -44,7 +51,7 @@ export default async function Changelogs({ params }: Props) {
 
   // Get project config
   const { data: projectConfig, error: projectConfigError } = await getProjectConfigBySlug(
-    params.project,
+    resolvedParams.project,
     'server',
     true,
     false
@@ -57,7 +64,7 @@ export default async function Changelogs({ params }: Props) {
 
   // Get project
   const { data: project, error: projectError } = await getProjectBySlug(
-    params.project,
+    resolvedParams.project,
     'server',
     true,
     false
@@ -69,7 +76,7 @@ export default async function Changelogs({ params }: Props) {
   }
 
   return (
-    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' projectSlug={params.project}>
+    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' projectSlug={resolvedParams.project}>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
@@ -80,7 +87,7 @@ export default async function Changelogs({ params }: Props) {
           {/* Buttons */}
           <div className='flex select-none flex-row flex-wrap items-center gap-4 text-sm'>
             {/* Email */}
-            <SubscribeToEmailUpdates projectSlug={params.project}>
+            <SubscribeToEmailUpdates projectSlug={resolvedParams.project}>
               <button
                 type='button'
                 className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
@@ -108,7 +115,7 @@ export default async function Changelogs({ params }: Props) {
 
             {/* RRS Update Feed */}
             <Link
-              href={`/api/v1/${params.project}/atom`}
+              href={`/api/v1/${resolvedParams.project}/atom`}
               target='_blank'
               rel='noopener noreferrer'
               className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
@@ -181,7 +188,7 @@ export default async function Changelogs({ params }: Props) {
 
                   {projectConfig.changelog_preview_style === 'content' && (
                     <div
-                      className="prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-mono prose-blockquote:text-foreground/80 prose-blockquote:font-normal font-light"
+                      className='prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-mono prose-blockquote:text-foreground/80 prose-blockquote:font-normal font-light'
                       dangerouslySetInnerHTML={{ __html: changelog.content! }}
                     />
                   )}

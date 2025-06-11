@@ -6,8 +6,9 @@ import { ProjectProps } from '@/lib/types';
     Get project by slug
     GET /api/v1/projects/[slug]
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: project, error } = await getProjectBySlug(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: project, error } = await getProjectBySlug(resolvedParams.slug, 'route');
   // If any errors thrown, return error
   if (error) {
     return NextResponse.json({ error: error.message }, { status: error.status });
@@ -28,7 +29,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
       og_image: string
     }
 */
-export async function PATCH(req: Request, context: { params: { slug: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const {
     name,
     slug,
@@ -38,7 +40,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   } = (await req.json()) as ProjectProps['Update'];
 
   const { data: updatedProject, error } = await updateProjectBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     { name, slug, icon, icon_radius: iconRadius, og_image: OGImage },
     'route'
   );
@@ -56,8 +58,9 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     Delete project by slug
     DELETE /api/v1/projects/[slug]
 */
-export async function DELETE(req: Request, context: { params: { slug: string } }) {
-  const { data, error } = await deleteProjectBySlug(context.params.slug, 'route');
+export async function DELETE(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data, error } = await deleteProjectBySlug(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

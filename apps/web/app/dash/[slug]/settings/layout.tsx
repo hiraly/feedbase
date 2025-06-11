@@ -20,15 +20,16 @@ const tabs = [
   },
 ];
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const resolvedParams = await params;
   // Headers
-  const headerList = headers();
+  const headerList = await headers();
   const pathname = headerList.get('x-pathname');
 
   // Retrieve the currently active tab
@@ -37,7 +38,7 @@ export default function SettingsLayout({
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto '>
       {/* Navigation tabs */}
-      <CategoryTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={params.slug} />
+      <CategoryTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={resolvedParams.slug} />
 
       {/* Content */}
       <div className='flex h-full w-full flex-1 flex-col'>{children}</div>

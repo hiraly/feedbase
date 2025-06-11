@@ -5,8 +5,9 @@ import { formatRootUrl } from '@/lib/utils';
   Export all feedback for a project
   GET /api/v1/projects/:slug/feedback/export
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: feedback, error } = await getAllProjectFeedback(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: feedback, error } = await getAllProjectFeedback(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -17,7 +18,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   const csv = `ID,Link,Title,Content,Status,Upvotes,Comment Count,User ID,User Name,User Email,User Avatar,Tags,Created At\n${feedback
     .map((feedback) => {
       return `${feedback.id},${formatRootUrl(
-        context.params.slug,
+        resolvedParams.slug,
         `/feedback/${feedback.id}`
       )},"${feedback.title.replace(/"/g, '""')}","${feedback.description.replace(/"/g, '""')}",${
         feedback.status
@@ -37,7 +38,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   return new Response(csv, {
     headers: {
       'Content-Type': 'text/csv',
-      'Content-Disposition': `attachment; filename=${context.params.slug}-${timestamp}.csv`,
+      'Content-Disposition': `attachment; filename=${resolvedParams.slug}-${timestamp}.csv`,
     },
   });
 }

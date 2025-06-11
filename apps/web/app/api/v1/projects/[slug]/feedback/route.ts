@@ -14,7 +14,8 @@ export const runtime = 'edge';
         tags: [id, id, id]
     }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { title, description, status, tags, user } = (await req.json()) as FeedbackWithUserInputProps;
 
   // Validate Request Body
@@ -23,7 +24,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   const { data: feedback, error } = await createFeedback(
-    context.params.slug,
+    resolvedParams.slug,
     {
       title: title || '',
       description: description || '',
@@ -49,8 +50,9 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     Get Project Feedback
     GET /api/v1/projects/[slug]/feedback
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: feedback, error } = await getAllProjectFeedback(context.params.slug, 'route', false);
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: feedback, error } = await getAllProjectFeedback(resolvedParams.slug, 'route', false);
 
   // If any errors thrown, return error
   if (error) {

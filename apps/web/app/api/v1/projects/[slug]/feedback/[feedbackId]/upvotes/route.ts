@@ -6,10 +6,11 @@ import { getCurrentUser } from '@/lib/api/user';
   Get feedback upvotes
   GET /api/v1/projects/[slug]/feedback/[id]/upvote
 */
-export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string; feedbackId: string }> }) {
+  const resolvedParams = await context.params;
   const { data: feedback, error } = await getFeedbackByID(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 
@@ -20,8 +21,8 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
 
   // Get feedback upvoters
   const { data: upvoters, error: upvotersError } = await getFeedbackUpvotersById(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 
@@ -44,7 +45,11 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
     Upvote a feedback
     POST /api/v1/projects/[slug]/feedback/[id]/upvote
 */
-export async function POST(req: NextRequest, context: { params: { slug: string; feedbackId: string } }) {
+export async function POST(
+  req: NextRequest,
+  context: { params: Promise<{ slug: string; feedbackId: string }> }
+) {
+  const resolvedParams = await context.params;
   const hasUpvoted = req.nextUrl.searchParams.get('has_upvoted');
 
   // Get current user
@@ -52,8 +57,8 @@ export async function POST(req: NextRequest, context: { params: { slug: string; 
 
   // Upvote feedback
   const { data: feedback, error } = await upvoteFeedbackByID(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route',
     hasUpvoted ? hasUpvoted === 'true' : undefined,
     !isLoggedIn

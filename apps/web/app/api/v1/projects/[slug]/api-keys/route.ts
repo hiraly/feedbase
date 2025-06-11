@@ -5,9 +5,10 @@ import { createProjectApiKey, getProjectApiKeys } from '@/lib/api/projects';
   Get all API keys for a project
   GET /api/v1/projects/:slug/config/api
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   // Get all api keys
-  const { data: apiKeys, error } = await getProjectApiKeys(context.params.slug, 'route');
+  const { data: apiKeys, error } = await getProjectApiKeys(resolvedParams.slug, 'route');
 
   if (error) {
     return NextResponse.json(error, { status: error.status });
@@ -24,7 +25,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     "permissions": "string"
   }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { name, permission } = (await req.json()) as { name: string; permission: string };
 
   // Validate input
@@ -34,7 +36,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 
   // Create api key
   const { data: apiKey, error } = await createProjectApiKey(
-    context.params.slug,
+    resolvedParams.slug,
     { name, permission },
     'route'
   );

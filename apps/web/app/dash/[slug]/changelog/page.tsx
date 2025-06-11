@@ -7,8 +7,9 @@ import { ApiSheet } from '@/components/dashboard/changelogs/api-sheet';
 import ChangelogList from '@/components/dashboard/changelogs/changelog-list';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
 
-export default async function Changelog({ params }: { params: { slug: string } }) {
-  const { data: changelogs, error } = await getAllProjectChangelogs(params.slug, 'server');
+export default async function Changelog({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const { data: changelogs, error } = await getAllProjectChangelogs(resolvedParams.slug, 'server');
 
   if (error) {
     return <div>{error.message}</div>;
@@ -22,14 +23,14 @@ export default async function Changelog({ params }: { params: { slug: string } }
         {changelogs.length > 0 && (
           <div className='flex h-12 flex-row items-center justify-end gap-3'>
             {/* Api Docs Button */}
-            <ApiSheet projectSlug={params.slug} />
+            <ApiSheet projectSlug={resolvedParams.slug} />
 
             {/* Seperator Line */}
             <Separator orientation='vertical' className='h-7' />
 
             {/* Create new Button */}
             <AddChangelogModal
-              projectSlug={params.slug}
+              projectSlug={resolvedParams.slug}
               trigger={
                 <Button variant='default' className='font-norm flex items-center gap-1' size='sm'>
                   <Plus className='-ml-[2px] inline-flex h-[18px] w-[18px]' />
@@ -52,7 +53,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
             </CardHeader>
             <CardFooter>
               <AddChangelogModal
-                projectSlug={params.slug}
+                projectSlug={resolvedParams.slug}
                 trigger={<Button size='sm'>Create first changelog</Button>}
               />
             </CardFooter>
@@ -60,7 +61,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
         )}
 
         {/* If there is changelog, show changelog list */}
-        {changelogs.length > 0 && <ChangelogList changelogs={changelogs} projectSlug={params.slug} />}
+        {changelogs.length > 0 && <ChangelogList changelogs={changelogs} projectSlug={resolvedParams.slug} />}
       </div>
     </div>
   );

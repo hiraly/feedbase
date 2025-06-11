@@ -9,7 +9,8 @@ import { updateProjectConfigBySlug } from '@/lib/api/projects';
         webhook: string,
     }
 */
-export async function PATCH(req: Request, context: { params: { slug: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { status, webhook } = (await req.json()) as {
     status: boolean;
     webhook: string;
@@ -25,7 +26,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
 
   // Update project config
   const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     {
       integration_slack_status: status,
       integration_slack_webhook: status ? webhook : null,

@@ -11,20 +11,26 @@ import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 type Props = {
-  params: { project: string; id: string };
+  params: Promise<{ project: string; id: string }>;
 };
 
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
+  const { data: changelogs, error } = await getPublicProjectChangelogs(
+    resolvedParams.project,
+    'server',
+    true,
+    false
+  );
 
   if (error?.status === 404 || !changelogs) {
     notFound();
   }
 
   // Get current changelog
-  const changelog = changelogs.find((changelog) => changelog.slug === params.id);
+  const changelog = changelogs.find((changelog) => changelog.slug === resolvedParams.id);
 
   // If changelog is undefined redirects to 404
   if (!changelog) {
@@ -48,8 +54,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ChangelogPage({ params }: Props) {
+  const resolvedParams = await params;
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
+  const { data: changelogs, error } = await getPublicProjectChangelogs(
+    resolvedParams.project,
+    'server',
+    true,
+    false
+  );
 
   // If error.status redirects to 404
   if (error?.status === 404 || !changelogs) {
@@ -62,9 +74,9 @@ export default async function ChangelogPage({ params }: Props) {
   });
 
   // Get current changelog
-  const changelog = changelogs.find((changelog) => changelog.slug === params.id);
+  const changelog = changelogs.find((changelog) => changelog.slug === resolvedParams.id);
 
-  const changelogIndex = changelogs.findIndex((changelog) => changelog.slug === params.id);
+  const changelogIndex = changelogs.findIndex((changelog) => changelog.slug === resolvedParams.id);
 
   // If changelog is undefined redirects to 404
   if (!changelog) {
@@ -72,7 +84,7 @@ export default async function ChangelogPage({ params }: Props) {
   }
 
   return (
-    <AnalyticsWrapper projectSlug={params.project} changelogId={changelog.id}>
+    <AnalyticsWrapper projectSlug={resolvedParams.project} changelogId={changelog.id}>
       {/* // Row Splitting up date and Content  */}
       <div
         className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
@@ -145,7 +157,7 @@ export default async function ChangelogPage({ params }: Props) {
                 className='text-foreground/70 hover:text-foreground/95 transition-all duration-200 hover:scale-110'
                 href={`https://twitter.com/intent/tweet?text=Make sure to check out ${changelog.title} by ${
                   changelog.author.full_name
-                }!&url=${formatRootUrl(params.project, `/changelog/${changelog.slug}`)}`}
+                }!&url=${formatRootUrl(resolvedParams.project, `/changelog/${changelog.slug}`)}`}
                 target='_blank'
                 rel='noopener noreferrer'>
                 <Icons.Twitter className='h-6 w-6' />
@@ -157,7 +169,7 @@ export default async function ChangelogPage({ params }: Props) {
           <div
             // TODO: Change this to not be html but markdown
             // prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 should only be applied if codeblock is not in pre
-            className="prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:font-mono prose-blockquote:text-foreground/80 prose-blockquote:font-normal w-0 min-w-full font-light"
+            className='prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:font-mono prose-blockquote:text-foreground/80 prose-blockquote:font-normal w-0 min-w-full font-light'
             // => LUM-32
             dangerouslySetInnerHTML={{ __html: changelog.content! }}
           />

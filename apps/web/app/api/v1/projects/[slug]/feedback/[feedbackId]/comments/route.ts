@@ -9,7 +9,8 @@ import { FeedbackCommentProps } from '@/lib/types';
         content: string
     }
 */
-export async function POST(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string; feedbackId: string }> }) {
+  const resolvedParams = await context.params;
   const { content, reply_to_id: replyToId } = (await req.json()) as FeedbackCommentProps['Insert'];
 
   if (!content) {
@@ -18,12 +19,12 @@ export async function POST(req: Request, context: { params: { slug: string; feed
 
   const { data: comment, error } = await createCommentForFeedbackById(
     {
-      feedback_id: context.params.feedbackId,
+      feedback_id: resolvedParams.feedbackId,
       content: content || '',
       user_id: 'dummy-id',
       reply_to_id: replyToId || null,
     },
-    context.params.slug,
+    resolvedParams.slug,
     'route'
   );
 
@@ -40,10 +41,11 @@ export async function POST(req: Request, context: { params: { slug: string; feed
     Get feedback comments
     GET /api/v1/projects/[slug]/feedback/[id]/comments
 */
-export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string; feedbackId: string }> }) {
+  const resolvedParams = await context.params;
   const { data: comments, error } = await getCommentsForFeedbackById(
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 

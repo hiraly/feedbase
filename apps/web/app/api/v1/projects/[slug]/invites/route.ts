@@ -5,8 +5,9 @@ import { createProjectInvite, getProjectInvites } from '@/lib/api/invites';
   Get all project invites
   GET /api/v1/projects/[slug]/invites
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: invites, error } = await getProjectInvites(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: invites, error } = await getProjectInvites(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -24,7 +25,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     email: string
   }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { email } = await req.json();
 
   // Check if email is valid
@@ -34,7 +36,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Create invite
-  const { data: invite, error } = await createProjectInvite(context.params.slug, 'route', email);
+  const { data: invite, error } = await createProjectInvite(resolvedParams.slug, 'route', email);
 
   // If any errors thrown, return error
   if (error) {

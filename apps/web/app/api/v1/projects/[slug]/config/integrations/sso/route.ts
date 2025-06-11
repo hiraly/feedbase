@@ -10,7 +10,8 @@ import { updateProjectConfigBySlug } from '@/lib/api/projects';
     secret: string,
   }
 */
-export async function PATCH(req: Request, context: { params: { slug: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { status, url, secret } = await req.json();
 
   if (status && (!url || !secret)) {
@@ -22,7 +23,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
 
   // Update project config
   const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     {
       integration_sso_status: status,
       integration_sso_url: status ? url : null,

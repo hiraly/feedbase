@@ -10,13 +10,14 @@ import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider'
 
 type Props = {
   children: React.ReactNode;
-  params: { project: string };
+  params: Promise<{ project: string }>;
 };
 
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
   // Get project
-  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+  const { data: project, error } = await getProjectBySlug(resolvedParams.project, 'server', true, false);
 
   // If project is undefined redirects to 404
   if (error?.status === 404 || !project) {
@@ -52,7 +53,8 @@ const tabs = [
 ];
 
 export default async function HubLayout({ children, params }: Props) {
-  const headerList = headers();
+  const resolvedParams = await params;
+  const headerList = await headers();
   const pathname = headerList.get('x-pathname');
   const hostname = headerList.get('host');
   const currentTab = pathname ? tabs.find((tab) => tab.link === `/${pathname.split('/')[1]}`) : null;
@@ -62,14 +64,14 @@ export default async function HubLayout({ children, params }: Props) {
   }
 
   // Get project data
-  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+  const { data: project, error } = await getProjectBySlug(resolvedParams.project, 'server', true, false);
 
   if (error?.status === 404 || !project) {
     notFound();
   }
 
   // Get project config
-  const { data: config } = await getProjectConfigBySlug(params.project, 'server', true, false);
+  const { data: config } = await getProjectConfigBySlug(resolvedParams.project, 'server', true, false);
 
   if (!config) {
     notFound();

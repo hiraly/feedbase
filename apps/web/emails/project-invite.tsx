@@ -11,7 +11,6 @@ import {
   Link,
   Preview,
   Section,
-  Tailwind,
   Text,
 } from '@react-email/components';
 import { formatRootUrl } from '@/lib/utils';
@@ -37,50 +36,87 @@ export default function ProjectInviteEmail({
     <Html>
       <Head />
       <Preview>{previewText}</Preview>
-      <Tailwind>
-        <Body className='mx-auto my-auto bg-white font-sans'>
-          <Container className='mx-auto my-[40px] w-[465px] rounded border border-solid border-[#eaeaea] p-[20px]'>
-            <Section className='mt-8'>
-              <Img
-                src={`${formatRootUrl()}/icon-512x512.png`}
-                width='40'
-                height='40'
-                alt='Feedbase'
-                className='mx-auto my-0 rounded-md'
-              />
-            </Section>
-            <Heading className='mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black'>
-              Join <strong>{projectName}</strong> on <strong>Feedbase</strong>
-            </Heading>
-            <Text className='text-[14px] leading-[24px] text-black'>
-              <strong>{invitedByFullName}</strong> (
-              <Link href={`mailto:${invitedByEmail}`} className='text-blue-600 no-underline'>
-                {invitedByEmail}
-              </Link>
-              ) has invited you to the <strong>{projectName}</strong> team on <strong>Feedbase</strong>.
-            </Text>
-            <Section className='mb-[32px] mt-[32px] text-center'>
-              <Button
-                className='rounded-md bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline'
-                href={inviteLink}>
-                Join the team
-              </Button>
-            </Section>
-            <Text className='text-[14px] leading-[24px] text-black'>
-              or copy and paste this URL into your browser:{' '}
-              <Link href={inviteLink} className='text-blue-600 no-underline'>
-                {inviteLink}
-              </Link>
-            </Text>
-            <Hr className='mx-0 my-[26px] w-full border border-solid border-[#eaeaea]' />
-            <Text className='text-[12px] leading-[24px] text-[#666666]'>
-              This invitation was intended for <span className='text-black'>{email}</span>. If you were not
-              expecting this invitation, you can ignore this email. If you are concerned about your
-              account&apos;s safety, please reply to this email to get in touch with us.
-            </Text>
-          </Container>
-        </Body>
-      </Tailwind>
+      <Body style={{ margin: 'auto', backgroundColor: 'white', fontFamily: 'sans-serif' }}>
+        <Container
+          style={{
+            margin: 'auto',
+            marginTop: '40px',
+            marginBottom: '40px',
+            width: '465px',
+            borderRadius: '4px',
+            border: '1px solid #eaeaea',
+            padding: '20px',
+          }}>
+          <Section style={{ marginTop: '32px' }}>
+            <Img
+              src={`${formatRootUrl()}/icon-512x512.png`}
+              width='40'
+              height='40'
+              alt='Feedbase'
+              style={{ margin: 'auto', borderRadius: '6px' }}
+            />
+          </Section>
+          <Heading
+            style={{
+              margin: '0',
+              marginTop: '30px',
+              marginBottom: '30px',
+              padding: '0',
+              textAlign: 'center',
+              fontSize: '24px',
+              fontWeight: 'normal',
+              color: 'black',
+            }}>
+            Join <strong>{projectName}</strong> on <strong>Feedbase</strong>
+          </Heading>
+          <Text style={{ fontSize: '14px', lineHeight: '24px', color: 'black' }}>
+            <strong>{invitedByFullName}</strong> (
+            <Link href={`mailto:${invitedByEmail}`} style={{ color: '#2563eb', textDecoration: 'none' }}>
+              {invitedByEmail}
+            </Link>
+            ) has invited you to the <strong>{projectName}</strong> team on <strong>Feedbase</strong>.
+          </Text>
+          <Section style={{ marginBottom: '32px', marginTop: '32px', textAlign: 'center' }}>
+            <Button
+              style={{
+                borderRadius: '6px',
+                backgroundColor: '#000000',
+                paddingLeft: '20px',
+                paddingRight: '20px',
+                paddingTop: '12px',
+                paddingBottom: '12px',
+                textAlign: 'center',
+                fontSize: '12px',
+                fontWeight: '600',
+                color: 'white',
+                textDecoration: 'none',
+              }}
+              href={inviteLink}>
+              Join the team
+            </Button>
+          </Section>
+          <Text style={{ fontSize: '14px', lineHeight: '24px', color: 'black' }}>
+            or copy and paste this URL into your browser:{' '}
+            <Link href={inviteLink} style={{ color: '#2563eb', textDecoration: 'none' }}>
+              {inviteLink}
+            </Link>
+          </Text>
+          <Hr
+            style={{
+              margin: '0',
+              marginTop: '26px',
+              marginBottom: '26px',
+              width: '100%',
+              border: '1px solid #eaeaea',
+            }}
+          />
+          <Text style={{ fontSize: '12px', lineHeight: '24px', color: '#666666' }}>
+            This invitation was intended for <span style={{ color: 'black' }}>{email}</span>. If you were not
+            expecting this invitation, you can ignore this email. If you are concerned about your
+            account&apos;s safety, please reply to this email to get in touch with us.
+          </Text>
+        </Container>
+      </Body>
     </Html>
   );
 }

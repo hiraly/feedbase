@@ -4,7 +4,8 @@ import { createClient } from '@supabase/supabase-js';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { getProjectBySlug } from '@/lib/api/projects';
 
-export async function GET(req: NextRequest, context: { params: { slug: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const redirectTo = req.nextUrl.searchParams.get('redirect_to');
   const jwtPayload = req.nextUrl.searchParams.get('jwt');
 
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
 
   // Get project by slug
   const { data: project, error: projectError } = await getProjectBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     'route',
     true,
     false
@@ -88,7 +89,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   const sessionEncoded = JSON.stringify(user.session);
 
   // Set auth token cookie
-  cookies().set(
+  (await cookies()).set(
     `sb-${
       process.env.NODE_ENV === 'production'
         ? process.env.NEXT_PUBLIC_SUPABASE_URL!.split('.')[0].replace('https://', '')

@@ -8,14 +8,15 @@ import { archiveUserNotification } from '@/lib/api/user';
     "archived": true
   }
 */
-export async function PATCH(req: Request, context: { params: { notificationId: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ notificationId: string }> }) {
+  const resolvedParams = await context.params;
   // Get notification id
   const { archived } = await req.json();
 
   // Archive notification
   const { data: notification, error } = await archiveUserNotification(
     'route',
-    context.params.notificationId,
+    resolvedParams.notificationId,
     archived
   );
 

@@ -13,13 +13,19 @@ import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import CommentsList from '@/components/hub/feedback/comments/comments-list';
 
 type Props = {
-  params: { project: string; id: string };
+  params: Promise<{ project: string; id: string }>;
 };
 
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const resolvedParams = await params;
   // Get feedback
-  const { data: feedbackList, error } = await getPublicProjectFeedback(params.project, 'server', true, false);
+  const { data: feedbackList, error } = await getPublicProjectFeedback(
+    resolvedParams.project,
+    'server',
+    true,
+    false
+  );
 
   // If project is undefined redirects to 404
   if (error?.status === 404 || !feedbackList) {
@@ -27,7 +33,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   // Get current feedback
-  const feedback = feedbackList.find((feedback) => feedback.id === params.id);
+  const feedback = feedbackList.find((feedback) => feedback.id === resolvedParams.id);
 
   // If feedback is undefined redirects to 404
   if (!feedback) {
@@ -65,14 +71,20 @@ const statusOptions = [
 ];
 
 export default async function FeedbackDetails({ params }: Props) {
-  const { data: feedbackList, error } = await getPublicProjectFeedback(params.project, 'server', true, false);
+  const resolvedParams = await params;
+  const { data: feedbackList, error } = await getPublicProjectFeedback(
+    resolvedParams.project,
+    'server',
+    true,
+    false
+  );
 
   if (error || !feedbackList) {
     return <div>{error.message}</div>;
   }
 
   // Get current feedback
-  const feedback = feedbackList.find((feedback) => feedback.id === params.id);
+  const feedback = feedbackList.find((feedback) => feedback.id === resolvedParams.id);
 
   // If feedback is undefined redirects to 404
   if (!feedback) {
@@ -81,8 +93,8 @@ export default async function FeedbackDetails({ params }: Props) {
 
   // Get comments
   const { data: comments, error: commentsError } = await getCommentsForFeedbackById(
-    params.id,
-    params.project,
+    resolvedParams.id,
+    resolvedParams.project,
     'server',
     false
   );
@@ -95,7 +107,7 @@ export default async function FeedbackDetails({ params }: Props) {
   const { data: user } = await getCurrentUser('server');
 
   return (
-    <AnalyticsWrapper projectSlug={params.project} feedbackId={params.id}>
+    <AnalyticsWrapper projectSlug={resolvedParams.project} feedbackId={resolvedParams.id}>
       {/* // Row Splitting up date and Content  */}
       <div className='relative flex w-full flex-row px-5 sm:px-10 md:px-8 lg:px-10' key={feedback.id}>
         <div className='flex h-full w-full flex-col md:w-5/6 md:border-r md:pr-5 lg:flex-row'>
@@ -236,7 +248,7 @@ export default async function FeedbackDetails({ params }: Props) {
             <CommentsList
               feedbackComments={comments}
               feedbackId={feedback.id}
-              projectSlug={params.project}
+              projectSlug={resolvedParams.project}
               user={user}
             />
           </div>

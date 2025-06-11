@@ -9,7 +9,8 @@ import { recordClick } from '@/lib/tinybird';
     "changelogId": "string",
   }
 */
-export async function POST(req: NextRequest, context: { params: { slug: string } }) {
+export async function POST(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { feedbackId, changelogId } = await req.json();
 
   // Check for Tinybird env vars
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest, context: { params: { slug: string }
 
   const data = await recordClick({
     req,
-    projectId: context.params.slug,
+    projectId: resolvedParams.slug,
     feedbackId,
     changelogId,
   });

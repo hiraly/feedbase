@@ -91,7 +91,7 @@ export function StatusCombobox({
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-[200px] p-0' align={align}>
-        <Command>
+        <Command shouldFilter={false}>
           <CommandGroup>
             {statusOptions.map((item) => (
               <CommandItem

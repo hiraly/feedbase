@@ -12,8 +12,9 @@ export async function recordClick({
   feedbackId?: string;
   changelogId?: string;
 }) {
-  const cookieStore = cookies();
-  const geo = process.env.VERCEL === '1' ? req.geo : null;
+  const cookieStore = await cookies();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const geo = process.env.VERCEL === '1' ? (req as any).geo : null;
   const ua = userAgent(req);
   const referer = req.headers.get('referer');
 

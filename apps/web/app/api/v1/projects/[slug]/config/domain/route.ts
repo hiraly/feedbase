@@ -4,9 +4,10 @@ import { getProjectConfigBySlug, updateProjectConfigBySlug } from '@/lib/api/pro
 /*
   GET /api/v1/projects/:slug/config/domain
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   // Get project
-  const { data, error } = await getProjectConfigBySlug(context.params.slug, 'route');
+  const { data, error } = await getProjectConfigBySlug(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -105,7 +106,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   // If verification succeeded, update project config
   if (domainData?.verified && !configData.misconfigured) {
     const { error: updateError } = await updateProjectConfigBySlug(
-      context.params.slug,
+      resolvedParams.slug,
       { custom_domain_verified: true },
       'route'
     );
@@ -133,7 +134,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     "name": "example.com"
   }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { name } = await req.json();
 
   if (!name) {
@@ -142,7 +144,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 
   // Get project config
   const { data: projectConfig, error: projectConfigError } = await getProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     'route'
   );
 
@@ -190,7 +192,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 
   // Update project config
   const { error } = await updateProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     { custom_domain: responseData.name, custom_domain_verified: false },
     'route'
   );
@@ -207,9 +209,10 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 /*
   DELETE /api/v1/projects/:slug/config/domain
 */
-export async function DELETE(req: Request, context: { params: { slug: string } }) {
+export async function DELETE(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   // Get project
-  const { data, error } = await getProjectConfigBySlug(context.params.slug, 'route');
+  const { data, error } = await getProjectConfigBySlug(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -244,7 +247,7 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
 
   // Update project config
   const { data: updatedProjectConfig, error: updatedProjectConfigError } = await updateProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     { custom_domain: null, custom_domain_verified: null },
     'route'
   );

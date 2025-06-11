@@ -4,8 +4,9 @@ import { getChangelogSubscribers } from '@/lib/api/changelogs';
   Download changelog subscribers
   GET /api/v1/projects/:slug/changelogs/subscribers/download
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: subscribers, error } = await getChangelogSubscribers(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: subscribers, error } = await getChangelogSubscribers(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

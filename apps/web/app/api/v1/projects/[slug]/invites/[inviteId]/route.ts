@@ -5,8 +5,9 @@ import { acceptProjectInvite, deleteProjectInvite } from '@/lib/api/invites';
   Accept project invite
   POST /api/v1/projects/[slug]/invites/[inviteId]
 */
-export async function POST(req: Request, context: { params: { slug: string; inviteId: string } }) {
-  const { data: invite, error } = await acceptProjectInvite(context.params.inviteId, 'route');
+export async function POST(req: Request, context: { params: Promise<{ slug: string; inviteId: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: invite, error } = await acceptProjectInvite(resolvedParams.inviteId, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -21,8 +22,9 @@ export async function POST(req: Request, context: { params: { slug: string; invi
   Delete project invite
   DELETE /api/v1/projects/[slug]/invites/[inviteId]
 */
-export async function DELETE(req: Request, context: { params: { slug: string; inviteId: string } }) {
-  const { data: invite, error } = await deleteProjectInvite(context.params.inviteId, 'route');
+export async function DELETE(req: Request, context: { params: Promise<{ slug: string; inviteId: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: invite, error } = await deleteProjectInvite(resolvedParams.inviteId, 'route');
 
   // If any errors thrown, return error
   if (error) {

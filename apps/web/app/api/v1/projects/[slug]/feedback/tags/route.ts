@@ -10,11 +10,12 @@ import { FeedbackTagProps } from '@/lib/types';
         color: string
     }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { name, color } = (await req.json()) as FeedbackTagProps['Insert'];
 
   const { data: tag, error } = await createFeedbackTag(
-    context.params.slug,
+    resolvedParams.slug,
     {
       name: name || '',
       color: color || '',
@@ -35,8 +36,9 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     Get all feedback tags
     GET /api/v1/projects/:slug/feedback/tags
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: tags, error } = await getAllFeedbackTags(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: tags, error } = await getAllFeedbackTags(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

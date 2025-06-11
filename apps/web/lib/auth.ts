@@ -47,8 +47,8 @@ function createCookiesConfig(
 // Also returns the current user
 // cType: 'server' | 'route'
 async function createClient(cType: 'server' | 'route', isPublic = false) {
-  const headerStore = headers();
-  const cookieStore = cookies();
+  const headerStore = await headers();
+  const cookieStore = await cookies();
   const authHeader = headerStore.get('authorization');
 
   // Create client

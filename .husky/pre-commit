@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm run lint --fix && pnpm run ts && pnpm lint-staged
+cd apps/web && pnpm run lint --fix && pnpm run ts && cd ../.. && pnpm lint-staged

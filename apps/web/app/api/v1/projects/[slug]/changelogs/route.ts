@@ -2,8 +2,6 @@ import { NextResponse } from 'next/server';
 import { createChangelog, getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { ChangelogProps } from '@/lib/types';
 
-export const runtime = 'edge';
-
 /* 
     Create Changelog
     POST /api/v1/projects/[slug]/changelogs
@@ -16,7 +14,8 @@ export const runtime = 'edge';
         published: boolean;
     }
 */
-export async function POST(req: Request, context: { params: { slug: string } }) {
+export async function POST(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const {
     title,
     summary,
@@ -37,7 +36,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   const { data: changelog, error } = await createChangelog(
-    context.params.slug,
+    resolvedParams.slug,
     {
       title: title || '',
       summary: summary || '',
@@ -65,8 +64,9 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     Get project changelogs
     GET /api/v1/projects/[slug]/changelogs
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: changelogs, error } = await getAllProjectChangelogs(context.params.slug, 'route', true);
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: changelogs, error } = await getAllProjectChangelogs(resolvedParams.slug, 'route', true);
 
   // If any errors thrown, return error
   if (error) {

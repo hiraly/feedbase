@@ -5,9 +5,10 @@ import { getPublicProjectChangelogs } from '@/lib/api/public';
     Get project changelogs
     GET /api/v1/projects/[slug]/changelogs
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const { data: changelogs, error } = await getPublicProjectChangelogs(
-    context.params.slug,
+    resolvedParams.slug,
     'route',
     true,
     false

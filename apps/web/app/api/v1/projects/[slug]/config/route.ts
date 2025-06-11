@@ -6,8 +6,9 @@ import { ProjectConfigProps } from '@/lib/types';
     Get Project Config by slug
     GET /api/v1/projects/[slug]/config
 */
-export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: projectConfig, error } = await getProjectConfigBySlug(context.params.slug, 'route');
+export async function GET(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
+  const { data: projectConfig, error } = await getProjectConfigBySlug(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -26,7 +27,8 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
         changelog_twitter_handle: string;
     }
 */
-export async function PATCH(req: Request, context: { params: { slug: string } }) {
+export async function PATCH(req: Request, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   const {
     changelog_enabled: changelogEnabled,
     changelog_preview_style: changelogPreviewStyle,
@@ -44,7 +46,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
 
   // Update project config
   const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
-    context.params.slug,
+    resolvedParams.slug,
     {
       changelog_enabled: changelogEnabled,
       changelog_preview_style: changelogPreviewStyle,

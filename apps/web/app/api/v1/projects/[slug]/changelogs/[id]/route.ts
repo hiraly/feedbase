@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server';
 import { deleteChangelog, updateChangelog } from '@/lib/api/changelogs';
 
-export const runtime = 'edge';
-
 /*
     Update project changelog
     PUT /api/v1/projects/[slug]/changelogs/[id]
@@ -15,12 +13,13 @@ export const runtime = 'edge';
         published: boolean;
     }
 */
-export async function PUT(req: Request, context: { params: { slug: string; id: string } }) {
+export async function PUT(req: Request, context: { params: Promise<{ slug: string; id: string }> }) {
+  const resolvedParams = await context.params;
   const { title, summary, content, image, publishDate, published } = await req.json();
 
   const { data: changelog, error } = await updateChangelog(
-    context.params.id,
-    context.params.slug,
+    resolvedParams.id,
+    resolvedParams.slug,
     { title, summary, content, image, publish_date: publishDate, published },
     'route'
   );
@@ -38,8 +37,9 @@ export async function PUT(req: Request, context: { params: { slug: string; id: s
     Delete project changelog
     DELETE /api/v1/projects/[slug]/changelogs/[id]
 */
-export async function DELETE(req: Request, context: { params: { slug: string; id: string } }) {
-  const { data, error } = await deleteChangelog(context.params.id, context.params.slug, 'route');
+export async function DELETE(req: Request, context: { params: Promise<{ slug: string; id: string }> }) {
+  const resolvedParams = await context.params;
+  const { data, error } = await deleteChangelog(resolvedParams.id, resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

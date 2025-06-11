@@ -2,8 +2,9 @@ import React from 'react';
 import { getProjectAnalytics } from '@/lib/api/projects';
 import AnalyticsCards from '@/components/dashboard/analytics/chart-cards';
 
-export default async function AnalyticsPage({ params }: { params: { slug: string } }) {
-  const { data, error } = await getProjectAnalytics(params.slug, 'server');
+export default async function AnalyticsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
+  const { data, error } = await getProjectAnalytics(resolvedParams.slug, 'server');
 
   if (!data) {
     return <div>Error: {error?.message}</div>;

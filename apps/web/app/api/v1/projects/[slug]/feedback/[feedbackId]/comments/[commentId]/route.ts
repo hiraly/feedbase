@@ -7,12 +7,13 @@ import { deleteCommentForFeedbackById } from '@/lib/api/comments';
 */
 export async function DELETE(
   req: Request,
-  context: { params: { slug: string; feedbackId: string; commentId: string } }
+  context: { params: Promise<{ slug: string; feedbackId: string; commentId: string }> }
 ) {
+  const resolvedParams = await context.params;
   const { data: comment, error } = await deleteCommentForFeedbackById(
-    context.params.commentId,
-    context.params.feedbackId,
-    context.params.slug,
+    resolvedParams.commentId,
+    resolvedParams.feedbackId,
+    resolvedParams.slug,
     'route'
   );
 

@@ -12,7 +12,6 @@ import {
   Preview,
   Row,
   Section,
-  Tailwind,
 } from '@react-email/components';
 import { formatRootUrl } from '@/lib/utils';
 
@@ -37,100 +36,143 @@ export default function ChangelogEmail({ subId, projectSlug, changelog }: Change
   return (
     <Html>
       <Preview>{changelog.summary}</Preview>
-      <Tailwind>
-        <Head />
-        <Body className='mx-auto my-auto bg-white p-3 font-sans'>
-          <Container>
-            {/* Title */}
-            <Heading className='cursor-default text-3xl font-medium text-black'>{changelog.title}</Heading>
+      <Head />
+      <Body style={{ margin: 'auto', backgroundColor: 'white', padding: '12px', fontFamily: 'sans-serif' }}>
+        <Container>
+          {/* Title */}
+          <Heading style={{ fontSize: '30px', fontWeight: '500', color: 'black' }}>{changelog.title}</Heading>
 
-            {/* Image */}
-            <Img
-              src={changelog.image || ''}
-              alt='Thumbnail'
-              className='aspect-auto w-full rounded-lg object-cover object-center'
-            />
+          {/* Image */}
+          <Img
+            src={changelog.image || ''}
+            alt='Thumbnail'
+            style={{ width: '100%', borderRadius: '8px', objectFit: 'cover' }}
+          />
 
-            {/* Author & Share */}
-            <Section className='pb-6 pt-4'>
-              <Row>
-                <Column className='min-w-10'>
-                  <Img
-                    src={changelog.author.avatar_url || ''}
-                    alt={changelog.author.full_name}
-                    className='h-10 w-10 rounded-full'
-                  />
-                </Column>
-                <Column className='w-full pl-3'>
-                  <Row>
-                    <span className='text-sm font-medium text-black/90'>{changelog.author.full_name}</span>
-
-                    <Column className='text-sm text-black/70'>
-                      <time className='sticky top-10' dateTime={changelog.publish_date}>
-                        {new Date(changelog.publish_date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric',
-                        })}
-                      </time>
-                    </Column>
-                  </Row>
-                </Column>
-                <Column>
-                  <Link
-                    className='text-black/[85%]'
-                    href={`https://twitter.com/intent/tweet?text=Make sure to check out ${
-                      changelog.title
-                    } by ${changelog.author.full_name}!&url=${formatRootUrl(
-                      projectSlug,
-                      `/changelog/${changelog.slug}`
-                    )}`}
-                    target='_blank'
-                    rel='noopener noreferrer'>
-                    <Img src='https://svgl.app/library/twitter.svg' className='h-6 w-6' />
-                  </Link>
-                </Column>
-              </Row>
-            </Section>
-
-            {/* Content as html */}
-            <div
-              className='prose prose-p:font-light prose-zinc prose-headings:font-medium prose-headings:text-black/80 prose-strong:text-black/80 prose-strong:font-normal prose-code:text-black/70 prose-code:font-normal prose-blockquote:text-black/80 prose-blockquote:font-normal w-0 min-w-full font-normal text-black/70'
-              dangerouslySetInnerHTML={{ __html: changelog.content }}
-            />
-
-            {/* Separetor */}
-            <Hr className='mt-8 border-black/20' />
-
-            <div className='flex w-full flex-row items-center justify-center gap-5 py-4'>
-              <Link
-                href={formatRootUrl(projectSlug, `/changelog/unsubscribe?subId=${subId}`)}
-                className='flex items-center gap-2 text-sm font-light text-black/70 underline'>
-                Unsubscribe
-              </Link>
-              <span className='text-sm font-normal text-black/70'>•</span>
-              <Link
-                href={formatRootUrl(projectSlug, `/changelog/${changelog.slug}`)}
-                className='flex items-center gap-2 text-sm font-light text-black/70 underline'>
-                View in browser
-              </Link>
-            </div>
-
-            <div className='flex w-full flex-row items-center justify-center'>
-              <Link
-                href='https://feedbase.app'
-                className='flex items-center gap-2 text-sm font-normal text-black/70'>
+          {/* Author & Share */}
+          <Section style={{ paddingBottom: '24px', paddingTop: '16px' }}>
+            <Row>
+              <Column style={{ minWidth: '40px' }}>
                 <Img
-                  src='https://feedbase.app/icon-512x512.png'
-                  alt='Feedbase'
-                  className='h-8 w-8 rounded-md'
+                  src={changelog.author.avatar_url || ''}
+                  alt={changelog.author.full_name}
+                  style={{ height: '40px', width: '40px', borderRadius: '50%' }}
                 />
-                Powered by Feedbase
-              </Link>
-            </div>
-          </Container>
-        </Body>
-      </Tailwind>
+              </Column>
+              <Column style={{ width: '100%', paddingLeft: '12px' }}>
+                <Row>
+                  <span style={{ fontSize: '14px', fontWeight: '500', color: 'rgba(0,0,0,0.9)' }}>
+                    {changelog.author.full_name}
+                  </span>
+
+                  <Column style={{ fontSize: '14px', color: 'rgba(0,0,0,0.7)' }}>
+                    <time dateTime={changelog.publish_date}>
+                      {new Date(changelog.publish_date).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </time>
+                  </Column>
+                </Row>
+              </Column>
+              <Column>
+                <Link
+                  style={{ color: 'rgba(0,0,0,0.85)' }}
+                  href={`https://twitter.com/intent/tweet?text=Make sure to check out ${changelog.title} by ${
+                    changelog.author.full_name
+                  }!&url=${formatRootUrl(projectSlug, `/changelog/${changelog.slug}`)}`}
+                  target='_blank'
+                  rel='noopener noreferrer'>
+                  <Img src='https://svgl.app/library/twitter.svg' style={{ height: '24px', width: '24px' }} />
+                </Link>
+              </Column>
+            </Row>
+          </Section>
+
+          {/* Content as html */}
+          <div
+            style={{
+              width: '100%',
+              minWidth: '100%',
+              fontWeight: 'normal',
+              color: 'rgba(0,0,0,0.7)',
+              lineHeight: '1.6',
+            }}
+            dangerouslySetInnerHTML={{ __html: changelog.content }}
+          />
+
+          {/* Separator */}
+          <Hr style={{ marginTop: '32px', borderColor: 'rgba(0,0,0,0.2)' }} />
+
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              paddingTop: '16px',
+              paddingBottom: '16px',
+            }}>
+            <Link
+              href={formatRootUrl(projectSlug, `/changelog/unsubscribe?subId=${subId}`)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '14px',
+                fontWeight: '300',
+                color: 'rgba(0,0,0,0.7)',
+                textDecoration: 'underline',
+              }}>
+              Unsubscribe
+            </Link>
+            <span style={{ fontSize: '14px', fontWeight: 'normal', color: 'rgba(0,0,0,0.7)' }}>•</span>
+            <Link
+              href={formatRootUrl(projectSlug, `/changelog/${changelog.slug}`)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '14px',
+                fontWeight: '300',
+                color: 'rgba(0,0,0,0.7)',
+                textDecoration: 'underline',
+              }}>
+              View in browser
+            </Link>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Link
+              href='https://feedbase.app'
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontSize: '14px',
+                fontWeight: 'normal',
+                color: 'rgba(0,0,0,0.7)',
+              }}>
+              <Img
+                src='https://feedbase.app/icon-512x512.png'
+                alt='Feedbase'
+                style={{ height: '32px', width: '32px', borderRadius: '6px' }}
+              />
+              Powered by Feedbase
+            </Link>
+          </div>
+        </Container>
+      </Body>
     </Html>
   );
 }

@@ -46,7 +46,7 @@ const tabs = [
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Headers
-  const headerList = headers();
+  const headerList = await headers();
   const projectSlug = headerList.get('x-project');
   const pathname = headerList.get('x-pathname');
 

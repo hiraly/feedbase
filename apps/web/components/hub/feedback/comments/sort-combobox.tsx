@@ -47,7 +47,7 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-[160px] p-0' align={align}>
-        <Command>
+        <Command shouldFilter={false}>
           <CommandGroup>
             {sortOptions.map((item) => (
               <CommandItem

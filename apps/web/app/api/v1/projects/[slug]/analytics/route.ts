@@ -5,7 +5,8 @@ import { getProjectAnalytics } from '@/lib/api/projects';
   Get Analytics
   GET /api/v1/projects/:slug/analytics
 */
-export async function GET(req: NextRequest, context: { params: { slug: string } }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await context.params;
   // Check if tinybird variables are set
   if (!process.env.TINYBIRD_API_URL || !process.env.TINYBIRD_API_KEY) {
     return NextResponse.json({ error: 'Tinybird variables not set.' }, { status: 500 });
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
     return NextResponse.json({ error: 'Invalid start or end date.' }, { status: 400 });
   }
 
-  const { data: analyticsData, error } = await getProjectAnalytics(context.params.slug, 'route');
+  const { data: analyticsData, error } = await getProjectAnalytics(resolvedParams.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

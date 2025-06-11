@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
-export default async function Dashboard({ params }: { params: { slug: string } }) {
+export default async function Dashboard({ params }: { params: Promise<{ slug: string }> }) {
+  const resolvedParams = await params;
   // Redirect to settings/general
-  redirect(`/${params.slug}/settings/general`);
+  redirect(`/${resolvedParams.slug}/settings/general`);
 }
