@@ -93,10 +93,6 @@ module.exports = {
         rotate: 'rotate 3s linear infinite both',
         'background-shine': 'background-shine 2s linear',
       },
-      fontFamily: {
-        monospace: ['var(--font-monospace)'],
-        satoshi: ['var(--font-satoshi)'],
-      },
     },
   },
   plugins: [require('tailwindcss-animate'), require('@tailwindcss/typography')],

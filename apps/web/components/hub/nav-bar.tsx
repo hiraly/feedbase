@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@ui/components/ui/button';
 import { cn } from '@ui/lib/utils';
-import { satoshi } from '@ui/styles/fonts';
 import { ProfileProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
 import UserDropdown from '../shared/user-dropdown';
@@ -61,10 +60,7 @@ export default function Header({
 
           {/* Name */}
           <div
-            className={cn(
-              satoshi.variable,
-              'text-foreground/90 font-satoshi text-center text-xl font-medium'
-            )}>
+            className='text-foreground/90 text-center text-xl font-medium'>
             {project?.name}
           </div>
         </Link>

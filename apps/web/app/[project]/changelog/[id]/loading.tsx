@@ -31,12 +31,12 @@ export default function ChangelogPageLoading() {
 
             {/* Name & Date */}
             <div className='flex w-44 flex-col gap-1'>
-              <p className='text-foreground/90 text-sm font-medium'>
+              <div className='text-foreground/90 text-sm font-medium'>
                 <Skeleton className='h-4 w-full' />
-              </p>
-              <p className='text-foreground/70 w-1/2 text-sm font-light'>
+              </div>
+              <div className='text-foreground/70 w-1/2 text-sm font-light'>
                 <Skeleton className='h-4 w-full' />
-              </p>
+              </div>
             </div>
           </div>
 

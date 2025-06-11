@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { fontMono } from '@ui/styles/fonts';
 import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
@@ -506,7 +505,7 @@ export default function GeneralConfigCards({
                             <div className='flex w-full flex-col justify-start gap-2'>
                               <Label className='text-foreground/90 text-sm font-light'>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className="font-mono text-foreground/70 text-sm font-extralight">
                                 A
                               </span>
                             </div>
@@ -519,7 +518,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   @
                                 </span>
 
@@ -540,7 +539,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   76.76.21.21
                                 </span>
 
@@ -560,7 +559,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   86400
                                 </span>
 
@@ -578,7 +577,7 @@ export default function GeneralConfigCards({
                         <Label className='text-foreground/80 cursor-text select-text text-sm font-light'>
                           Note: If{' '}
                           <span
-                            className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                            className="bg-background font-mono rounded px-1 py-0.5">
                             86400
                           </span>{' '}
                           is not supported for TLL, make sure to use the highest TTL value available.
@@ -596,7 +595,7 @@ export default function GeneralConfigCards({
                             <div className='flex w-full flex-col justify-start gap-2'>
                               <Label className='text-foreground/90 text-sm font-light'>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className="font-mono text-foreground/70 text-sm font-extralight">
                                 CNAME
                               </span>
                             </div>
@@ -609,7 +608,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   www
                                 </span>
 
@@ -630,7 +629,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   cname.vercel-dns.com
                                 </span>
 
@@ -650,7 +649,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className="font-mono text-foreground/70 text-sm font-extralight">
                                   86400
                                 </span>
 
@@ -668,7 +667,7 @@ export default function GeneralConfigCards({
                         <Label className='text-foreground/80 cursor-text select-text pb-2 text-sm font-light'>
                           Note: If{' '}
                           <span
-                            className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                            className="bg-background font-mono rounded px-1 py-0.5">
                             86400
                           </span>{' '}
                           is not supported for TLL, make sure to use the highest TTL value available.
@@ -683,7 +682,7 @@ export default function GeneralConfigCards({
                       <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm font-light'>
                         To prove ownership of{' '}
                         <span
-                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                          className="bg-background font-mono rounded px-1 py-0.5">
                           {domainData.apexName}
                         </span>
                         , please add the following TXT Record to your DNS settings.
@@ -696,7 +695,7 @@ export default function GeneralConfigCards({
                           <div className='flex w-full flex-col justify-start gap-2'>
                             <Label className='text-foreground/90 text-sm font-light'>Type</Label>
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                              className="font-mono text-foreground/70 text-sm font-extralight">
                               TXT
                             </span>
                           </div>
@@ -709,7 +708,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className="font-mono text-foreground/70 text-sm font-extralight">
                                 {domainData.verification[0].domain}
                               </span>
 
@@ -730,7 +729,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className="font-mono text-foreground/70 text-sm font-extralight">
                                 {domainData.verification[0].value}
                               </span>
 
@@ -748,7 +747,7 @@ export default function GeneralConfigCards({
                       <Label className='text-foreground/80 cursor-text select-text text-sm font-light'>
                         Warning: If{' '}
                         <span
-                          className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
+                          className="bg-background font-mono rounded px-1 py-0.5">
                           {domainData.apexName}
                         </span>{' '}
                         is already in use, the TXT Record will transfer away from the existing domain

@@ -1,9 +1,7 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { cn } from '@ui/lib/utils';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { GeistSans } from 'geist/font';
 import { Toaster } from 'sonner';
 import { formatRootUrl } from '@/lib/utils';
 
@@ -49,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <SpeedInsights />
         <Toaster closeButton />
-        <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
+        <main className='bg-root flex min-h-screen w-full flex-col items-center'>
           {children}
         </main>
       </body>

@@ -55,7 +55,7 @@ export default async function HubLayout({ children, params }: Props) {
   const headerList = headers();
   const pathname = headerList.get('x-pathname');
   const hostname = headerList.get('host');
-  const currentTab = tabs.find((tab) => tab.link === `/${pathname!.split('/')[1]}`);
+  const currentTab = pathname ? tabs.find((tab) => tab.link === `/${pathname.split('/')[1]}`) : null;
 
   if (!currentTab) {
     redirect('/feedback');

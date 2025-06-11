@@ -106,7 +106,7 @@ export default function Onboarding() {
                   onChange={handleSlugChange}
                 />
                 <div className='text-foreground/50 bg-accent flex select-none items-center rounded-r-md border-l px-3 py-2'>
-                  .{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+                  .{process.env.NEXT_PUBLIC_ROOT_DOMAIN || 'feedbase.app'}
                 </div>
               </div>
 

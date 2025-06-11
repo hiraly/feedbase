@@ -1,0 +1,6 @@
+{
+  "permissions": {
+    "allow": ["Bash(supabase start:*)", "Bash(ls:*)", "Bash(pnpm list:*)", "Bash(find:*)", "Bash(grep:*)"],
+    "deny": []
+  }
+}
